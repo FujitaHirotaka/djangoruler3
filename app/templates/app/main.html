@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang=ja>
+<head>
+    <meta charset="UTF-8">
+    <title>DjangoProject作成ページ</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+
+          function getCookie(name) {
+              var cookieValue = null;
+              if (document.cookie && document.cookie !== '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = jQuery.trim(cookies[i]);
+                      // Does this cookie string begin with the name we want?
+                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                      }
+                  }
+              }
+              return cookieValue;
+          }
+          var csrftoken = getCookie('csrftoken');
+
+          function csrfSafeMethod(method) {
+              // these HTTP methods do not require CSRF protection
+              return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+          }
+          $.ajaxSetup({
+              beforeSend: function(xhr, settings) {
+                  if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  }
+              }
+          });
+    </script>
+
+
+</head>
+        <body>
+                <div class="container">
+                      <div class="row">
+                              <div class="col-md-2"></div>
+                              <div class="col-md-8">
+                                  <div id="project_related">
+                                    <div class="card border-primary">
+                                        <div class="card-header bg-primary text-light" >プロジェクト</div>
+                                        <div class="card-body" id ="form1">
+                                              <form id="projectmake" method="POST" action="{% url 'app:projectmake' %}">
+                                                    {% csrf_token %}
+                                                    <input type="text" name="project_name">
+                                                    <input type="submit" class="btn btn-primary" value="新しく作る">
+                                              </form>
+                                              <form id="projectselect" method="POST" action="{% url 'app:projectselect' %}">
+                                                    {% csrf_token %}
+                                                    <select name="project_select">
+                                                    {% for i in allproject_list %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                    {% if allproject_list %}
+                                                           <input type="submit" class="btn btn-primary" value="選んで確定">
+                                                    {% endif %}
+                                              </form>
+                                        </div>
+                                    </div>
+                                  </div>
+
+                                  <div id="model_related"></div>
+                                  <div id="app_related"></div>
+
+                              </div>
+                              <div class="col-md-2"></div>
+                      </div>
+                </div>
+
+
+                <script>
+                //form(id="projectmake")にて、新規にプロジェクトを作る場合にプロジェクト名を入力させる。
+                           $("form#projectmake").submit( function(event) {
+                                event.preventDefault();
+                                var form = $(this);
+                                $.ajax({
+                                  url: form.prop("action"),
+                                  method: form.prop("method"),
+                                  data: form.serialize(),
+                                  timeout: 10000,
+                                  dataType: "text",
+                                })
+                                .done( function(data) {
+                                  let html1='<div style="text-align: left">'+data+'</div>\
+                                                  <div style="text-align: right">\
+                                                       <form method="POST" action={% url 'app:projectreturn' %}>\
+                                                            {% csrf_token %}\
+                                                            <input type="submit" class="btn btn-primary" value="プロジェクトを新しく作るか選びなおす">\
+                                                       </form>\
+                                                  </div>\
+                                                 '
+
+                                  $("#form1").html(html1);
+                                  $("#project_related").after('<input type="submit" id="addition" class="btn btn-default add" value="アプリを追加する">');
+                                  $("#project_related").after('<input type="submit" id="class_addition" class="btn btn-danger class_add" value="モデルのクラスを追加する">');
+
+
+                                })
+                              });
+
+
+                //
+                            $(document).on("click", "#addition", function(){
+                                  if($("div#app_related").html() == ""){
+                                          var nn=1;}
+                                  else {
+                                          var nn=1+parseInt($("div#app_related > div:last").children().text().replace("アプリ",""));
+                                  };
+                                  if(nn < 11){
+                                      let app_panel='<div class="card  border-dark app">\
+                                                    <div class="card-header bg-dark text-light">アプリ'+nn+'</div>\
+                                                         <div class="card-body" id ="app'+nn+'">\
+                                                         </div>\
+                                                    </div>';
+                                      $("#app_related").append(app_panel);
+                                  }
+                                  else {
+                                      alert("アプリは10個までしか作れません")
+                                  }
+
+                            });
+
+
+
+                //form(id="projectselect")にて、既存のプロジェクトを選ばせる。
+                            $("form#projectselect").submit( function(event) {
+                                event.preventDefault();
+                                var form = $(this);
+                                $.ajax({
+                                  url: form.prop("action"),
+                                  method: form.prop("method"),
+                                  data: form.serialize(),
+                                  timeout: 10000,
+                                  dataType: "text",
+                                })
+                                .done( function(data) {
+                                  var html1='<div style="text-align: left">'+data+'</div><div style="text-align: right"><form method="POST" action={% url 'app:projectreturn' %}>{% csrf_token %}<input type="submit" class="btn btn-primary" value="確定解除"></form></div>';
+                                  $("#form1").html(html1);
+
+                                })
+                              });
+
+
+
+
+
+
+
+
+                </script>
+        </body>
+</html>
