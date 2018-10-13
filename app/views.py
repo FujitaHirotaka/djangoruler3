@@ -6,8 +6,7 @@ from .forms import DjangoForm
 from .models import *
 import re
 
-
-
+######
 def get_project_list():
     judge_set = {"wsgi.py", "settings.py", "urls.py", "__init__.py"}
     directory_of_projects=Path(os.path.abspath(__file__)).parents[3]
