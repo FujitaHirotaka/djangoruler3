@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from django.http import HttpResponse,HttpResponseNotFound
+from django.http import HttpResponse,HttpResponseNotFound, JsonResponse
 import os
 from pathlib import Path
 from .forms import DjangoForm
 from .models import *
 import re
 
-######
 def get_project_list():
     judge_set = {"wsgi.py", "settings.py", "urls.py", "__init__.py"}
     directory_of_projects=Path(os.path.abspath(__file__)).parents[3]
@@ -52,9 +51,21 @@ def projectselect(request):
     project_name= request.POST.get("project_select")
     #if project_name in project_list:
     project = DjangoProject.objects.get(project_name=project_name)
-    return HttpResponse(project_name)
+    d={"project_name": project_name,"select_or_delete":"select"}
+    return JsonResponse(d)
     #else:
     #    raise Exception("エラー。このプロジェクトは実際には存在しません")
+
+
+def projectdelete(request):
+    project_name= request.POST.get("project_select")
+    #if project_name in project_list:
+    project = DjangoProject.objects.get(project_name=project_name)
+    project.delete()
+    d={"project_name": project_name,"select_or_delete":"delete"}
+    return JsonResponse(d)
+    #else:
+    #    raise Exception("エラー。このプロジェクトは実際には存在しません")    
 
 
 def projectreturn(request):
