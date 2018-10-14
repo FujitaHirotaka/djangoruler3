@@ -56,6 +56,7 @@
                                               <form id="projectselect" method="POST" >
                                                     {% csrf_token %}
                                                     <select name="project_select">
+                                                        <option>----------</option>
                                                     {% for i in allproject_list %}
                                                         <option>{{ i }}</option>
                                                     {% endfor %}
@@ -137,13 +138,20 @@
                 //form(id="projectselect")にて、既存のプロジェクトを選ばせる。
                                 $(function(){
                                     $('input[id="select_project"]').click(function() {
+                                    var selectval=$("project_select").val();
+                                    if ( selectval != "----------"){
                                     $("form#projectselect").attr("action", "{% url 'app:projectselect' %}");
                                     $("form#projectselect").submit();
+                                    };
                                     });
+                                     
 
                                     $('input[id="delete_project"]').click(function() {
+                                    var selectval=$("project_select").val();
+                                    if ( selectval != "----------"){
                                     $("form#projectselect").attr("action", "{% url 'app:projectdelete' %}");
                                     $("form#projectselect").submit();
+                                    };
                                     });
                                 });
 
