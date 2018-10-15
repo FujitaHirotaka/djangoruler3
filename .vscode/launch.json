@@ -28,8 +28,7 @@
         },
         {
             "name": "Python: Django",
-            "python.pythonPath": "C:\\Users\\fujita\\anaconda3\\envs\\env_standard\\python.exe",
-            "type": "python",
+             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "console": "integratedTerminal",

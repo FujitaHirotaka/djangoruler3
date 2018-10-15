@@ -55,12 +55,14 @@
                                               </form>
                                               <form id="projectselect" method="POST" >
                                                     {% csrf_token %}
+                                                    {% if allproject_list %}
                                                     <select name="project_select">
-                                                        <option>----------</option>
-                                                    {% for i in allproject_list %}
-                                                        <option>{{ i }}</option>
-                                                    {% endfor %}
+                                                          <option>----------</option>
+                                                      {% for i in allproject_list %}
+                                                          <option>{{ i }}</option>
+                                                      {% endfor %}
                                                     </select>
+                                                    {% endif %}
                                               </form>
                                               <div id="buttons_project">
                                                  {% if allproject_list %}
@@ -103,7 +105,7 @@
                                                   </div>\
                                                  '
                                   $("#form1").html(html1);
-                                  if (!(data == "プロジェクト名の始文字は大文字にする。プロジェクトを新しく作るか選びなおすボタンをおしてください。" || data == "エラー。プロジェクト名は英数字_のみ。プロジェクトを新しく作るか選びなおすボタンをおしてください。")) { 
+                                  if (!(data == "プロジェクト名の始文字はアルファベットにする。プロジェクトを新しく作るか選びなおすボタンをおしてください。" || data == "エラー。プロジェクト名は英数字_のみ。プロジェクトを新しく作るか選びなおすボタンをおしてください。" || data=="エラー。既にその名前のプロジェクトは存在します。別の名前にしてください")) { 
                                   $("#project_related").after('<input type="submit" id="addition" class="btn btn-default add" value="アプリを追加する">');
                                   $("#project_related").after('<input type="submit" id="class_addition" class="btn btn-danger class_add" value="モデルのクラスを追加する">');
                                   }

@@ -9,4 +9,5 @@ class DjangoProject(models.Model):
         exec("app"+str(i)+"=models.CharField('アプリ"+str(i)+"', max_length=255, null=True, blank=True)")
         exec("app" + str(i) + "_URL=models.URLField('URL" + str(i) + "', null=True, blank=True)")
         #アプリ種との紐づけをのちのちやらなければならない
-
+    def __str__(self):
+        return self.project_name
