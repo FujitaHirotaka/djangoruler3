@@ -96,7 +96,7 @@
                                   dataType: "text",
                                 })
                                 .done( function(data) {
-                                  let html1='<div style="text-align: left">'+data+'</div>\
+                                  let html1='<div id="project__name" style="text-align: left">'+data+'</div>\
                                                   <div style="text-align: right">\
                                                        <form method="POST" action={% url 'app:projectreturn' %}>\
                                                             {% csrf_token %}\
@@ -114,7 +114,7 @@
                               });
 
 
-                //
+                //アプリカードを作るまたは増幅させる。いまのところアプリの数は10個まで
                             $(document).on("click", "#addition", function(){
                                   if($("div#app_related").html() == ""){
                                           var nn=1;}
@@ -125,6 +125,10 @@
                                       let app_panel='<div class="card  border-dark app">\
                                                     <div class="card-header bg-dark text-light">アプリ'+nn+'</div>\
                                                          <div class="card-body" id ="app'+nn+'">\
+                                                         <form>\
+                                                              <input type="text" name="aa">\ 
+                                                              <input type="submit" id="app_name_button' +nn+ '" class="btn btn-default" value="このアプリを作製する">\
+                                                         </form>\
                                                          </div>\
                                                     </div>';
                                       $("#app_related").append(app_panel);
@@ -169,7 +173,7 @@
                                 })
                                 .done( function(data) {
                                   if(data.select_or_delete == "select"){
-                                  var html2='<div style="text-align: left">'+data.project_name+'</div><div style="text-align: right"><form method="POST" action={% url 'app:projectreturn' %}>{% csrf_token %}<input type="submit" class="btn btn-primary" value="確定解除"></form></div>';
+                                  var html2='<div id="project__name" style="text-align: left">'+data.project_name+'</div><div style="text-align: right"><form method="POST" action={% url 'app:projectreturn' %}>{% csrf_token %}<input type="submit" class="btn btn-primary" value="確定解除"></form></div>';
                                   $("#form1").html(html2);
                                   $("#buttons_project").html("")
                                 } else if (data.select_or_delete == "delete") {

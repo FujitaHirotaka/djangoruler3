@@ -44,10 +44,11 @@ def get_project_list():
                     project_list_sin.append(i)
     return project_list_sin
 
+
 def get_project_list2(project_list):
    """
    get_project_listで得られるプロジェクトリストとデータベース内に格納されているプロジェクトリストを比較し、両方に
-   属するものを返す
+   属するものを返す。引数として、get_project_listで返されたリストを取る。
    """ 
    project_list_in_database=[i.project_name for i in DjangoProject.objects.all()]
    allproject_list=[] 
@@ -69,6 +70,9 @@ def start_project(project_name):
 
 
 def write_djangoruler2_in_settings_py(project_name):
+    """
+    projectのsettings.pyの一行目に'made_by_djangoruler2_app\n'を記載する関数
+    """
     settings_py_dir=os.path.join(directory_of_projects, project_name, "project", "project", "settings.py")
     with open(settings_py_dir, "r") as f:
             sentence_list=f.readlines()
@@ -83,13 +87,13 @@ def write_djangoruler2_in_settings_py(project_name):
 #****************************************************************************************************
 
 def main(request):
-   project_list=get_project_list() 
-   allproject_list=get_project_list2(project_list)
    ''' 
    初期ページで新規プロジェクトを登録するページ（実際の登録はprojectmakeで行う）
    '''
    #データベースのプロジェクトリストとフォルダ構造を調べて得られたプロジェクトリスト両方ともに属するものだけ、
    #選択可能なプロジェクトとして表示
+   project_list=get_project_list() 
+   allproject_list=get_project_list2(project_list)
    return render(request, "app/main.html", {"allproject_list":allproject_list})
 
 
@@ -98,9 +102,9 @@ def projectmake(request):
   project_list=get_project_list() 
   allproject_list=get_project_list2(project_list)
   project_name= request.POST.get("project_name")
-  if not (project_name in allproject_list):      
-    if re.match("^[a-zA-Z0-9_]+$", project_name): #プロジェクト名が英数文字またはアンダーバーで構成されたものかどうか
-        if re.match("^[a-zA-Z]", project_name): #プロジェクト名の初期文字が大小英文字ではじまっているか
+  if not (project_name in allproject_list):   #プロジェクト名が既に作ったものとダブりがないかチェック   
+    if re.match("^[a-zA-Z0-9_]+$", project_name): #プロジェクト名が英数文字またはアンダーバーで構成されたものかどうかチェック
+        if re.match("^[a-zA-Z]", project_name): #プロジェクト名の初期文字が大小英文字ではじまっているかチェック
             start_project(project_name)
             settings_py_path=Path(directory_of_projects/project_name/"project"/"project"/"settings.py")
             for i in range(1000):
