@@ -10,7 +10,7 @@ import subprocess
 import time
 
 
-directory_of_projects=Path("C://users/sakodaken/pycharmprojects") #Path(os.path.abspath(__file__)).parents[3] でもＯＫ
+directory_of_projects=Path("C://users/fujita/pycharmprojects") #Path(os.path.abspath(__file__)).parents[3] でもＯＫ
 
 def get_project_list():
     """
