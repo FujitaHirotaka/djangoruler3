@@ -153,3 +153,13 @@ def projectdelete(request):
 def projectreturn(request):
     #ajax
     return redirect(reverse("app:main"))
+
+
+def appdetermine(request):
+    #ajax
+    print(request.POST)
+    identity=request.POST.get("appid")
+    appname=request.POST.get("appname")
+    apptype=request.POST.get("appselect")
+    d={"appname": appname,"apptype":apptype, "id":identity}
+    return JsonResponse(d)
