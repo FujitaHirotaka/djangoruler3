@@ -84,6 +84,10 @@
 
 
                 <script>
+        /*ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+                 javascrtiptプロジェクト関連
+        　ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー         
+        */
                 //form(id="projectmake")にて、新規にプロジェクトを作る場合にプロジェクト名を入力させる。
                            $("form#projectmake").submit( function(event) {
                                 event.preventDefault();
@@ -114,32 +118,6 @@
                               });
 
 
-                //アプリカードを作るまたは増幅させる。いまのところアプリの数は10個まで
-                            $(document).on("click", "#addition", function(){
-                                  if($("div#app_related").html() == ""){
-                                          var nn=1;}
-                                  else {
-                                          var nn=1+parseInt($("div#app_related > div:last").children().text().replace("アプリ",""));
-                                  };
-                                  if(nn < 11){
-                                      let app_panel='<div class="card  border-dark app">\
-                                                    <div class="card-header bg-dark text-light">アプリ'+nn+'</div>\
-                                                         <div class="card-body" id ="app'+nn+'">\
-                                                         <form>\
-                                                              <input type="text" name="aa">\ 
-                                                              <input type="submit" id="app_name_button' +nn+ '" class="btn btn-default" value="このアプリを作製する">\
-                                                         </form>\
-                                                         </div>\
-                                                    </div>';
-                                      $("#app_related").append(app_panel);
-                                  }
-                                  else {
-                                      alert("アプリは10個までしか作れません")
-                                  }
-
-                            });
-
-
 
                 //form(id="projectselect")にて、既存のプロジェクトを選ばせる。
                                 $(function(){
@@ -161,7 +139,7 @@
                                     });
                                 });
 
-                              
+                //form(id="projectselect")にて、既存のプロジェクトを消去する。              
                                 $("form#projectselect").submit( function() {
                                 var form = $(this);
                                 $.ajax({
@@ -186,9 +164,61 @@
                             });
 
 
+      /*
+      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+                 javascrtiptアプリ関連
+      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+　　　*/
+                //アプリカードを作るまたは増幅させる。いまのところアプリの数は10個まで
+                $(document).on("click", "#addition", function(){
+                                  if($("div#app_related").html() == ""){
+                                          var nn=1;}
+                                  else {
+                                          var nn=1+parseInt($("div#app_related > div:last").children().text().replace("アプリ",""));
+                                  };
+                                  if(nn < 11){
+                                      let app_panel='<div class="card  border-dark app">\
+                                                    <div class="card-header bg-dark text-light">アプリ'+nn+'</div>\
+                                                         <div class="card-body" id ="app'+nn+'">\
+                                                         <form>\
+                                                            {% csrf_token %}\
+                                                            <p>アプリ名：<input type="text" name="appname'+nn+'"></p>\
+                                                            <p>アプリ種：\
+                                                                <select  name="appselect">\
+                                                                    {% for i in allappspecie_name_list %}\
+                                                                       <option>{{ i }}</option>\
+                                                                    {% endfor %}\
+                                                                </select>\
+                                                            </p>\
+                                                            <div class="selectedaddition"></div>\
+                                                            <input type="submit" id="appname_button' +nn+ '" class="btn btn-default" value="このアプリを作製する">\
+                                                         </form>\
+                                                         </div>\
+                                                    </div>';
+                                      $("#app_related").append(app_panel);
+                                  }
+                                  else {
+                                      alert("アプリは10個までしか作れません")
+                                  }
 
+                            });
 
-
+                //アプリの種類を選んだときに必要なフォームを形成する
+                          $(document).on("change", 'select[name="appselect"]', function(){
+                               let selectedvalue=$(this).val();
+                               //アプリ種と型の関係を記述した辞書を得る
+                               //djangoのリストを橋渡し
+                               let allappspecie_name_list={{ allappspecie_name_list|safe }};
+                               let allappspecie_type_list={{ allappspecie_type_list|safe }};
+                               let allappspecie_dict={};
+                               for (let i=0; i<allappspecie_name_list.length; i++){
+                                       allappspecie_dict[allappspecie_name_list[i]]=allappspecie_type_list[i];
+                               };
+                               alert(allappspecie_dict[selectedvalue]);
+                                    
+                          });
+              
+    
 
 
 

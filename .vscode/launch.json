@@ -28,6 +28,7 @@
         },
         {
             "name": "Python: Django",
+            "python.pythonpath": "C:\\Users\\sakodaken\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
              "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",

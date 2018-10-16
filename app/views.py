@@ -9,6 +9,7 @@ import re
 import subprocess
 import time
 
+
 directory_of_projects=Path("C://users/sakodaken/pycharmprojects") #Path(os.path.abspath(__file__)).parents[3] でもＯＫ
 
 def get_project_list():
@@ -94,7 +95,15 @@ def main(request):
    #選択可能なプロジェクトとして表示
    project_list=get_project_list() 
    allproject_list=get_project_list2(project_list)
-   return render(request, "app/main.html", {"allproject_list":allproject_list})
+   allappspecie_list=AppSpecie.objects.all()
+
+   allappspecie_name_list=[i.name for i in allappspecie_list]
+   allappspecie_type_list=[i.type.type for i in allappspecie_list]
+   print(allappspecie_name_list)
+   print(allappspecie_type_list)
+  
+   d={"allproject_list":allproject_list, "allappspecie_name_list":allappspecie_name_list, "allappspecie_type_list":allappspecie_type_list}
+   return render(request, "app/main.html", d)
 
 
 def projectmake(request):
@@ -120,6 +129,7 @@ def projectmake(request):
         return HttpResponse("エラー。プロジェクト名は英数字_のみ。プロジェクトを新しく作るか選びなおすボタンをおしてください。")
   else:
        return HttpResponse("エラー。既にその名前のプロジェクトは存在します。別の名前にしてください")
+
 
 def projectselect(request):
     #ajax
