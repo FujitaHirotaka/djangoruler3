@@ -9,8 +9,15 @@ import re
 import subprocess
 import time
 
+#家と学校の環境でベースパスを使い分ける
+pathlist=["C://users/sakodaken/pycharmprojects", "C://users/fujita/pycharmprojects"]
+for i in pathlist:
+    if Path(i).exists():
+          directory_of_projects=Path(i)
+           #Path(os.path.abspath(__file__)).parents[3] のような使い方もできる
+           #"python.pythonpath":"C:\\Users\\sakodaken\\AppData\\Local\\conda\\conda\\envs\\env_standard\\python.exe",
+           #"python.pythonpath":"C:\\Users\\fujita\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe",
 
-directory_of_projects=Path("C://users/fujita/pycharmprojects") #Path(os.path.abspath(__file__)).parents[3] でもＯＫ
 
 def get_project_list():
     """
@@ -99,9 +106,6 @@ def main(request):
 
    allappspecie_name_list=[i.name for i in allappspecie_list]
    allappspecie_type_list=[i.type.type for i in allappspecie_list]
-   print(allappspecie_name_list)
-   print(allappspecie_type_list)
-  
    d={"allproject_list":allproject_list, "allappspecie_name_list":allappspecie_name_list, "allappspecie_type_list":allappspecie_type_list}
    return render(request, "app/main.html", d)
 
@@ -157,9 +161,10 @@ def projectreturn(request):
 
 def appdetermine(request):
     #ajax
-    print(request.POST)
+    project_name=request.POST.get("project_name")
     identity=request.POST.get("appid")
     appname=request.POST.get("appname")
-    apptype=request.POST.get("appselect")
-    d={"appname": appname,"apptype":apptype, "id":identity}
+    appspecie=request.POST.get("appselect")
+    apptype=AppSpecie.objects.get(name=appspecie).type.type
+    d={"appname": appname,"appspecie":appspecie,"id":identity,"apptype":apptype, "project_name":project_name}
     return JsonResponse(d)

@@ -28,7 +28,7 @@
         },
         {
             "name": "Python: Django",
-            "python.pythonpath":"C:\\Users\\fujita\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe",
+            "python.pythonpath":"C:\\Users\\sakodaken\\AppData\\Local\\conda\\conda\\envs\\env_standard\\python.exe",
              "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
