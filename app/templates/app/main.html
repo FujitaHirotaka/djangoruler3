@@ -72,9 +72,10 @@
                                               </div>
                                             </div>
                                     </div>
+                                    <br>
                                   </div>
 
-                                  <div id="model_related"></div>
+   
                                   <div id="app_related"></div>
 
                               </div>
@@ -100,6 +101,7 @@
                                   dataType: "text",
                                 })
                                 .done( function(data) {
+                            
                                   let html1='<div id="project__name" style="text-align: left">'+data+'</div>\
                                                   <div style="text-align: right">\
                                                        <form method="POST" action={% url "app:projectreturn" %}>\
@@ -110,8 +112,7 @@
                                                  '
                                   $("#form1").html(html1);
                                   if (!(data == "プロジェクト名の始文字はアルファベットにする。プロジェクトを新しく作るか選びなおすボタンをおしてください。" || data == "エラー。プロジェクト名は英数字_のみ。プロジェクトを新しく作るか選びなおすボタンをおしてください。" || data=="エラー。既にその名前のプロジェクトは存在します。別の名前にしてください")) { 
-                                  $("#project_related").after('<input type="submit" id="addition" class="btn btn-default add" value="アプリを追加する">');
-                                  $("#project_related").after('<input type="submit" id="class_addition" class="btn btn-danger class_add" value="モデルのクラスを追加する">');
+                                  $("#project_related").after('<input type="submit" id="addition" class="btn btn-default add" value="アプリを追加する"><br><br>');
                                   }
 
                                 })
@@ -174,11 +175,11 @@
                                   if($("div#app_related").html() == ""){
                                           var nn=1;}
                                   else {
-                                          var nn=1+parseInt($("div#app_related > div:last").children().text().replace("アプリ",""));
+                                          var nn=1+parseInt($("div#app_related > div:last").children().text().replace("アプリ","").replace("のモデル",""));
                                   };
                                   if(nn < 11){
                                       let app_panel='<div class="card  border-dark app">\
-                                                        <div class="card-header bg-dark text-light">アプリ'+nn+'</div>\
+                                                            <div class="card-header bg-dark text-light">アプリ'+nn+'</div>\
                                                             <div class="card-body">\
                                                                  <div>\
                                                                  <form  action={% url "app:appdetermine" %} method="POST" id="app_determine">\
@@ -199,8 +200,20 @@
                                                                  <div>\
                                                                  </div>\
                                                             </div>\
-                                                        </div>\
-                                                    </div>';
+                                                            <div class="card-footer"></div>\
+                                                     </div>\
+                                                     \
+                                                     \
+                                                     <div class="card  border-dark app">\
+                                                            <div class="card-header bg-secondary text-light">アプリ'+nn+'のモデル</div>\
+                                                            <div class="card-body">\
+                                                                 <div>\
+                                                                 </div>\
+                                                                 <div>\
+                                                                 </div>\
+                                                            </div>\
+                                                            <div class="card-footer"></div>\
+                                                     </div><br><br>';
                                       $("#app_related").append(app_panel);
                                   }
                                   else {
@@ -217,7 +230,7 @@
                                 if (!(app_name.match(/^[0-9a-zA-Z]+$/))) {
                                     alert("アプリ名は半角英数字");
                                 } else if (!(app_name.slice(0,1).match(/^[a-zA-Z]$/))) {
-                                    alert("最初の文字は英字")
+                                    alert("最初の文字は英字");
                                 } else {
 
                                 $.ajax({
@@ -229,7 +242,7 @@
                                 })
                                 .done(function(data) {
                                   let html3="\
-                                             <form>\
+                                             <form class='appestablishform'>\
                                              <input type='hidden' name='appid' value='"+data.id+"'</p>\
                                              <input type='hidden' name='apptype' value='"+data.apptype+"'</p>\
                                              <input type='hidden' name='appname' value='"+data.appname+"'</p>\
@@ -242,14 +255,20 @@
 
                                   switch (app_type) {
                                       case "require_no_model":
-                                          html3=html3+"<p>URL:<input type='text' name='url' value='"+data.appname+"/index'></p>";
+                                          html3=html3+"<p>URL : <input type='text' name='url' value='"+data.appname+"/index'></p>";
                                           break;
 
                                     
                                   };
                         
                                   html3=html3+"</form>\
-                                               <input type='button' class='appchange' value='アプリ名、アプリ種をreset'>";
+                                               <div class='text-right'>\
+                                                <input type='button' class='appchange' value='アプリ名、アプリ種をreset'>\
+                                               </div>";
+                                  let html4="<div class='text-right'>\
+                                                <input type='button' class='appestablish' value='登録'>\
+                                               </div>";
+                                  form.parent().parent().next().html(html4);
                                   form.parent().html(html3);
                                   
 
@@ -258,6 +277,8 @@
                                 };
                                 return false;
                                     });
+
+
 
 
                                 $(document).on("click", ".appchange", function(){
@@ -273,10 +294,22 @@
                                                             </p>\
                                                             <input type="hidden" name="appid" value="'+$(this).prev("form").children("input[name='appid']").val()+'">\
                                                             <input type="submit" class="btn btn-default" value="確定" id="app_confirmation">\
-                                                         </form>';
-                                    $(this).parent().html(app_content)
+                                                         </form>\
+                                                         ';
+                                    $(this).parent().parent().parent().next().html("")
+                                    $(this).parent().parent().html(app_content)
 
 
+                                });
+
+
+                                $(document).on("click", ".appestablish", function(){
+                                    $(this).parent().parent().prev().find("form").submit();
+                                });
+
+                                $(document).on("submit", ".appestablishform", function(){
+                                  //これから作る
+                                 return false;
                                 });
          
                           

@@ -4,7 +4,6 @@
     // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "Python: Current File (Integrated Terminal)",
             "type": "python",
@@ -28,8 +27,7 @@
         },
         {
             "name": "Python: Django",
-            "python.pythonpath":"C:\\Users\\sakodaken\\AppData\\Local\\conda\\conda\\envs\\env_standard\\python.exe",
-             "type": "python",
+            "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "console": "integratedTerminal",
