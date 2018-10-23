@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect,reverse
 from django.http import HttpResponse, JsonResponse
 import shutil
 import os
+import uuid
 from pathlib import Path
-from .forms import DjangoForm
 from .models import *
 import re
 import subprocess
 import time
+
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 #家と学校の環境でベースパスを使い分ける
 pathlist=["C://users/sakodaken/pycharmprojects", "C://users/fujita/pycharmprojects"]
@@ -24,7 +27,7 @@ def get_project_list():
     フォルダ構造を調べることにより、このアプリで作ったプロジェクトかどうかを判断し、そうであれば格納しリストとして返す関数。
     基本的には一つ下のフォルダ階層にproject名/project名のような階層を持ち、
     その中にwsgi.py、settings.py、urls.py、__init__.pyを持つかどうかでまずプロジェクトフォルダかどうかを判断。
-　　さらに、settings.pyに"made_by_djangoruler2_app\n"が最初に記載されているかどうかを調べ、
+　　さらに、settings.pyに"#made_by_djangoruler2_app\n"が最初に記載されているかどうかを調べ、
    （なお、これについては、projectmakeのviewで書き込む）djangoruler2アプリで作られたものかどうかを判断。
     後者をやる理由は、このアプリで作った以外のプロジェクトである場合、プログラムの構造が想定とは異なり、
     このアプリがうまく機能するかわからないため。
@@ -41,14 +44,14 @@ def get_project_list():
             if not (judge_set-set(file_list)):
                     project_list.append(i.name)
 
-    ##settings.pyに"made_by_django_ruler2_app"が1行目に記載されているかを調べ、このアプリで作られたものかを判断
+    ##settings.pyに"#made_by_django_ruler2_app"が1行目に記載されているかを調べ、このアプリで作られたものかを判断
     project_list_sin=[]
     for i in project_list:
         settings_path=Path(directory_of_projects/i/"project"/"project"/"settings.py")
         if settings_path.exists():
             with open(os.path.join(directory_of_projects, i, "project", "project","settings.py"), "r") as f:
                 sentence_list=f.readlines()
-                if "made_by_djangoruler2_app" in sentence_list[0]:
+                if "#made_by_djangoruler2_app" in sentence_list[0]:
                     project_list_sin.append(i)
     return project_list_sin
 
@@ -79,12 +82,12 @@ def start_project(project_name):
 
 def write_djangoruler2_in_settings_py(project_name):
     """
-    projectのsettings.pyの一行目に'made_by_djangoruler2_app\n'を記載する関数
+    projectのsettings.pyの一行目に'#made_by_djangoruler2_app\n'を記載する関数
     """
     settings_py_dir=os.path.join(directory_of_projects, project_name, "project", "project", "settings.py")
     with open(settings_py_dir, "r") as f:
             sentence_list=f.readlines()
-            sentence_list.insert(0, "made_by_djangoruler2_app\n")
+            sentence_list.insert(0, "#made_by_djangoruler2_app\n")
     with open(settings_py_dir, 'w') as f:
             f.writelines(sentence_list)
 
@@ -105,8 +108,7 @@ def main(request):
    allappspecie_list=AppSpecie.objects.all()
 
    allappspecie_name_list=[i.name for i in allappspecie_list]
-   allappspecie_type_list=[i.type.type for i in allappspecie_list]
-   d={"allproject_list":allproject_list, "allappspecie_name_list":allappspecie_name_list, "allappspecie_type_list":allappspecie_type_list}
+   d={"allproject_list":allproject_list, "allappspecie_name_list":allappspecie_name_list}
    return render(request, "app/main.html", d)
 
 
@@ -121,7 +123,7 @@ def projectmake(request):
             start_project(project_name)
             settings_py_path=Path(directory_of_projects/project_name/"project"/"project"/"settings.py")
             for i in range(1000):
-                 time.sleep(0.02*i) #django-admin startprojectコマンドを実行したときに、settings.pyなどのファイルができる時間差があるので、その時間を設ける
+                 time.sleep(0.1*i) #django-admin startprojectコマンドを実行したときに、settings.pyなどのファイルができる時間差があるので、その時間を設ける
                  if settings_py_path.exists():
                         write_djangoruler2_in_settings_py(project_name)
                         break
@@ -156,6 +158,14 @@ def projectdelete(request):
 
 def projectreturn(request):
     #ajax
+    #そもそも下記の条件ではプロジェクトが作られないので、データベースには登録されていない。よって消してはいけない（ないものを消そうとするとエラーになる）。
+    project_name=request.POST.get("project_name")
+    if re.match("^[a-zA-Z0-9_]+$", project_name): #プロジェクト名が英数文字またはアンダーバーで構成されたものかどうかチェック 
+        if re.match("^[a-zA-Z]", project_name): #プロジェクト名の初期文字が大小英文字ではじまっているかチェック
+              project = DjangoProject.objects.get(project_name=project_name)
+              project.delete()
+              shutil.rmtree(Path(directory_of_projects/project_name))
+    
     return redirect(reverse("app:main"))
 
 
@@ -165,6 +175,33 @@ def appdetermine(request):
     identity=request.POST.get("appid")
     appname=request.POST.get("appname")
     appspecie=request.POST.get("appselect")
-    apptype=AppSpecie.objects.get(name=appspecie).type.type
-    d={"appname": appname,"appspecie":appspecie,"id":identity,"apptype":apptype, "project_name":project_name}
+    d={"appname": appname,"appspecie":appspecie,"id":identity, "project_name":project_name}
+    return JsonResponse(d)
+
+
+
+def app_establish(request):
+    #ajax
+    #共通処理
+    app_specie=request.POST.get("appspecie")
+    app_ID=request.POST.get("appid")
+    app_name=request.POST.get("appname")
+    project_name=request.POST.get("project_name")
+    d={"appname": app_name,"appspecie":app_specie,"id":app_ID, "project_name":project_name}
+    object_id=str(uuid.uuid4())
+    
+    #アプリの種類の違いによる処理の付け加え
+    if app_specie=="関数view_モデルなし":
+            indexURL=request.POST.get("url")
+            d["indexURL"]=indexURL
+            #データベースへの登録
+            project1=DjangoProject.objects.get(project_name=project_name)
+            app_specie1=AppSpecie.objects.get(name=app_specie)
+            model_name=ContentType.objects.get(app_label="app", model="apptype_1")
+            new_app=DjangoApp.objects.create(project=project1, appNo=app_ID, app_name=app_name, app_specie=app_specie1, content_type=model_name, object_id=object_id)
+            new_app_record=AppType_1.objects.create(app=new_app, indexURL=indexURL, object_id=object_id)
+            #ファイルやフォルダのコピー
+
+    #####アプリの種類を足すごとにここに追加していく
+
     return JsonResponse(d)

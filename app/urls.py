@@ -11,4 +11,5 @@ urlpatterns = [
     path('ajax_api_projectreturn', views.projectreturn, name='projectreturn'),
     path('ajax_api_projectdelete', views.projectdelete, name='projectdelete'),
     path('ajax_api_appdetermine',  views.appdetermine, name='appdetermine'),
+    path('ajax_api_appestablish',  views.app_establish, name='app_establish'),
 ]

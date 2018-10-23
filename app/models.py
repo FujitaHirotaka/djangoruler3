@@ -1,22 +1,48 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-class AppSpecie_type(models.Model):
-    type=models.CharField("アプリの必要情報の型", max_length=255)
-    def __str__(self):
-        return self.type
+
 
 class AppSpecie(models.Model):
     name=models.CharField("アプリの種類", max_length=255, unique=True)
-    type=models.ForeignKey(AppSpecie_type, on_delete=models.CASCADE, blank=True, null=True, verbose_name="アプリの必要情報の型")
     def __str__(self):
         return self.name
+    class Meta:
+        verbose_name_plural="アプリの種類"
 
 class DjangoProject(models.Model):
     project_name=models.CharField("プロジェクト名", max_length=255, unique=True)
-    for i in range(1,11):
-        exec("app"+str(i)+"=models.CharField('アプリ"+str(i)+"', max_length=255, null=True, blank=True)")
-        exec("app" + str(i) + "_URL=models.URLField('URL" + str(i) + "', null=True, blank=True)")
-        exec("app"+str(i)+"_specie=models.ForeignKey(AppSpecie, on_delete=models.CASCADE, related_name='アプリ"+str(i)+"', null=True, blank=True)")
-        
     def __str__(self):
         return self.project_name
+    class Meta:
+        verbose_name_plural="プロジェクト"
+
+
+class DjangoApp(models.Model):
+    project=models.ForeignKey(DjangoProject, on_delete=models.CASCADE, verbose_name="プロジェクト名")
+    appNo=models.CharField("アプリＩＤ", max_length=10)
+    app_name=models.CharField("アプリ名", max_length=255)
+    app_specie=models.ForeignKey(AppSpecie, on_delete=models.CASCADE, verbose_name="アプリの種類")    
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.CharField(max_length=255, primary_key=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+    def __str__(self):
+        return self.app_name
+    class Meta:
+        verbose_name_plural="アプリ"
+
+
+
+
+class AppType_1(models.Model):
+    """
+    関数view_モデルなし
+    """
+    app=models.ForeignKey(DjangoApp,on_delete=models.CASCADE)
+    indexURL=models.CharField("indexページのパス",max_length=255)
+    object_id=models.CharField(max_length=255, primary_key=True)
+    def __str__(self):
+        return str(self.pk)
+    class Meta:
+        verbose_name_plural="AppType_1フォーム（関数view_モデルなし）"

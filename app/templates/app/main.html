@@ -106,6 +106,7 @@
                                                   <div style="text-align: right">\
                                                        <form method="POST" action={% url "app:projectreturn" %}>\
                                                             {% csrf_token %}\
+                                                            <input type="hidden" name="project_name" value="'+data+'">\
                                                             <input type="submit" class="btn btn-primary" value="プロジェクトを新しく作るか選びなおす">\
                                                        </form>\
                                                   </div>\
@@ -226,11 +227,14 @@
                                 
                           $(document).on('submit', '#app_determine', function() {
                                 var form=$(this);
+                                let project_name=$('div#project__name').text();
                                 var app_name=form.find('input[name="appname"]').val();
                                 if (!(app_name.match(/^[0-9a-zA-Z]+$/))) {
                                     alert("アプリ名は半角英数字");
                                 } else if (!(app_name.slice(0,1).match(/^[a-zA-Z]$/))) {
                                     alert("最初の文字は英字");
+                                } else if (app_name==project_name){
+                                    alert("プロジェクト名と同じアプリ名は不可");
                                 } else {
 
                                 $.ajax({
@@ -242,20 +246,20 @@
                                 })
                                 .done(function(data) {
                                   let html3="\
-                                             <form class='appestablishform'>\
+                                             <form action={% url 'app:app_establish' %} method='POST' class='appestablishform'>\
                                              <input type='hidden' name='appid' value='"+data.id+"'</p>\
-                                             <input type='hidden' name='apptype' value='"+data.apptype+"'</p>\
                                              <input type='hidden' name='appname' value='"+data.appname+"'</p>\
                                              <input type='hidden' name='appspecie' value='"+data.appspecie+"'</p>\
                                              <input type='hidden' name='project_name' value='"+data.project_name+"'</p>\
                                              <p>アプリ名："+data.appname+"</p>\
                                              <p>アプリ種："+data.appspecie+"</p>";
 
-                                  app_type=data.apptype;
+                                  app_type=data.appspecie;
 
                                   switch (app_type) {
-                                      case "require_no_model":
+                                      case "関数view_モデルなし":
                                           html3=html3+"<p>URL : <input type='text' name='url' value='"+data.appname+"/index'></p>";
+  
                                           break;
 
                                     
@@ -303,12 +307,43 @@
                                 });
 
 
+
                                 $(document).on("click", ".appestablish", function(){
                                     $(this).parent().parent().prev().find("form").submit();
                                 });
 
                                 $(document).on("submit", ".appestablishform", function(){
-                                  //これから作る
+                                    var form = $(this);
+                                $.ajax({
+                                  url: form.prop("action"),
+                                  method: form.prop("method"),
+                                  data: form.serialize(),
+                                  timeout: 10000,
+                                  dataType: "json",
+                                })
+                                .done(function(data) {
+                                    let html5="\
+                                             <form  method='POST' class='appdelete'>\
+                                             <input type='hidden' name='appid' value='"+data.id+"'</p>\
+                                             <input type='hidden' name='appname' value='"+data.appname+"'</p>\
+                                             <input type='hidden' name='appspecie' value='"+data.appspecie+"'</p>\
+                                             <input type='hidden' name='project_name' value='"+data.project_name+"'</p>\
+                                             <p>アプリ名："+data.appname+"</p>\
+                                             <p>アプリ種："+data.appspecie+"</p>";
+
+                                    app_type=data.appspecie;
+                                    
+                                    switch (app_type) {
+                                        case "関数view_モデルなし":
+                                        html5=html5+"<p>URL : "+data.indexURL+"</p>\
+                                        <input type='hidden' name='indexURL' value='"+data.indexURL+"'>";
+                                        form.parent().html(html5)
+                                        break;
+
+  
+                                        }; 
+                                });
+
                                  return false;
                                 });
          
