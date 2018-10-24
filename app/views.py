@@ -180,6 +180,16 @@ def appdetermine(request):
 
 
 
+def common_treatment_for_database(model_name, project_name, app_specie, app_ID, app_name, object_id):
+    #app_establishビューにおけるデータベースへの書き込みの共通処理
+            project1=DjangoProject.objects.get(project_name=project_name)
+            app_specie1=AppSpecie.objects.get(name=app_specie)
+            a=1+1
+            model_name1=ContentType.objects.get(app_label="app", model=model_name)
+            new_app=DjangoApp.objects.create(project=project1, appNo=app_ID, app_name=app_name, app_specie=app_specie1, content_type=model_name1, object_id=object_id)
+            return new_app
+
+
 def app_establish(request):
     #ajax
     #共通処理
@@ -192,15 +202,14 @@ def app_establish(request):
     
     #アプリの種類の違いによる処理の付け加え
     if app_specie=="関数view_モデルなし":
+            #ajax用のjsonresponseへのデータの追加
             indexURL=request.POST.get("url")
             d["indexURL"]=indexURL
-            #データベースへの登録
-            project1=DjangoProject.objects.get(project_name=project_name)
-            app_specie1=AppSpecie.objects.get(name=app_specie)
-            model_name=ContentType.objects.get(app_label="app", model="apptype_1")
-            new_app=DjangoApp.objects.create(project=project1, appNo=app_ID, app_name=app_name, app_specie=app_specie1, content_type=model_name, object_id=object_id)
+            #データベースへの登録(なぜか、common_treatment_for_database関数のmodel_name引数は小文字じゃないといけない)
+            new_app=common_treatment_for_database("apptype_1", project_name, app_specie, app_ID, app_name, object_id)
             new_app_record=AppType_1.objects.create(app_name=new_app, appNo=app_ID, indexURL=indexURL, object_id=object_id)
-            #ファイルやフォルダのコピー
+            #ファイルやフォルダのコピー、リネイム
+
 
     #####アプリの種類を足すごとにここに追加していく
 
