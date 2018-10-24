@@ -39,9 +39,10 @@ class AppType_1(models.Model):
     """
     関数view_モデルなし
     """
-    app=models.ForeignKey(DjangoApp,on_delete=models.CASCADE)
-    indexURL=models.CharField("indexページのパス",max_length=255)
-    object_id=models.CharField(max_length=255, primary_key=True)
+    object_id=models.CharField(max_length=255, primary_key=True, verbose_name="オブジェクトID")
+    appNo=models.CharField("アプリＮｏ", max_length=10)
+    app_name=models.ForeignKey(DjangoApp, on_delete=models.CASCADE, verbose_name="アプリ名")
+    indexURL=models.CharField("indexページのURL",max_length=255)
     def __str__(self):
         return str(self.pk)
     class Meta:

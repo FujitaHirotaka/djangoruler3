@@ -199,7 +199,7 @@ def app_establish(request):
             app_specie1=AppSpecie.objects.get(name=app_specie)
             model_name=ContentType.objects.get(app_label="app", model="apptype_1")
             new_app=DjangoApp.objects.create(project=project1, appNo=app_ID, app_name=app_name, app_specie=app_specie1, content_type=model_name, object_id=object_id)
-            new_app_record=AppType_1.objects.create(app=new_app, indexURL=indexURL, object_id=object_id)
+            new_app_record=AppType_1.objects.create(app_name=new_app, appNo=app_ID, indexURL=indexURL, object_id=object_id)
             #ファイルやフォルダのコピー
 
     #####アプリの種類を足すごとにここに追加していく
