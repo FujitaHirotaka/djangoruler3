@@ -3,15 +3,50 @@ from django.http import HttpResponse
 import os
 from pathlib import Path
 from .forms import Form
+import pprint
+from .models import *
 
-#家と学校の環境でベースパスを使い分ける
-pathlist=["C://users/sakodaken/pycharmprojects", "C://users/fujita/pycharmprojects"]
-for i in pathlist:
-    if Path(i).exists():
-          directory_of_projects=Path(i)/"djangoruler3"/"project"/"app_example"
+# 家と学校の環境でベースパスを使い分ける
+home = Path.home()
+base_path = home / "PycharmProjects" / "djangoruler3" / "project" / "examples"
 
+# base_path内にあるフォルダー名をすべて取得する
 
 
 def index(request):
-    print(directory_of_projects)
-    return render(request, 'app_example/index.html', {"form":Form})
+    large_category_list = os.listdir(base_path)
+    # フォルダー構造から大カテゴリーを収集し、データーベースに登録する
+    for i in large_category_list:
+        large_category, created = LargeCategory.objects.get_or_create(
+            largecategoryname=i
+        )
+        # フォルダー構造から中カテゴリーを収集し、データーベースに登録する
+        for ii in os.listdir(Path(base_path) / i):
+            middle_category, created = MiddleCategory.objects.get_or_create(
+                largecategory=large_category, middlecategoryname=ii
+            )
+            for iii in os.listdir(Path(base_path) / i / ii):
+                small_category, created = SmallCategory.objects.get_or_create(
+                    middlecategory=middle_category, smallcategoryname=iii
+                )
+
+    # データベースにはあるがフォルダー構造から発見されない大カテゴリーや中カテゴリーをデータベースから消去する。
+    for i in LargeCategory.objects.all():
+        if not (i.largecategoryname in large_category_list):
+            i.delete()
+        else:
+            middlecategory_list = os.listdir(Path(base_path) / i.largecategoryname)
+            for ii in i.middlecategory_set.all():
+                if not (ii.middlecategoryname in middlecategory_list):
+                    ii.delete()
+                else:
+                    smallcategory_list = os.listdir(
+                        Path(base_path) / i.largecategoryname / ii.middlecategoryname
+                    )
+                    for iii in ii.smallcategory_set.all():
+                        if not (iii.smallcategoryname in smallcategory_list):
+                            iii.delete()
+
+    d = {"form": Form, "large_category_list": LargeCategory.objects.all()}
+
+    return render(request, "app_example/index.html", d)
