@@ -1,10 +1,14 @@
 ﻿from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import os
 from pathlib import Path
 from .forms import Form
 import pprint
 from .models import *
+import subprocess
+import time
+from selenium import webdriver
+import threading
 
 # 家と学校の環境でベースパスを使い分ける
 home = Path.home()
@@ -50,3 +54,23 @@ def index(request):
     d = {"form": Form, "large_category_list": LargeCategory.objects.all()}
 
     return render(request, "app_example/index.html", d)
+
+
+def example_open(request):
+    example_name = request.GET.get("example_select")
+    middlecategory = request.GET.get("middlecategory")
+    largecategory = request.GET.get("largecategory")
+    os.chdir(base_path / largecategory / middlecategory / example_name / "project")
+    subprocess.Popen("python manage.py runserver 8080", shell=True)
+    os.chdir(base_path)
+
+
+
+
+    d = {
+        "example_name": example_name,
+        "middlecategory": middlecategory,
+        "largecategory": largecategory,
+    }
+    return JsonResponse(d)
+
