@@ -9,6 +9,7 @@ import subprocess
 import time
 from selenium import webdriver
 import threading
+import psutil
 
 # 家と学校の環境でベースパスを使い分ける
 home = Path.home()
@@ -57,20 +58,24 @@ def index(request):
 
 
 def example_open(request):
+    pid1=request.GET.get("pid")
     example_name = request.GET.get("example_select")
     middlecategory = request.GET.get("middlecategory")
     largecategory = request.GET.get("largecategory")
+    if pid1.isdigit():
+      if psutil.pid_exists(pid1):
+        subprocess.Popen("taskkill /F /pid "+str(pid1)) 
     os.chdir(base_path / largecategory / middlecategory / example_name / "project")
-    subprocess.Popen("python manage.py runserver 8080", shell=True)
-    os.chdir(base_path)
-
-
-
+    process1=subprocess.Popen("python manage.py runserver 8080", shell=True)
+    os.chdir(home / "PycharmProjects" / "djangoruler3" / "project" )
+    
+    subprocess.Popen("python call_selenium.py", shell=True)
 
     d = {
         "example_name": example_name,
         "middlecategory": middlecategory,
         "largecategory": largecategory,
+        "pid": process1.pid,
     }
     return JsonResponse(d)
 

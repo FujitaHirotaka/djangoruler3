@@ -1,4 +1,7 @@
 from django.db import models
+from pathlib import Path
 
 class Django_Project(models.Model):
-    project_path=models.FilePathField(path="C:\\Users\\sakodaken\\PycharmProjects", recursive=False, allow_folders=True, allow_files=False)
+    home = Path.home()
+    base_path = home / "PycharmProjects" 
+    project_path=models.FilePathField(path=base_path, recursive=False, allow_folders=True, allow_files=False)

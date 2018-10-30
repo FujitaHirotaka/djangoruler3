@@ -56,6 +56,7 @@
             <option>{{ iii.smallcategoryname }}</option>
             {% endfor %}
           </select>
+          <input type="hidden" name="pid" value="---">
           <input type="hidden" name="middlecategory" value="{{ ii.middlecategoryname }}">
           <input type="hidden" name="largecategory" value="{{ i }}">
         </form>
@@ -105,10 +106,15 @@
         dataType: "json",
       })
         .done(function (data) {
+
+          $("input[name='pid']").each(function(){
+               $(this).val(data.pid);
+          });
+          /*
           let location = "http://127.0.0.1:8080/app/index";
 
-          alert(location);
           window.location.href = location;
+          */
         });
       return false;
     };
