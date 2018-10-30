@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\fujita\\Anaconda3\\envs\\myenv\\python.exe",
+    "python.pythonPath": "C:\\Users\\sakodaken\\AppData\\Local\\conda\\conda\\envs\\env_standard\\python.exe",
     "python.linting.pylintEnabled": false,
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,

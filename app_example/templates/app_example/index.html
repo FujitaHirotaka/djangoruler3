@@ -60,7 +60,7 @@
           <input type="hidden" name="middlecategory" value="{{ ii.middlecategoryname }}">
           <input type="hidden" name="largecategory" value="{{ i }}">
         </form>
-        <input type='button' class="form-control btn btn-secondary example_send" value='登録'>
+        <input type='button' class="form-control btn btn-secondary example_send" value='実行'>
       </div>
 
 
@@ -107,8 +107,8 @@
       })
         .done(function (data) {
 
-          $("input[name='pid']").each(function(){
-               $(this).val(data.pid);
+          $("input[name='pid']").each(function () {
+            $(this).val(data.pid);
           });
           /*
           let location = "http://127.0.0.1:8080/app/index";
