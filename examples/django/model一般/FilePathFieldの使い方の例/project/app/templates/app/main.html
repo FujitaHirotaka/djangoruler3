@@ -1,10 +1,20 @@
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1 class="mt-5">Choose filename</h1>
-            {{ form }}
 
-        </div>
+            <h1 class="mt-5">FilePathFieldの使い方の例</h1>
+            <p>(1)recursive=False, allow_folders=True, allow_files=False</p>
+            <p>{{ form }}</p>
+            <p>(2)recursive=False, allow_folders=False, allow_files=True</p>
+            <p>{{ form2 }}</p>
+            <p>(3)recursive=False, allow_folders=True, allow_files=True</p>
+            <p>{{ form3 }}</p>
+            <p>(4)recursive=True, allow_folders=True, allow_files=False</p>
+            <p>{{ form4 }}</p>
+            <p>(5)recursive=False, match="fds", allow_folders=True, allow_files=False</p>
+            <p>{{ form5 }}</p>
+
+
+
     </div>
 </div>

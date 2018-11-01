@@ -1,0 +1,52 @@
+﻿[概要]
+フォルダーパスを指定して、そこにあるフォルダー
+またはファイルを選択する選択ボックスを表示してくれる。
+
+[詳細な使い方]
+class FilePathField(path=None, match=None, 
+　　　　　recursive=False, max_length=100, **options)
+
+ファイルシステム上の特定のディレクトリ内の
+ファイル名に選択肢が制限されるCharField 。
+3つの特別な引数があり、最初の1つは 必須 :
+
+FilePathField.path
+必須。FilePathField が選択肢から取得するディレクトリ
+へのファイルシステムの絶対パス。　　例: "/home/images"。
+
+FilePathField.match
+省略可能。正規表現で文字列としてファイル名を
+フィルタリングするために使用する。正規表現は
+フルパスではなくベースファイル名に適用される点に注意。 
+例: "foo.*\.txt$"。これは foo23.txt とは合致するが、
+bar.txt や foo23.png とは合致ない。
+
+FilePathField.recursive
+省略可能。True か False のどちらかを取りデフォルトは False 。
+path の全てのサブディレクトリを含むかどうかを指定します。
+（Trueの場合、再帰的に探索可能）
+
+FilePathField.allow_files
+省略可能。True か False を取り、デフォルトは True 。
+指定された場所にあるファイルを含むかどうかを指定。 
+allow_foldersｔｐ のいずれかを True にする必要あり。
+
+FilePathField.allow_folders
+省略可能。True か False を取り、デフォルトは False 。
+指定した場所にあるフォルダーを含むかどうかを指定。
+ allow_files とのいずれかを True にする必要あり。
+
+
+もちろん、これらの引数は同時に使うことができる。
+
+
+1つの可能性は、フルパスではなく、ベースファイル名に match が適用されることです。 
+したがって、この例:
+
+FilePathField(path="/home/images", match="foo.*", recursive=True)
+...は、/home/images/foo/bar.png ではなく /home/images/foo.png とマッチ。
+match がベースのファイル名に適用されるため (foo.png と bar.png)。
+
+FilePathField のインスタンスは、デフォルトが最大 100 文字の varchar カラムとして、
+データベース上に生成される。他のフィールドと同様に、max_length 引数を使って
+最大文字数を変更することができる。
