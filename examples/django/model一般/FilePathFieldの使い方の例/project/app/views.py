@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import os
 from .forms import Form
 import subprocess
@@ -39,3 +39,10 @@ def ajax(request):
 
     return HttpResponse(pid)
 
+def ajax2(request):
+    filepath=request.GET.get("filepath")
+    with open(filepath, "r") as f:
+           text=f.read()
+    d={"text": text}
+
+    return JsonResponse(d)
