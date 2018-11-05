@@ -23,8 +23,11 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6">
-
+        {% if mode == "index" %}
           {% include "app/main.html" %}
+        {% else %}
+          {% include "app/main2.html" %}          
+        {% endif %}
           {% include "app/footer.html" %}
         </div>
         <div class="col-lg-6">

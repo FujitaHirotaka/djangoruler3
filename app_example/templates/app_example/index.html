@@ -102,8 +102,9 @@
         url: $(this).prop("action"),
         method: $(this).prop("method"),
         data: $(this).serialize(),
-        timeout: 10000,
+        timeout: 10000000,
         dataType: "json",
+        async: false
       })
         .done(function (data) {
 

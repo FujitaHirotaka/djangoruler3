@@ -1,0 +1,131 @@
+﻿<!-- Page Content -->
+<div class="container">
+    <div class="row">
+
+            <h1 class="mt-5">Viewの使い方の例</h1>
+            <p>[参考ページ]<a href="https://qiita.com/tell-k/items/38c0612a44497b311d6b">Djangoのクラスベースビューのas_viewて何なの？</a></p>
+            <p>[関係URL]</p>
+            <p><a href="{% url 'app:index2' %}">その２</a></p>
+            <p><a href="{% url 'app:index3' %}">その３</a></p>
+            <p><a href="{% url 'app:index4' %}">その４</a></p>
+            <p><a href="{% url 'app:index5' %}">その５</a></p>                                    
+          <pre style="white-space: pre-wrap ;">
+[概要]
+・Djangoには関数ベースのビューと、クラスベースのビューの2種類がある
+・クラスベースの方は利用する時に as_view というクラスメソッドからviewオブジェクトを生成している
+・これは一体何してるんですか？ 
+[前提]
+Djangoのビューはドキュメントにも書いてある通り以下の条件を満たす必要がある
+(A view is a callable which takes a request and returns a response)
+・requestオブジェクトを(第一引数として)受け取る
+・callableである
+・responseオブジェクトを返す
+
+[as_view クラスメソッド]
+例えば以下のような関数ベースビューがあるとする
+-------------------------------------------------------------
+from django.http import HttpResponse, HttpResponseNotAllowed
+
+def myview(request):
+    if request.method == 'GET':
+      return HttpResponse('Hello, World!')
+    return HttpResponseNotAllowed('GET only accept')
+-------------------------------------------------------------
+これと等価なクラスベースビューを作ると下記のようになる
+
+-------------------------------------------------------------
+from django.http import HttpResponse
+from django.views import View
+
+class MyView(View):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, World!')
+
+myview = MyView.as_view()
+-------------------------------------------------------------
+この myview = MyView.as_view() の myview は実態は関数である。
+as_view は Djangoのビューの条件を満たす関数 を作り出しているだけである
+
+[as_view を使わずにクラスベースビューを使う]
+たとえば as_view を使わずにクラスベースビューを使おうとすると下記のようになる。(この例自体に意味はない。)
+
+-------------------------------------------------------------
+from django.http import HttpResponse
+from django.views import View
+
+class MyView(View):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, World!')
+
+def myview(request, *args, **kwargs):
+    view_obj = MyView()
+    view_obj.request = request
+    view_obj.args = args
+    view_obj.kwargs = kwargs
+    return view_obj.dispatch(request, *args, **kwargs)
+-------------------------------------------------------------
+クラスベースビューは最初の起点が dispatch メソッドとなる
+dispatch メソッド は リクエストメソッド を判定して、その リクエストメソッド と同じ名前のメソッドが実装されていたらそれを実行する。
+つまり request.method == 'GET' だったら Myview.get を実行するということ
+dispatch が実装されてるメソッドに応じて処理を自動的に分岐してくれるので、関数ベースでやっていた時のように自分で分岐を書かなくても良い。
+# こんな感じで分岐を書かなくても良いという話
+
+-------------------------------------------------------------
+def myview(request):
+    if request.method == 'GET':
+      # code for GET
+
+    if request.method == 'POST':
+      # code for POST
+
+    if request.method in ('PATCH', 'PUT'):
+      # code for PATCH or PUT
+
+    if request.method == 'DELETE':
+      # code for DELETE
+
+    return HttpResponseNotAllowed('Not accept method {}'.format(request.method))
+-------------------------------------------------------------
+Djangoの該当コード
+実際にDjangoがview関数を生成している部分をgithubのコードから抜粋して確認する
+
+# refs https://github.com/django/django/blob/master/django/views/generic/base.py#L49
+
+-------------------------------------------------------------
+@classonlymethod
+def as_view(cls, **initkwargs):
+
+   # 〜 省略 〜
+
+   # 自分自身をインスタンス化するビュー関数を生成してreturn してる
+   def view(request, *args, **kwargs):
+       self = cls(**initkwargs)
+       if hasattr(self, 'get') and not hasattr(self, 'head'):
+           self.head = self.get
+       self.request = request
+       self.args = args
+       self.kwargs = kwargs
+       return self.dispatch(request, *args, **kwargs)
+
+   # 〜 省略 〜
+
+   return view
+-------------------------------------------------------------
+
+as_view は 自ら(=cls) をインスタンス化して dispatchメソッドを実行するような関数(=view)を生成して return しているのがわかる。
+まとめ
+クラスベースビューのas_viewは Djangoのビューの条件を満たす関数を生成しているだけ。極論を言えば条件満たせばなんでもいい。
+クラスベースビューの基本的な機能は、リクエストメソッドに応じた処理の自動分岐を提供することである
+それをベースにテンプレートをレンダリングする機能を加えたり、CRUDの機能が追加されたのが他のviews.genrice群
+
+例) TemplateView, RedirectView, CreateView, etc...
+            </pre>
+        
+
+
+
+
+    </div>
+</div>

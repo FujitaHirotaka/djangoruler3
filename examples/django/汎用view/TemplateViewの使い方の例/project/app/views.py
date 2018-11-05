@@ -16,10 +16,14 @@ class index(TemplateView):
         hierarchy_list=make_file_path_list()[1]
         max_hierarchy_number=max(hierarchy_list)
         #*****************************************
-        context = super().get_context_data(**kwargs) # はじめに継承元のメソッドを呼び出す
-        context["file_path_list"] = file_path_list
-        context["max_hierarchy_number"] =max_hierarchy_number
-        return context
+        #context = super().get_context_data(**kwargs) # はじめに継承元のメソッドを呼び出す
+        #context["file_path_list"] = file_path_list
+        #context["max_hierarchy_number"] =max_hierarchy_number
+        #return context
+        kwargs["file_path_list"] = file_path_list
+        kwargs["max_hierarchy_number"] =max_hierarchy_number
+        return kwargs
+
 
 
 

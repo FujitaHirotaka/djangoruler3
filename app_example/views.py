@@ -65,8 +65,9 @@ def example_open(request):
     largecategory = request.GET.get("largecategory")
     pid_list = psutil.pids()
     if pid1.isdigit():
-        if pid1 in pid_list:  # psutil.pid_exists()はどうも変数を受け付けないらしい。なので、このような記述になった。
-            subprocess.Popen("taskkill /F /pid " + str(pid1))
+        if int(pid1) in pid_list:  # psutil.pid_exists()はどうも変数を受け付けないらしい。なので、このような記述になった。
+            subprocess.Popen("taskkill /f /T /pid " + str(pid1))
+
     example_path = base_path / largecategory / middlecategory / example_name / "project"
     example_index_path = example_path / "app" / "templates" / "app"
     os.chdir(example_path)

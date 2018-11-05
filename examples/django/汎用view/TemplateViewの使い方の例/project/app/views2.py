@@ -12,7 +12,7 @@ def ajax(request):
     pid_list=psutil.pids()
 
     if int(pid) in pid_list:
-        cmd="taskkill /F /pid "+str(pid)
+        cmd="taskkill /f /T /im chromedriver.exe"
         subprocess.Popen(cmd,shell=True)
 
     return HttpResponse(pid)
