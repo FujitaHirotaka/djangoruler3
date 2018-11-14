@@ -1,0 +1,15 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">@require_http_methodsの使い方</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/topics/http/decorators/">Django公式document</a></p>
+<p>postでアクセス、およびgetでアクセスをおしてみること。また/app/index2にアクセスしてみること。</p>
+<p>デコレーターでpostでのみアクセスを許可しているのでpost以外はHTTP ERROR 405がでる。</p>
+<p>/app/index2に直接アクセスしてみてもHTTP ERROR 405がでる</p>
+<form action="{% url 'app:index2' %}" method="GET">
+    <button type="submit">GETでアクセス</button>
+</form>
+<form action="{% url 'app:index2' %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">POSTでアクセス</button>
+</form>

@@ -1,0 +1,19 @@
+﻿[概要]
+formの使い方（モデルと結びつけない場合）
+[手順]
+１．forms.pyでクラスとフィールドを定義する。この際、定義するクラスはdjango.forms.Formを継承する。
+2.viewにforms.pyで定義したクラスを読み込む。
+
+[コアフィールド引数]
+required	True/False
+label	文字列（ここで設定した文字列がフォームの入力欄の前に記載される）
+initial	初期値
+widget	widget を指定する
+help_text	文字列
+error_messages	エラーメッセージをディクショナリで渡す {'required':'Enter your name.'} など
+validators	Django 1.2 以降
+localize	Django 1.2 以降
+
+
+
+

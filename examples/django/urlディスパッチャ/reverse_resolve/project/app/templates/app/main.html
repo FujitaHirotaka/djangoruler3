@@ -1,0 +1,14 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">名前空間からのurlの特定</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/topics/http/urls/">Django公式document</a></p>
+<p>[関係URL]/app/1709/index/template/786/に行ってみるること（リダイレクトされる）</p>
+
+
+<p>パラメーターvalue:{{ value }}</p>
+<p>パラメーターvalue2:{{ value2 }}</p>
+<p>パラメーターvalue4:{{ value4 }}</p>
+<p><a href="{% url 'short:index' %}">リダイレクト先</a></p>
+<p><a href="{% url 'long:index2' 22 14 %}">リダイレクト先2</a></p>
+

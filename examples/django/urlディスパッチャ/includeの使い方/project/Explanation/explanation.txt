@@ -1,0 +1,9 @@
+﻿[概要]
+application2013/august/index/
+application2013/august/update/
+application2013/august/load/
+application2013/august/form/
+application2013/august/result/
+
+など、前半分のurlの構造が非常に似通っているときに
+includeを使うと、すっきり書ける

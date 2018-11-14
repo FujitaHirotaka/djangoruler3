@@ -1,0 +1,26 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">form基本例(モデルと結びつけない場合）</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/topics/http/decorators/">Django公式document</a></p>
+<p>postでアクセス、およびgetでアクセスをおしてみること。また/app/index2にアクセスしてみること。</p>
+<p>デコレーターでGETでのみアクセスを許可しているのでGET以外はHTTP ERROR 405がでる。</p>
+<p>/app/index2に直接アクセスするときちんとアクセスできる</p>
+<br>
+<br>
+<h2>１．デフォルト表示</h2>
+{{ form }}
+<br>
+<br>
+<br>
+<h2>２．as_Pで表示</h2>
+{{ form.as_p }}
+<br>
+<br>
+<h2>３．as_tableで表示</h2>
+{{ form.as_p }}
+<br>
+<br>
+<h2>４．as_ulで表示</h2>
+{{ form.as_ul }}
+<br><br>

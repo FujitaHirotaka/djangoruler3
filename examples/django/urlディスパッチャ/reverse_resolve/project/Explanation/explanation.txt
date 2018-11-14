@@ -1,0 +1,10 @@
+﻿[概要]
+app_name（アプリの名前空間）,namespace（インスタンスの名前空間）,name（名前空間）の組み合わせから、
+urlを特定する。
+なお、インスタンスの名前空間を設定する際は、親urls.pyの中でincludeを用い、
+include("app.urls", namespace="long")やinclude("app.urls","long")のいずれも書き方として可能。
+
+
+view中で実行する場合はdjango.urls.reverseを用いる。reverseを用いる場合は 
+reverse("app_name:name")やreverse("namespace:name")などの書き方が可能。
+templateの中で実行するためには{% url "app:index " %}などとやる。
