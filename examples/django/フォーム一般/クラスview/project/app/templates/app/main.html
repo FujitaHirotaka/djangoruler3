@@ -1,0 +1,21 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">クラスview</h1>
+<p><a href="https://docs.djangoproject.com/ja/2.1/topics/class-based-views/intro/"></a>django公式</p>
+<br>
+<br>
+<h2>フォーム１(number1とnumber2を足し算,答えは別ページ)</h2>
+<form action='{% url "app:result" %}' method="post">
+    {% csrf_token %}
+    {{ form1.as_p }}
+    <button type="submit">足し算をする</button>
+</form>
+
+<h2>フォーム2(number1とnumber2を足し算、答えは同じページ内)</h2>
+<form action='{% url "app:index" %}' method="post">
+    {% csrf_token %}
+    {{ form2.as_p }}
+    <button type="submit">足し算をする</button>
+</form>
+

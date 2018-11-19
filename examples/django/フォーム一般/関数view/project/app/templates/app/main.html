@@ -1,0 +1,21 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">関数view</h1>
+<p>参考ページ</p>
+<p><a href="https://tutorial.djangogirls.org/ja/django_forms/"></a>djangogirls</p>
+<br>
+<br>
+<h2>フォーム１(number1とnumber2を足し算,答えは別ページ)</h2>
+<form action='{% url "app:result" %}' method="post">
+    {% csrf_token %}
+    {{ form1.as_p }}
+    <button type="submit">足し算をする</button>
+</form>
+
+<h2>フォーム2(number1とnumber2を足し算、答えは同じページ内)</h2>
+<form action='{% url "app:index" %}' method="post">
+    {% csrf_token %}
+    {{ form2.as_p }}
+    <button type="submit">足し算をする</button>
+</form>

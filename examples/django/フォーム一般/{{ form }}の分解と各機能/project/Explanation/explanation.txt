@@ -1,0 +1,30 @@
+﻿[概要]
+validation(clean_)
+
+formのバリデーションのうち、特定の一つのフィールドについてのバリデーション。
+[手続き]
+forms.pyにて、特定のクラスのメソッド名をclean_(fieldname)にする。
+↓
+cleaned_dataでクラスの属性を取得し、if文でバリデーション条件を書き、
+当てはまらない場合、ValidationErrorをレイズする。
+↓
+属性を返す。
+なお、属性間にまたがるバリデーションはcleanで行う。
+
+
+例：
+from django import forms
+
+class ContactForm(forms.Form):
+    # Everything as before.
+    ...
+
+    def clean_recipients(self):
+        data = self.cleaned_data['recipients']
+        if "fred@example.com" not in data:
+            raise forms.ValidationError("You have forgotten about Fred!")
+
+        # Always return a value to use as the new cleaned data, even if
+        # this method didn't change it.
+        return data
+
