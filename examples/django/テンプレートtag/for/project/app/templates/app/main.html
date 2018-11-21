@@ -1,0 +1,77 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">for</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+
+<h2>基本例0(リストへのアクセス)</h2>
+<p>リストへのアクセスはlist[0][1]のような形でなく、list.0.1のような形でアクセスする</p>
+{{ list.0 }}<br>
+  {{ list.1.2 }}<br>
+  {{ list.0.1 }}<br>
+  {{ list.0.2 }}<br>
+  {{ list.0.3 }}<br>
+
+
+<hr>
+<h2>基本例1(リストの展開)</h2>
+{% for i in list %}
+  {{ i }}<br>
+{% endfor %}
+<hr>
+<h2>基本例2(reversed)</h2>
+{% for i in list reversed %}
+  {{ i }}<br>
+{% endfor %}
+<hr>
+<h2>基本例3(入れ子、リストの中のリストにアクセスする）</h2>
+<p>ネストされたリストの展開も可能</p>
+{% for i in list %}
+{% for ii in i %}
+  {{ ii }}<br>
+{% endfor %}
+{% endfor %}
+<hr>
+<h2>基本例4(リストの中のリストにアクセスするその２)</h2>
+<p>ネストされたリストについて for x,y,z in listのような形で展開できる</p>
+{% for x,y,z in list %}
+  <p>This is a point at ({{ x }}, {{ y }}, {{ z }})</p>
+{% endfor %}
+<hr>
+
+<h2>基本例５(辞書の展開)</h2>
+<p>for i in jishoのような形で展開した場合、キーが展開される</p>
+{% for i in jisho %}
+  <p>{{ i }}</p>
+{% endfor %}
+<hr>
+
+<h2>基本例6(辞書の展開その２)</h2>
+<p>for i in jisho.keysのような形で展開した場合、キーが展開される</p>
+{% for i in jisho.keys %}
+  <p>{{ i }}</p>
+{% endfor %}
+<hr>
+
+<h2>基本例７(辞書の展開その３)</h2>
+<p>for i in jisho.valuesのような形で展開した場合、バリューが展開される</p>
+{% for i in jisho.values %}
+  <p>{{ i }}</p>
+{% endfor %}
+<hr>
+
+<h2>基本例8(辞書の展開その4)</h2>
+<p>for i, ii in jisho.itemsのような形で展開した場合、キーとバリューが展開される</p>
+{% for i, ii in jisho.items %}
+  <p>{{ i }}:{{ ii }} </p>
+{% endfor %}
+<hr>
+<h2>基本例9(辞書へのアクセス)</h2>
+<p>jisho["key"]のような形でアクセスするのではなく、jisho.keyのような形でアクセスする</p>
+<p>辞書やリストが入れ子になった複雑なものでも基本的にこのようなやり方ですべてアクセスできるようだ。</p>
+  <p>{{ jisho.bbb}} </p>
+  <p>{{ jisho2.2}} </p>
+  <p>{{ jisholist.1.ddd}} </p>
+
+<hr>
+

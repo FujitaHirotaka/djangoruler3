@@ -1,0 +1,8 @@
+﻿[概要]
+forloop.counter	現在のループカウンタ番号 ( 1 から順にカウント )
+forloop.counter0	現在のループカウンタ番号 ( 0 から順にカウント )
+forloop.revcounter	現在のループカウンタ値 ( 1 から順に、末尾からカウント)
+forloop.revcounter0	現在のループカウンタ値 ( 0 から順に、末尾からカウント)
+forloop.first	最初のループであれば True
+forloop.last	最後のループであれば True
+forloop.parentloop	入れ子のループであるとき、現在のループを囲んでいる 1 つ上のループを表します。

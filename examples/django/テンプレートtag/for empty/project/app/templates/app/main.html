@@ -1,0 +1,22 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">for empty</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+
+
+<h2>基本例(listがある場合）</h2>
+{% for i in list %}
+   {{ i }}<br>
+{% empty %}
+   名前のリストが空です。<br>
+{% endfor %}
+<hr>
+<h2>基本例(listがない場合）</h2>
+{% for i in list2 %}
+   {{ i }}<br>
+{% empty %}
+名前のリストが空です。<br>
+{% endfor %}
+<hr>
+

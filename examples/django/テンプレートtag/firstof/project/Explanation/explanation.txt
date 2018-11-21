@@ -1,0 +1,32 @@
+﻿[概要]
+firstof¶
+与えられた引数の中から False でない最初の 1 つを出力します。
+すべて False だった場合は何も出力しません。
+
+使用例:
+
+{% firstof var1 var2 var3 %}
+これは以下のテンプレートと等価です:
+
+{% if var1 %}
+    {{ var1 }}
+{% elif var2 %}
+    {{ var2 }}
+{% elif var3 %}
+    {{ var3 }}
+{% endif %}
+すべての変数の値が False だった場合に表示させるフォールバック値として、 
+1 個の文字列リテラルを指定できます:
+
+{% firstof var1 var2 var3 "fallback value" %}
+このタグは変数の値を自動エスケープします。
+自動エスケープなしで出力するには次のように書きます:
+
+{% autoescape off %}
+    {% firstof var1 var2 var3 "<strong>fallback value</strong>" %}
+{% endautoescape %}
+一部の変数だけをエスケープさせるには、次のように書きます:
+
+{% firstof var1 var2|safe var3 "<strong>fallback value</strong>"|safe %}
+{% firstof var1 var2 var3 as value %} と記述することで、
+出力を 1 つの変数内に格納することができます。

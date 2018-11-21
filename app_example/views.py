@@ -67,14 +67,22 @@ def example_open(request):
     if pid1.isdigit():
         if int(pid1) in pid_list:  # psutil.pid_exists()はどうも変数を受け付けないらしい。なので、このような記述になった。
             subprocess.Popen("taskkill /f /T /pid " + str(pid1))
+    if largecategory=="django":
+        example_path = base_path / largecategory / middlecategory / example_name / "project"
+        example_index_path = example_path / "app" / "templates" / "app"
+        os.chdir(example_path)
+        process1 = subprocess.Popen("python manage.py runserver 8080", shell=True)
+        os.chdir(home / "PycharmProjects" / "djangoruler3" / "project")
+        cmd = "python call_selenium.py " + str(process1.pid) + " " + str(example_index_path)
+        subprocess.Popen(cmd, shell=True)
+    elif largecategory == "python一般":
+        example_path = base_path / largecategory / middlecategory / example_name 
+        os.chdir(example_path)
+        process1 = subprocess.Popen("python index.py", shell=True)
+        os.chdir(home / "PycharmProjects" / "djangoruler3" / "project")
 
-    example_path = base_path / largecategory / middlecategory / example_name / "project"
-    example_index_path = example_path / "app" / "templates" / "app"
-    os.chdir(example_path)
-    process1 = subprocess.Popen("python manage.py runserver 8080", shell=True)
-    os.chdir(home / "PycharmProjects" / "djangoruler3" / "project")
-    cmd = "python call_selenium.py " + str(process1.pid) + " " + str(example_index_path)
-    subprocess.Popen(cmd, shell=True)
+
+
 
     d = {
         "example_name": example_name,

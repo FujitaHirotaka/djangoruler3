@@ -1,0 +1,289 @@
+﻿[概要]
+はじめての Django アプリ作成、その 1
+https://docs.djangoproject.com/ja/2.1/intro/tutorial01/
+
+さあ、例を交えながら学んでゆきましょう。
+
+このチュートリアルでは、簡単な投票 (poll) アプリケーションの作成に取り組みます。
+
+Poll アプリケーションは2つの部分からなります:
+
+１．ユーザが投票したり結果を表示したりできる公開用サイト
+２．投票項目の追加、変更、削除を行うための管理 (admin) サイト
+
+Django がインストールされているかどうか、
+またどのバージョンがインストールされているかを調べるには、
+以下のコマンドをシェルプロンプト（先頭の $ は入力待ちを示す記号です）で実行します。
+
+$ python -m django --version
+
+Django がインストールされていれば、
+インストールされているDjangoのバージョンがわかります。
+もしなければ "No module named django" とエラーが表示されます。
+
+このチュートリアルは Django 2.1 と Python 3.5 以降を対象に書かれています。
+
+プロジェクトを作成する
+初めて Django を使うのなら、最初のセットアップを行う必要があります。
+通常は、 Django の プロジェクト (project) を構成するコードを自動生成します。
+プロジェクトとは、データベースの設定や Django 固有のオプション、
+アプリケーション固有の設定などといった、個々の Django インスタンスの設定を集めたものです。
+
+コマンドラインから、コードを置きたい場所に cd して、以下のコマンドを 実行してください。
+
+$ django-admin startproject mysite
+これを実行すると、現在のディレクトリに mysite ディレクトリが作成されます。
+
+コードはどこに置くの？
+(モダンなフレームワークを使わない) 古いプレーンな PHP の経験があるなら、
+これまでは Web サーバのドキュメントルート下 (/var/www といった場所) に
+コードを配置してきたことでしょう。
+ Django ではそうしないでください｡ 
+ Python コードを Web サーバーのドキュメントルート下に置かないでください｡
+ コードをドキュメントルート下に置くと、 
+ 誰かがコードを Web を介して読めるようになってしまうからです。これは安全上良くありません。
+
+コードはドキュメントルートの外､例えば /home/mycode の ような場所に置きましょう。
+
+startproject が何を作成したかをみてみましょう:
+
+mysite/
+    manage.py
+    mysite/
+        __init__.py
+        settings.py
+        urls.py
+        wsgi.py
+ファイルはそれぞれ以下のような役割を持っています:
+
+外側の mysite/ ルートディレクトリは、このプロジェクトのただの入れ物です。 
+この名前は Django に関係しませんので、好きな名前に変更できます。
+manage.py:
+　　 Django プロジェクトに対する様々な操作を行うためのコマンドラインユーティリティです｡
+　　　詳しくは django-admin と manage.py 内の manage.py を参照してください｡
+内側の mysite/ ディレクトリは、
+　　　このプロジェクトの実際の Python パッケージです。
+　　　この名前が Python パッケージの名前であり、 
+　　　import の際に 使用する名前です (例えば import mysite.urls) 。
+mysite/__init__.py:
+　　　 このディレクトリが Python パッケージであることを 
+　　　　Python に知らせるための空のファイルです。
+　　　　Python の初心者は、 Python の公式 ドキュメントの 
+　　　　more about packages を読んで下さい。
+mysite/settings.py: 
+　　　　Django プロジェクトの設定ファイルです。 
+　　　　設定の仕組みは Djangoの設定 を参照してください。
+mysite/urls.py: 
+　　　　Django プロジェクトの URL 宣言、
+　　　　いうなれば Django サイトにおける「目次」に相当します。
+　　　　詳しくは URL ディスパッチャ を参照 してください。
+mysite/wsgi.py: 
+　　　　プロジェクトをサーブするためのWSGI互換Webサーバーとのエントリーポイントです。
+　　　　詳細は WSGI とともにデプロイするには を参照してください。
+
+開発用サーバー
+Django のプロジェクトがうまく動作するか確認しましょう。
+外側の mysite ディレクトリに移動ができたら下記のコマンドを実行してください:
+
+$ python manage.py runserver
+コマンドライン上で下記の出力が確認できるでしょう:
+
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run 'python manage.py migrate' to apply them.
+
+11月 20, 2018 - 15:50:53
+Django version 2.1, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+注釈
+
+適用されていないデータベースマイグレーションについての警告はここでは無視します、
+後ほどすぐにデータベースとともにたっぷりと取り組みます。
+
+これで、 Django 開発サーバを起動しました。 
+Django 開発サーバは Python だけで書かれた軽量な Web サーバです。
+このサーバは、開発を迅速に行い、運用に適した状態になるまで 
+Apache のような運用サーバの設定をいじらなくても良いようにするためのものです。
+
+ここでちょっと注意しておきましょう。
+このサーバは開発中の利用だけを考えて作られています。
+絶対に運用環境では 使わないでください
+ (筆者たちの専門は Web フレームワークであって、Web サーバではありません)。
+
+さあ、これでサーバが起動したので、
+ブラウザで http://127.0.0.1:8000/ にアクセスしてみてください。 
+"Congratulations!" と表示された、ロケットが離陸しているページが出るはずです。
+やりましたね！
+
+ポート番号の変更
+
+デフォルトでは runserver コマンドは内部 IP のポート 8000 で起動します。
+サーバーのポートを変えたい場合は、以下のようにコマンドライン引数を渡してください。
+このコマンドによってポート 8080 で起動させれます:
+
+$ python manage.py runserver 8080
+サーバの IP を指定するときには、ポート番号も一緒に指定します。
+例えば、 全ての IP からのリクエストを受け付ける (サーバを他のコンピュータから見えるようにする) には、
+以下のようにします:
+
+/ 
+$ python manage.py runserver 0:8000
+0 は 0.0.0.0 のショートカットです。
+開発サーバーの詳細な説明は runserver のリファレンスを参照してください。
+
+runserver の自動リロード
+
+開発サーバーは必要に応じてリクエストごとにPythonコードを自動的にリロードします。
+コード変更の効果を得るためにサーバーを再起動する必要はありません。
+しかしながら、ファイルの追加のようないくつかの行動は再起動をトリガーしません、
+このような場合はサーバーを再起動する必要があります。
+
+Polls アプリケーションをつくる¶
+さあ、これで自分用の環境、すなわちプロジェクトが立ち上がり、
+作業にとりかかる準備ができました。
+Django 内に追加する各アプリケーションは、
+所定の規約に従った Python パッケージで構成されます。
+Django には基本的なディレクトリ構造を自動生成するユーティリティが含まれているので、
+ディレクトリを作ることではなくコードを書くことに集中できます。
+
+プロジェクトとアプリケーション
+プロジェクトとアプリケーションの違いとは何でしょうか？
+アプリケーションとは、実際に何らかの処理を行う Web アプリケーションを指します。
+例えばブログシステムや公開レコードのデータベース、単純な投票アプリといった具合です。
+プロジェクトとは、あるウェブサイト向けに設定とアプリケーションを集めたものです。
+一つのプロジェクトには複数のアプリケーションを入れられ ます。
+また、一つのアプリケーションは複数のプロジェクトで使えます。
+
+アプリケーションは Python path のどこにでも置けます。
+このチュートリアルでは投票アプリケーションを manage.py のすぐ隣に作ります。
+なので、 mysite のサブモジュールとしてでなく、トップレベルのモジュールとしてインポートできます。
+
+アプリケーションを作るには、 manage.py と同じディレクトリに入って、このコマンドを実行します:
+
+$ python manage.py startapp polls
+このコマンドは polls というディレクトリを作成します。
+中身はこのようになっています:
+
+polls/
+    __init__.py
+    admin.py
+    apps.py
+    migrations/
+        __init__.py
+    models.py
+    tests.py
+    views.py
+このディレクトリ構造が、 poll アプリケーションの全体像です。
+
+はじめてのビュー作成¶
+最初のビューを書いてみましょう。 polls/views.py を開いて、以下の Python コードを書いてください:
+
+polls/views.py
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+Django で最も単純なビューです。
+ビューを呼ぶために、 URL を対応付けしてやる必要があります。
+そのためには URLconf が必要です。
+
+polls ディレクトリに URLconf を作るには urls.py というファイルを作ります。
+アプリのディレクトリはこのようになるはずです:
+
+polls/
+    __init__.py
+    admin.py
+    apps.py
+    migrations/
+        __init__.py
+    models.py
+    tests.py
+    urls.py
+    views.py
+polls/urls.py ファイルには以下のコードを書いてください:
+
+polls/urls.py¶
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+次のステップはルートのURLconfに polls.urls モジュールの記述を反映させることです。 mysite/urls.py に django.urls.include のimportを追加して、 urlpatterns のリストに include() を挿入します。するとこのようになります:
+
+mysite/urls.py
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+]
+include() 関数は他の URLconf への参照することができます。
+Django が include() に遭遇すると、
+そのポイントまでに一致した URL の部分を切り落とし、
+次の処理のために残りの文字列をインクルードされた URLconf へ渡します。
+
+include() の背景にある考えは、 URL を簡単にプラグ & プレイ可能にすることです。
+polls には独自の URLconf (polls/urls.py) を持っているので、 
+"/polls/" 、 "/fun_polls/" や、 "/content/polls/" といった、
+どんなパスルート下にも置けて、どこに置いてもきちんと動作します。
+
+include() を使うとき
+
+URLパターンをインクルードするときはいつでも include() を使うべきです。 
+admin.site.urls はこれについての唯一の例外です。
+
+これで index ビューを URLconf に紐付けることができました。
+下記のコマンドを実行して、動作を確認しましょう:
+
+$ python manage.py runserver
+ブラウザで http://localhost:8000/polls/ にアクセスすると、 
+"Hello, world. You're at the polls index." と表示されるのが確認できるでしょう。
+これはビューの index で定義したものです。
+
+ページが見つかりませんか？
+
+ここでエラーページが表示された場合は、http://localhost:8000/ではなく、
+http://localhost:8000/polls/移動していることを確認してください。
+
+path() 関数は4つの引数を受け取ります。引数のうち route と view の2つは必須で、
+kwargs、name の2つは省略可能です。
+ここで、これらの引数がどのようなものか見てみましょう。
+
+path() 引数: route
+route は URL パターンを含む文字列です。
+リクエストを処理するとき、Django は urlpatterns のはじめのパターンから開始し、
+リストを順に下に見ていきます。
+要求された URL を一致するものを見つけるまで各パターンと比較します。
+
+パターンはGETやPOSTのパラメーター、そしてドメイン名を検索しません。
+例えば、 https://www.example.com/myapp/ へのリクエストにおいては、
+URLconfは myapp/ を見ます。
+ https://www.example.com/myapp/?page=3 へのリクエストにおいても、
+ URLconfは myapp/ を見ます。
+
+path() 引数: view
+Django がマッチする正規表現を見つけると、
+Django は指定されたビュー関数を呼び出します。
+その際は HttpRequest オブジェクトを第一引数に、
+そしてキーワード引数としてrouteから「キャプチャされた」値を呼び出します。この例はこの後すぐ出てきます。
+
+path() 引数: kwargs¶
+任意のキーワード引数を辞書として対象のビューに渡せます。
+この機能はチュートリアルでは使いません。
+
+path() 引数: name
+URL に名前付けをしておけば Django のどこからでも明確に参照でき、
+とくにテンプレートの中で有効です。
+この便利な機能のおかげで、
+プロジェクトのURLにグローバルな変更を加える場合にも
+1つのファイルを変更するだけで済むようになります。
+
+基本的なリクエストとレスポンスのフローに馴染んだら、
+データベースを使った作業を始めるために チュートリアルその2 を読みましょう。

@@ -1,0 +1,103 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">forloop</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+
+<h2>forloop</h2>
+{% for i in list %}
+{% for ii in i %}
+  {{forloop}}
+{% endfor %}
+{% endfor %}
+
+<h2>forloop.counter</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.counter}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+<h2>forloop.counter0</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.counter0}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+<h2>forloop.revcounter</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.revcounter}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+<h2>forloop.revcounter0</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.revcounter0}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+<h2>forloop.first</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.first}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+<h2>forloop.last</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.last}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+<h2>forloop.parentloop.counter</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.parentloop.counter}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+
+<h2>forloop.parentloop.parentloop.counter</h2>
+{% for i in list %}
+{% for ii in i %}
+{% for iii in ii %}
+  {{forloop.parentloop.parentloop.counter}}
+  {{iii}}<br>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+<hr>
+

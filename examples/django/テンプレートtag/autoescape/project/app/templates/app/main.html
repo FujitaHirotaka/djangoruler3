@@ -1,0 +1,27 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">autoescape tag</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+<p>(注意）autoescapeはデフォルトでオン</p>
+
+
+<h2>1.autoescapeの設定なし（すなわちデフォルト）</h2>
+{{ variable }}
+
+<hr>
+<h2>2.autoescape off</h2>
+{% autoescape off %}
+{{ variable }}
+{% endautoescape %}
+
+<hr>
+<h2>3.autoescape on(すなわちデフォルトとかわらない）</h2>
+{% autoescape on %}
+{{ variable }}
+{% endautoescape %}
+
+<hr>
+<h2>4.テンプレートフィルタのsafeを使ってautoescapeをoffすることも可能</h2>
+{{ variable|safe}}
+

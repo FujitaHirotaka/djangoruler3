@@ -1,0 +1,16 @@
+﻿<!-- Page Content -->
+
+{% verbatim %}
+<h1 class="mt-5">バリデーション</h1>
+{% endverbatim %}
+
+<p>参考ページ</p>
+<p><a href="https://docs.djangoproject.com/ja/2.1/ref/forms/api/"></a>django公式</p>
+<br>
+<br>
+<h2>フォーム１(バリデータ―を様々な形で記述)</h2>
+<form action='{% url "app:index" %}' method="post">
+    {% csrf_token %}
+    {{ form1.as_p }}
+    <button type="submit">送信する</button>
+</form>

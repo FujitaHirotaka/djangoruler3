@@ -1,0 +1,30 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">filter</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+<p>タグブロック内のコンテンツを、1 つまたは複数のフィルタに通します。</p>
+<h2>基本例１(linebreaksのみ）</h2>
+
+{% filter linebreaks %}
+FIRST LINE
+SECOND LINE
+{% endfilter %}
+
+<hr>
+<h2>基本例２(linebreaksとlower）</h2>
+
+{% filter linebreaks|lower %}
+FIRST LINE
+SECOND LINE
+{% endfilter %}
+
+<hr>
+<h2>基本例３(lowerのみ）</h2>
+
+{% filter lower %}
+FIRST LINE
+    SECOND LINE
+{% endfilter %}
+
+<hr>

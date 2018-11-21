@@ -1,0 +1,26 @@
+﻿[概要]
+for ... empty
+for タグのオプションとして {% empty %} 節を使うことができます。
+これはループさせようとした配列が空、
+または存在しなかった場合に表示する文字列を指定します:
+
+<ul>
+{% for athlete in athlete_list %}
+    <li>{{ athlete.name }}</li>
+{% empty %}
+    <li>Sorry, no athletes in this list.</li>
+{% endfor %}
+</ul>
+上記の例は以下のテンプレートと同等です。
+しかし {% empty %} を使ったほうが簡潔で、
+かつ高速になる場合もあります。
+
+<ul>
+  {% if athlete_list %}
+    {% for athlete in athlete_list %}
+      <li>{{ athlete.name }}</li>
+    {% endfor %}
+  {% else %}
+    <li>Sorry, no athletes in this list.</li>
+  {% endif %}
+</ul>

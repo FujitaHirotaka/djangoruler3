@@ -1,0 +1,90 @@
+﻿[概要]
+タグを実行するごとに、引数の文字列や変数から、順に一つずつ値を出力します。
+最初の処理では 1 番目の値が、その次に 2 番目の値、以下、4 個まで同様に処理されます。
+サイクルのすべての値を出力すると、再び 1 番目に戻って出力します。
+
+このタグは特にループ内で使うのが便利です:
+
+{% for o in some_list %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+        ...
+    </tr>
+{% endfor %}
+この例では、繰り返しの最初の実行では row1 クラスを参照する HTML が生成されます。 
+2 回目には row2、 3 回目は再び row1 というように、ループを繰り返すたびに交互に処理されます。
+
+変数を使うことも出来ます。
+例えば、ここに 2 つのテンプレート変数 rowvalue1 rowvalue2 があって、
+これらを交互に出力させたい場合には次のように書くことができます:
+
+{% for o in some_list %}
+    <tr class="{% cycle rowvalue1 rowvalue2 %}">
+        ...
+    </tr>
+{% endfor %}
+cycle に含まれる変数はエスケープされます。
+自動エスケープなしで出力する場合には次のようにします。
+
+{% for o in some_list %}
+    <tr class="{% autoescape off %}{% cycle rowvalue1 rowvalue2 %}{% endautoescape %}">
+        ...
+    </tr>
+{% endfor %}
+変数と文字列は混ぜて使用できます:
+
+{% for o in some_list %}
+    <tr class="{% cycle 'row1' rowvalue2 'row3' %}">
+        ...
+    </tr>
+{% endfor %}
+現在のサイクルの値を、次の値に進めずにもう一度参照したい場合には、 
+"as" を使って {% cycle %} タグに名前を与えます:
+
+{% cycle 'row1' 'row2' as rowcolors %}
+サイクル名を参照することで、テンプレート内のどの場所にも変数として現在のサイクルの値を挿入できます。
+元の cycle タグから独立してサイクルの値を次へ進めたいときには、
+変数の名前を指定して別の cycle タグを使用します。
+以下にテンプレートの例をあげます:
+
+<tr>
+    <td class="{% cycle 'row1' 'row2' as rowcolors %}">...</td>
+    <td class="{{ rowcolors }}">...</td>
+</tr>
+<tr>
+    <td class="{% cycle rowcolors %}">...</td>
+    <td class="{{ rowcolors }}">...</td>
+</tr>
+この出力は次のようになります:
+
+<tr>
+    <td class="row1">...</td>
+    <td class="row1">...</td>
+</tr>
+<tr>
+    <td class="row2">...</td>
+    <td class="row2">...</td>
+</tr>
+cycle タグ内では、空白で区切ることでいくつでも値を使うことができます。
+一重引用符 ( ' ) または二重引用符 ( " ) で囲まれた値は
+文字列リテラルとして扱われ、引用符のない値はテンプレート変数として扱われます。
+
+標準の設定において、 cycle タグに as を使う場合、 
+{% cycle %} はサイクルの初期設定を行うときサイクル内で使う値を初期化します。
+これは、入れ子となったループや include されたテンプレートで値を使う場合に問題になるかもしれません。
+もしあなたがサイクルを宣言したいだけで初期値を生成させたくない場合には、
+タグのキーワードの最後に silent を加えてください。以下に例を示します:
+
+{% for obj in some_list %}
+    {% cycle 'row1' 'row2' as rowcolors silent %}
+    <tr class="{{ rowcolors }}">{% include "subtemplate.html" %}</tr>
+{% endfor %}
+これは <tr> エレメントのリストを出力し、 class には row1 と row2 が交互に設定されます。サブテンプレートではそのコンテキスト内で rowcolors にアクセスし、値はそれを取り囲む <tr> のクラスに一致します。ここでもし silent キーワードが無かったら、 row1 と row2 は <tr> エレメントの外側で通常のテキストとして発行されます。
+
+あるサイクルの定義において silent キーワードが使われているとき、
+後に続いて使われる cycle タグには自動的に silent を適用します。
+次に示すテンプレートは、 2 番めの {% cycle %} 呼び出しでは silent を設定していませんが、
+何も出力しません。
+
+{% cycle 'row1' 'row2' as rowcolors silent %}
+{% cycle rowcolors %}
+You can use the resetcycle tag to make a {% cycle %} tag restart from its first value when it's next encountered.

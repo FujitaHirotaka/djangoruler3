@@ -1,0 +1,12 @@
+﻿[概要]
+{% comment %} ～ {% endcomment %} で囲まれた部分はすべて無視されます。
+最初のタグには追加の説明文を含めるすることができます。
+例えばコードの一部をコメント化した際、その部分を無効にした理由を記述したいときなどに便利です。
+
+使用例:
+
+<p>Rendered text with {{ pub_date|date:"c" }}</p>
+{% comment "Optional note" %}
+    <p>Commented out text with {{ create_date|date:"c" }}</p>
+{% endcomment %}
+comment タグを入れ子にすることはできません。

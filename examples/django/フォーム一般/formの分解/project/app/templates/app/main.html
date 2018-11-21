@@ -1,0 +1,89 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">クラスview</h1>
+<p><a href="https://docs.djangoproject.com/ja/2.1/topics/class-based-views/intro/"></a>django公式</p>
+<br>
+<br>
+<h2>フォーム１(form.as_p)</h2>
+{{ form.as_p }}
+
+
+<h2>フォーム2(分解その１)</h2>
+{{ form.non_field_errors }}
+<div class="fieldWrapper">
+    {{ form.char1.errors }}
+    <label for="{{ form.char1.id_for_label }}">{{ form.char1.label}}</label>
+    {{ form.char1 }}
+    {% if form.char1.help_text %}
+    {{ form.char1.help_text }}
+    {% endif %}
+</div>
+<div class="fieldWrapper">
+    {{ form.check.errors }}
+    <label for="{{ form.check.id_for_label }}">{{ form.check.label}}</label>
+    {{ form.check }}
+    {% if form.check.help_text %}
+    {{ form.check.help_text}}
+    {% endif %}
+</div>
+<div class="fieldWrapper">
+        {{ form.type.errors }}
+        <label for="{{ form.check.id_for_label }}">{{ form.type.label}}</label>
+        {{ form.type }}
+        {% if form.type.help_text %}
+        {{ form.type.help_text}}
+        {% endif %}
+    </div>
+
+<h2>フォーム3(分解その2)</h2>
+{{ form.non_field_errors }}
+{% for i in form %}
+<div class="fieldWrapper">
+    {{ i.errors }}
+    <label for="{{ i.id_for_label }}">{{ i.label}}</label>
+    {{ i }}
+    {% if i.help_text %}
+    {{ i.help_text|safe }}
+    {% endif %}
+</div>
+{% endfor %}
+
+<h2>フォーム4(分解その3)</h2>
+{{ form.non_field_errors }}
+{% for i in form %}
+<div class="fieldWrapper">
+    {{ i.errors }}
+    {{ i.label_tag }}
+    {{ i }}
+    {% if i.help_text %}
+    {{ i.help_text|safe }}
+    {% endif %}
+</div>
+{% endfor %}
+
+
+<h2>フォーム4(各フォーム値へのアクセス)</h2>
+{% for i in form %}
+<div class="fieldWrapper">
+    {{ i.html_name }}
+    {{ i.value }}
+    {{ i.is_hidden }}
+    {{ i.field.help_text }}
+    {{ i.field.validators }}
+    {{ i.field.max_length }}
+</div>
+{% endfor %}
+
+<h2>フォーム５（hiddenフィールドのみ表示）</h2>
+{% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %}
+
+<h2>フォーム６（hiddenでないフィールドのみ表示）</h2>
+{% for field in form.visible_fields %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+    </div>
+{% endfor %}

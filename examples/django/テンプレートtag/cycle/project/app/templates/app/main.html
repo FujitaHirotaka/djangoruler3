@@ -1,0 +1,81 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">cycle</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+<p>(概要）{% verbatim %}{% cycle 変数１　変数2　変数3 %}{% endverbatim %}で順に一つずつ変数の値を出力します</p>
+<p>for文との組み合わせで使う</p>
+
+
+<h2>１．基本的な使用例("aaa","bbb",などが変数)</h2>
+<table>
+{% for i in list %}
+    <tr >
+          <td>{{i}}.</td>
+          <td>{% cycle "aaa" "bbb" "ccc" "ddd" "eee" %}</td>
+    </tr>
+{% endfor %}
+</table>
+<hr>
+
+<h2>２．基本的な使用例（変数でもＯＫ）</h2>
+<table>
+{% for i in list %}
+    <tr >
+          <td>{{i}}.</td>
+          <td>{% cycle variable0 variable1 variable2 variable3 variable4 %}</td>
+    </tr>
+{% endfor %}
+</table>
+<hr>
+
+<h2>３．autoescapeをoffにしたい場合</h2>
+<table>
+{% for i in list %}
+    <tr >
+          <td>{{i}}.</td>
+          <td>{% autoescape off %}{% cycle variable0 variable1 variable2 variable3 variable4 %}{% endautoescape %}</td>
+    </tr>
+{% endfor %}
+</table>
+<hr>
+
+<h2>４．変数と文字列を混ぜて使用</h2>
+<table>
+{% for i in list %}
+    <tr >
+          <td>{{i}}.</td>
+          <td>{% autoescape off %}{% cycle variable0 variable1 "bbbb" variable2  "aaaa"  %}{% endautoescape %}</td>
+    </tr>
+{% endfor %}
+</table>
+<hr>
+
+<h2>５．変数や文字列を再利用したい場合</h2>
+<table>
+{% for i in list %}
+    <tr >
+          <td>{{i}}.</td>
+          <td>{% autoescape off %}{% cycle variable0 variable1 "bbbb" variable2  "aaaa" as revariable %}{% endautoescape %}</td>
+          <td>{{ revariable }}</td>
+        </tr>
+{% endfor %}
+</table>
+<hr>
+
+<h2>6．cycleを宣言したいだけでその場では値を生成したくない場合（silentの使用)
+</h2>
+<table>
+{% for i in list %}
+{% cycle variable0 variable1 "bbbb" variable2  "aaaa" as revariable silent%}
+     <tr >
+          <td>{{i}}.</td>
+          <td>{% autoescape off %}{{ revariable }}{% endautoescape %}</td>
+          <td>{{ revariable }}</td>
+     </tr>
+{% endfor %}
+</table>
+<hr>
+
+
+

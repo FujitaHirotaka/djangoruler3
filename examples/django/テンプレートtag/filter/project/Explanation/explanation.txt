@@ -1,0 +1,17 @@
+﻿[概要]
+タグブロック内のコンテンツを、1 つまたは複数のフィルタに通します。
+複数のフィルタを使うときはパイプ（ " | " ）を使って連結します。
+フィルタには変数のように引数を与えることができます。
+
+filter タグと endfilter タグに囲まれたテキストは、
+すべて ブロックに含まれることに注意しましょう。
+
+使用例:
+
+{% filter force_escape|lower %}
+    This text will be HTML-escaped, and will appear in all lowercase.
+{% endfilter %}
+
+注釈
+escape と safe フィルタは引数として与えることができません。
+ブロックの自動エスケープを管理するには、代わりに autoescape タグを使ってください。

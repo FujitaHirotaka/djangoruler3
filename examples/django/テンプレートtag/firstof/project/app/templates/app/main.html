@@ -1,0 +1,29 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">firstof</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+<p>(概要）{% verbatim %}{% firstof 変数１　変数２　変数３　・・・・%}{% endverbatim %}で後ろにある変数のうち、Trueである最初のものを出力</p>
+
+
+<h2>基本例1</h2>
+{% verbatim %}{% firstof False True %}{% endverbatim %}<br>
+{% firstof False True %}
+
+<hr>
+
+<h2>基本例2</h2>
+{% verbatim %}{% firstof "" 0 0.0 1.0 %}{% endverbatim %}<br>
+{% firstof "" 0 0.0 1.0 %}
+
+<hr>
+<h2>基本例3</h2>
+{% verbatim %}{% firstof karamojiretu zero zerofloat karalist "OK" %}{% endverbatim %}<br>
+{% firstof karamojiretu zero zerofloat karalist "OK" %}
+
+<hr>
+<h2>基本例4</h2>
+{% verbatim %}{% firstof karamojiretu zero zerofloat karalist "<b>OK</b>"|safe %}{% endverbatim %}<br>
+{% firstof karamojiretu zero zerofloat karalist "<b>OK</b>"|safe %}
+
+<hr>
