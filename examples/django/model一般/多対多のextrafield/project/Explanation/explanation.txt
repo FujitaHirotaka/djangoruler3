@@ -1,0 +1,79 @@
+﻿[概要]
+多対多を定義するためのエクストラフィールド
+Django 1.0 で新たに登場しました: リリースノートを参照してください
+ピザとトッピングを組み合わせたり照合したりするだけのような多対多のリレーショ ンを扱いたいのなら、標準の ManyToManyField で事 足ります。しかし、時として、二つのモデルのリレーションそのものにデータを関 連づけたい場合があります。
+
+例えば、ミュージシャンのグループと、在籍しているミュージシャンを追跡するア プリケーションのケースを考えてみましょう。これは個人 (person) とグループの 関係なので、 ManyToManyField でリレーションを表 現できるはずです。しかし、ミュージシャンとグループの関係には、あるミュージ シャンがあるグループにいつ合流したか、のような細かい情報がたくさんあります。
+
+こうした状況を解決するために、 Django では、多対多のリレーションを定義する ときに、あらかじめリレーションを管理するためのモデル(中間モデル)を定義して おき、その中間モデルに向けてエクストラフィールド (extra field) を組み込めま す。中間モデルは ManyToManyField の through 引数に指定します。ミュージシャン の例では、コードは以下のように表されます:
+
+class Person(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __unicode__(self):
+        return self.name
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Person, through='Membership')
+
+    def __unicode__(self):
+        return self.name
+
+class Membership(models.Model):
+    person = models.ForeignKey(Person)
+    group = models.ForeignKey(Group)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)
+中間モデルでは、多対多のリレーションの両側にあたるモデルに対して明示的に外 部キーを張らねばなりません。この明示的な定義によってはじめて、モデルのリレー ションが宣言されます:
+
+中間モデルには、いくつか制約があります:
+
+中間モデルは、多対多リレーションのターゲットモデル (リレーションを張 られる側のモデル) に対する外部キーを 一つだけ しか定義できません (上の例では Person ですね)。同じモデルに複数の外部キーを定義する と、モデルのバリデーション時にエラーを送出します。
+中間モデルは、多対多リレーションのソースモデル (リレーションを張る側 のモデル) に対する外部キーを 一つだけ しか定義できません (上の例で は Group ですね)。同じモデルに複数の外部キーを定義すると、モデル のバリデーション時にエラーを送出します。
+自分自身に対する多対多のリレーションを定義するのに中間モデルを使う場 合にのみ、例外的に同じモデルに対するリレーションを二つ定義できます。 ただし、多対多リレーションの中では、二つの外部キーは別々、すなわちソー スとターゲットを区別して扱います。
+中間モデルを使って、あるモデルから自分自身に多対対のリレーションを定 義する場合、 symmetrical=False を指定せねばなりません ( モデルフィールドのリファレンス を参照してください) 。
+さて、これで中間モデル (例でいうところの Membership) を使った ManyToManyField を設定したので、多対多のリレーショ ンを生成できます。リレーションの生成は、中間モデルのインスタンス生成によっ て実現します:
+
+>>> ringo = Person.objects.create(name="Ringo Starr")
+>>> paul = Person.objects.create(name="Paul McCartney")
+>>> beatles = Group.objects.create(name="The Beatles")
+>>> m1 = Membership(person=ringo, group=beatles,
+...     date_joined=date(1962, 8, 16),
+...     invite_reason= "Needed a new drummer.")
+>>> m1.save()
+>>> beatles.members.all()
+[<Person: Ringo Starr>]
+>>> ringo.group_set.all()
+[<Group: The Beatles>]
+>>> m2 = Membership.objects.create(person=paul, group=beatles,
+...     date_joined=date(1960, 8, 1),
+...     invite_reason= "Wanted to form a band.")
+>>> beatles.members.all()
+[<Person: Ringo Starr>, <Person: Paul McCartney>]
+通常の ManyToManyField と違い、 add や create, (beatles.members = [...] のような) 代入によるリレーションの定義 は行えません:
+
+# THIS WILL NOT WORK
+>>> beatles.members.add(john)
+# NEITHER WILL THIS
+>>> beatles.members.create(name="George Harrison")
+# AND NEITHER WILL THIS
+>>> beatles.members = [john, paul, ringo, george]
+なぜでしょうか。中間モデルでリレーションを作成すると、単に Person と Group の間のリレーションを生成するだけではなく、 Membership テーブ ルに必要な全ての情報が必要です。単に add や create を呼び出したり 代入を行うだけでは、リレーション以外の情報を埋められません。その結果、中間 モデルを使う場合は、 add や create は無効化されるのです。中間モデル を使った多対多のリレーションを定義するには、中間モデルのインスタンスを生成 するしかない、ということを覚えておいてください。
+
+同じ理由で、 remove メソッドも無効化されています。ただし、 clear() メソッドを使えば、以下のように多対多のリレーションを一括して消去できます:
+
+# Beatles have broken up
+>>> beatles.members.clear()
+中間のモデルを使って多対多のリレーションを確立したら、リレーションをまたい だクエリを実行できます。通常の多対多リレーションと同じく、リレーション先の モデルの属性を使ってクエリを実行します:
+
+# 'Paul' で始まる名前の人がメンバにいるグループを探す
+>>> Groups.objects.filter(person__name__startswith='Paul')
+[<Group: The Beatles>]
+中間テーブルを使っているので、中間のモデルの属性を使ったクエリも実行できま す:
+
+# 1961年1月1日以降に合流した Beatles のメンバを探す
+>>> Person.objects.filter(
+...     group__name='The Beatles',
+...     membership__date_joined__gt=date(1961,1,1))
+[<Person: Ringo Starr]

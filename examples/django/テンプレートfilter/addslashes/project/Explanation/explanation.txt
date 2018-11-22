@@ -1,0 +1,8 @@
+﻿[概要]
+addslashes¶
+引用符の前にスラッシュを追加します。CSV などの文字列をエスケープする際に便利です。
+
+For example:
+
+{{ value|addslashes }}
+value の値が "I'm using Django" のとき、出力は "I\'m using Django" となります。

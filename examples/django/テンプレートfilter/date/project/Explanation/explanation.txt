@@ -1,0 +1,8 @@
+﻿[概要]
+cut¶
+入力値の中から、引数に指定した値を全て取り除きます。
+
+For example:
+
+{{ value|cut:" " }}
+value の値が "String with spaces" のとき、出力は "Stringwithspaces" となります。

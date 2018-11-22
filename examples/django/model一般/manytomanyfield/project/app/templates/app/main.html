@@ -1,0 +1,23 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">ManyToManyField</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/topics/db/models/">Django公式document</a></p>
+
+<p>manytomanyfieldでも_set.all()は使える</p>
+<p>(コマンドプロンプトを確認）</p>
+
+<h2>基礎的な例(_set.allの使い方）</h2>
+{% for i in player_list %}
+ {{i}}
+ {{ i.team_set.all }}<br>
+{% endfor %}
+<hr>
+<h2>基礎的な例(allの使い方）</h2>
+{% for i in team_list %}
+ {{i}}
+ {{ i.players.all }}<br>
+{% endfor %}
+
+
+

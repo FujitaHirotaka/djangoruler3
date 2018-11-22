@@ -1,0 +1,12 @@
+﻿<!-- Page Content -->
+
+
+    <ul>
+    {% for i in latest_team_list %}
+        <li><a href="{% url 'app:detail' i.name %}">{{ i.name }}</a></li>
+    {% empty %}
+        <p>チームがありません</p>
+    {% endfor %}
+    </ul>
+<hr>
+

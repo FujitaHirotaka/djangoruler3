@@ -1,0 +1,8 @@
+﻿[概要]
+center¶
+入力値を引数で指定された幅のフィールド内に中央寄せします。
+
+For example:
+
+"{{ value|center:"15" }}"
+value の値が "django" のとき、出力は "     Django    " となります。

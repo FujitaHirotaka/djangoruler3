@@ -1,0 +1,17 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">center</h1>
+<p>[参考ページ]<a href="https://docs.djangoproject.com/ja/2.1/ref/templates/builtins/">Django公式document</a></p>
+<p>dictsortといいながら、辞書だけでなく、タプルやリストもok</p>
+
+<h2>単純な例</h2>
+<p>{{value0|dictsort:"name" }}</p>
+<p>{{value0|dictsort:"age" }}</p>
+<p>{{value1|dictsort:"author.name" }}</p>
+<p>{{value1|dictsort:"author.age" }}</p>
+<p>{{value1|dictsort:"title" }}</p>
+<p>{{value2|dictsort:0 }}</p>
+<p>{{value2|dictsort:1 }}</p>
+<hr>
+

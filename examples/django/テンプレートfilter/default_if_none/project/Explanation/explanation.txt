@@ -1,0 +1,10 @@
+﻿[概要]
+default_if_none¶
+入力値が None であるとき ( None であるときのみ ) 、引数に指定したデフォルト値を使いま す。そうでなければ、入力値を使います。
+
+空の文字列が入力された場合は、デフォルト値を 使わない ことに注意してください。空文字列をフォールバックしたければ default フィルタを使ってください。
+
+For example:
+
+{{ value|default_if_none:"nothing" }}
+If value is None, the output will be nothing.

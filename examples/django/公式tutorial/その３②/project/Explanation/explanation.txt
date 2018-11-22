@@ -1,0 +1,22 @@
+﻿実際に動作するビューを書く¶
+各ビューには二つの役割があります: 一つはリクエストされたページのコンテンツを含む HttpResponse オブジェクトを返すこと、もう一つは Http404 のような例外の送出です。それ以外の処理はユーザ次第です。
+
+ビューはデータベースからレコードを読みだしても、読み出さなくてもかまいません。 Django のテンプレートシステム、あるいはサードパーティの Python テンプ レートシステムを使ってもよいですし、使わなくてもかまいません。 PDF ファイルを生成しても、 XML を出力しても、 ZIP ファイルをその場で生成してもかまいません。 Python ライブラリを使ってやりたいことを何でも実現できます。
+
+Django にとって必要なのは HttpResponse か、あるいは例外です。
+
+簡単のため、 チュートリアルその 2 で解説した Django のデータベース API を使ってみましょう。試しに次のような index() ビューを作ります。これは、システム上にある最新の 5 件の質問項目をカンマで区切り、日付順に表示するビューです:
+
+polls/views.py¶
+from django.http import HttpResponse
+
+from .models import Question
+
+
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    output = ', '.join([q.question_text for q in latest_question_list])
+    return HttpResponse(output)
+
+# Leave the rest of the views (detail, results, vote) unchanged
+このコードには問題があります。ビューの中で、ページのデザインがハードコードされています。ページの見栄えを変更するたびに、 Python コードを編集する必要があります。 Django のテンプレートシステムを使って、ビューから使用できるテンプレートを作成し、Python からデザインを分離しましょう。

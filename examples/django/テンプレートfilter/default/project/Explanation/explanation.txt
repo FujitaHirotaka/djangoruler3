@@ -1,0 +1,8 @@
+﻿[概要]
+default¶
+入力の評価値が False の場合、引数に指定したデフォルト値を使います。そうでなければ、入力値を使います。
+
+For example:
+
+{{ value|default:"nothing" }}
+value が "" ( 空の文字列 ) のとき、出力は ``nothing``になります。

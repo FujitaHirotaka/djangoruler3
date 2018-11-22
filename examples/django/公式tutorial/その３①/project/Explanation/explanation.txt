@@ -1,0 +1,70 @@
+﻿[概要]
+はじめての Django アプリ作成、その 3¶
+このチュートリアルは チュートリアルその 2 の続きです。ここでは、引続き Web 投票アプリケーションの開発を例にして、公開用のインタフェース、ビュー(view) の作成を焦点に解説します。
+
+オーバービュー¶
+ビューとは、 Django のアプリケーションにおいて特定の機能を提供するウェブペー ジの「型 (type)」であり、各々のテンプレートを持っています。例えばブログアプリケーションなら、以下のようなビューがあるでしょう:
+
+Blog ホームページ - 最新エントリーをいくつか表示
+エントリー詳細ページ - 1エントリーへのパーマリンク (permalink) ページ
+年ごとのアーカイブページ - 指定された年のエントリーの月を全て表示
+月ごとのアーカイブページ - 指定された月のエントリーの日をすべて表示
+日ごとのアーカイブページ - 指定された日の全てのエントリーを表示
+コメント投稿 - エントリーに対するコメントの投稿を受付
+投票アプリケーションでは、以下4つのビューを作成します:
+
+質問 "インデックス" ページ -- 最新の質問をいくつか表示
+質問 "詳細" ページ -- 結果を表示せず、質問テキストと投票フォームを表示
+質問 "結果" ページ -- 特定の質問の結果を表示
+投票ページ -- 特定の質問の選択を投票として受付
+Django では、各ページとコンテンツはビューによって提供されます。各ビューは単純に Python 関数 (クラスベースビューの場合はメソッド) として実装されています。 Django はビューを、リクエストされたURLから決定します (正確には、URLのドメイン以降の部分)
+
+インターネットサーフィンをしてるときなどに、 "ME2/Sites/dirmod.asp?sid=&type=gen&mod=Core+Pages&gid=A6CD4967199A42D9B65B1B" のようななんとも素晴らしいURLを見かけることがあるでしょう。 Django はこんなものよりもっとエレガントな "URLパターン" を提供していると知っておいてください。
+
+URLパターンは、URLを単に一般化したものです。例えば /newsarchive/<year>/<month>/ などです。
+
+URLからビューを得るために、Django は「URLconf」と呼ばれているものを使います。URLconf はURLパターンをビューにマッピングします。
+
+このチュートリアルでは URLconf の基本的な使い方を知ってもらいます。より詳しくは URL ディスパッチャ を参照してください。
+
+もっとビューを書いてみる¶
+それではもう少しviewを polls/views.py に追加していきましょう。これから追加するviewでは引数をとります。
+
+polls/views.py¶
+def detail(request, question_id):
+    return HttpResponse("You're looking at question %s." % question_id)
+
+def results(request, question_id):
+    response = "You're looking at the results of question %s."
+    return HttpResponse(response % question_id)
+
+def vote(request, question_id):
+    return HttpResponse("You're voting on question %s." % question_id)
+次の path() コールを追加して、新しいviewを polls.urls モジュールと結びつけます。
+
+polls/urls.py¶
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    # ex: /polls/
+    path('', views.index, name='index'),
+    # ex: /polls/5/
+    path('<int:question_id>/', views.detail, name='detail'),
+    # ex: /polls/5/results/
+    path('<int:question_id>/results/', views.results, name='results'),
+    # ex: /polls/5/vote/
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+]
+お使いのブラウザで、 "/polls/34/" を見てください。 detail() メソッドが実行され、URLで提供したIDが表示されます。 "/polls/34/results/" と "/polls/34/vote/" も試してください。結果と投票ページのプレースホルダがそれぞれ表示されます。
+
+誰かがWebサイトの 「/polls/34/」 をリクエストすると、 Django は ROOT_URLCONF に指定されている Python モジュール mysite.urls をロードします。そのモジュール内の urlpatterns という変数を探し、順番にパターンを検査していきます。 `polls/` にマッチした箇所を見つけた後、一致した文字列 ("polls/") を取り除き、残りの文字列である "34/" を次の処理のために 『polls.urls』 の URLconf に渡します。これは '<int：question_id>/' に一致し、結果として下記のように detail() が呼び出されます。
+
+detail(request=<HttpRequest object>, question_id=34)
+question_id=34 の部分は <int:question_id> から来ています。 山括弧を使用すると、URLの一部が「キャプチャ」され、キーワード引数としてビュー関数に送信します。 文字列の :question_id> 部分は、一致するパターンを識別するために使用される名前を定義し、<int: 部分は、URLパスのこの部分に一致するパターンを決定するコンバータです。
+
+.html のような文字列をURLに追加する必要はありません。ただし、次のようにすれば、表現できます:
+
+path('polls/latest.html', views.index),
+とはいえ、こんな阿呆なことはやめましょう。

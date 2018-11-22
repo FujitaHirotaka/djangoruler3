@@ -1,0 +1,58 @@
+﻿[概要]
+dictsort¶
+辞書のリストを入力として、引数に指定したキーでリストをソートして返します。
+
+For example:
+
+{{ value|dictsort:"name" }}
+value が以下の内容であるとします:
+
+[
+    {'name': 'zed', 'age': 19},
+    {'name': 'amy', 'age': 22},
+    {'name': 'joe', 'age': 31},
+]
+このとき出力は以下のようになるでしょう:
+
+[
+    {'name': 'amy', 'age': 22},
+    {'name': 'joe', 'age': 31},
+    {'name': 'zed', 'age': 19},
+]
+より複雑なリストに対しても、以下のように処理できます:
+
+{% for book in books|dictsort:"author.age" %}
+    * {{ book.title }} ({{ book.author.name }})
+{% endfor %}
+ここで books が以下の内容だとします:
+
+[
+    {'title': '1984', 'author': {'name': 'George', 'age': 45}},
+    {'title': 'Timequake', 'author': {'name': 'Kurt', 'age': 75}},
+    {'title': 'Alice', 'author': {'name': 'Lewis', 'age': 33}},
+]
+すると出力は以下のようになります:
+
+* Alice (Lewis)
+* 1984 (George)
+* Timequake (Kurt)
+dictsort can also order a list of lists (or any other object implementing __getitem__()) by elements at specified index. For example:
+
+{{ value|dictsort:0 }}
+value が以下の内容であるとします:
+
+[
+    ('a', '42'),
+    ('c', 'string'),
+    ('b', 'foo'),
+]
+このとき出力は以下のようになるでしょう:
+
+[
+    ('a', '42'),
+    ('b', 'foo'),
+    ('c', 'string'),
+]
+You must pass the index as an integer rather than a string. The following produce empty output:
+
+{{ values|dictsort:"0" }}

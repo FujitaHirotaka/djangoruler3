@@ -1,0 +1,33 @@
+﻿[概要]
+choices
+フィールドの選択肢として用いられる 2 値のタプルのイテラブルなオブジェクト (例えばリストやタプル) です。このオプションが渡された場合、デフォルトのフォームウィジェットが標準のテキストフィールドからセレクトボックスに変わり与えられた選択肢のみに選択を制限します。
+
+選択肢のリストは以下のようになります。
+
+YEAR_IN_SCHOOL_CHOICES = (
+    ('FR', 'Freshman'),
+    ('SO', 'Sophomore'),
+    ('JR', 'Junior'),
+    ('SR', 'Senior'),
+    ('GR', 'Graduate'),
+)
+各タプルの1番目の要素はデータベースに保存される値です。2番目の要素はフォームウィジェットに表示される名前です。
+
+モデルのインスタンスが与えられたとき、choices のフィールドに対して表示される値は、get_FOO_display() メソッドを用いてアクセスすることができます。たとえば、次のようになります。
+
+from django.db import models
+
+class Person(models.Model):
+    SHIRT_SIZES = (
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+    )
+    name = models.CharField(max_length=60)
+    shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
+>>> p = Person(name="Fred Flintstone", shirt_size="L")
+>>> p.save()
+>>> p.shirt_size
+'L'
+>>> p.get_shirt_size_display()
+'Large'
