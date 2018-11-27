@@ -1,0 +1,24 @@
+﻿admin.site.register(Question) の呼び出しによって Question モデルを登録したことで、
+Django はデフォルトの形式でオブジェクトを表示できました。 
+admin フォームの表示方法や操作の仕方をデフォルトから変更したいこともよくあります。
+それには、オブジェクトを登録する時にオプションを指定します。
+
+ためしに、編集フォームでのフィールドの並び順を並べ替えてみましょう。 
+admin.site.register(Question) の行を以下のように置き換えてみてください。
+
+polls/admin.py¶
+from django.contrib import admin
+
+from .models import Question
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    fields = ['pub_date', 'question_text']
+
+admin.site.register(Question, QuestionAdmin)
+このように、モデルの admin のオプションを変更したいときには、モデルごとに admin クラスを作成して、 admin.site.register() の 2 番目の引数に渡すと いうパターンに従ってください。
+
+上の例では、「Publication date」フィールドの表示位置を「Question」フィールドよりも前に変更しています:
+
+Fields have been reordered
+二つしかフィールドがないので、あまりぱっとした変化ではありませんね。しかし admin フォームで数十ものフィールドを操作するような場合には、直感的なフィー ルドの並び順というものはユーザビリティ上重要な要素です。

@@ -1,0 +1,440 @@
+﻿[概要]
+Djangoには便利な管理画面がついています
+例えばですが、管理画面の上部にGoogleのリンクを張りたいと思ったとしましょう
+
+プロジェクト名は「test」
+アプリケーション名は「customadmin」
+です。
+管理画面を表示さえできればいいので、views.py等は作成しません
+
+まずはINSTALLED_APPSに追加しなくてはいけません
+test/test/settings.py
+
+     
+    INSTALLED_APPS = (
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        "customadmin",  # たしました
+    )
+
+
+
+test/customadmin/models.py
+
+     
+    from django.db import models
+     
+     
+    class Model1(models.Model):
+        name = models.CharField(max_length=255, )
+     
+     
+    class Model2(models.Model):
+        name = models.CharField(max_length=255, )
+
+
+
+
+
+test/customadmin/admin.py
+
+     
+    from django.contrib import admin
+    from .models import Model1, Model2
+     
+    admin.site.register(Model1)
+    admin.site.register(Model2)
+
+
+
+
+
+この状態でmigrateすれば、いつもの管理画面にいけると思います
+では管理画面、adminのテンプレートをカスタマイズしましょう
+
+色々入っていてわかりづらいですが、templatesに「admin」というディレクトリを作成するだけです
+
+
+base.htmlを作成します
+
+
+
+中身は、とりあえず以下のようにしましょう
+
+     
+    {% load i18n static %}<!DOCTYPE html>
+    {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+    <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+    <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" />
+    {% block extrastyle %}{% endblock %}
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    </head>
+    {% load i18n %}
+     
+    <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+      data-admin-utc-offset="{% now "Z" %}">
+     
+    <!-- Container -->
+    <div id="container">
+     
+        {% if not is_popup %}
+        <!-- Header -->
+        <div id="header">
+            <div id="branding">
+            {% block branding %}{% endblock %}
+            </div>
+            {% block usertools %}
+            {% if has_permission %}
+            <div id="user-tools">
+                {% block welcome-msg %}
+                    {% trans 'Welcome,' %}
+                    <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+                {% endblock %}
+                {% block userlinks %}
+                    <!-- ここを足しました -->
+                    <a href="http://torina.top">torinaのPythonブログへ</a> 
+                    {% if site_url %}
+                        <a href="{{ site_url }}">{% trans 'View site' %}</a> /
+                    {% endif %}
+                    {% if user.is_active and user.is_staff %}
+                        {% url 'django-admindocs-docroot' as docsroot %}
+                        {% if docsroot %}
+                            <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+                        {% endif %}
+                    {% endif %}
+                    {% if user.has_usable_password %}
+                    <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                    {% endif %}
+                    <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+                {% endblock %}
+            </div>
+            {% endif %}
+            {% endblock %}
+            {% block nav-global %}{% endblock %}
+        </div>
+        <!-- END Header -->
+        {% block breadcrumbs %}
+        <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        {% if title %} &rsaquo; {{ title }}{% endif %}
+        </div>
+        {% endblock %}
+        {% endif %}
+     
+        {% block messages %}
+            {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+            {% endif %}
+        {% endblock messages %}
+     
+        <!-- Content -->
+        <div id="content" class="{% block coltype %}colM{% endblock %}">
+            {% block pretitle %}{% endblock %}
+            {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+            {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+            {% endblock %}
+            {% block sidebar %}{% endblock %}
+            <br class="clear" />
+        </div>
+        <!-- END Content -->
+     
+        {% block footer %}<div id="footer"></div>{% endblock %}
+    </div>
+    <!-- END Container -->
+     
+    </body>
+    </html>
+
+
+
+すると、このようになったかと思います。画面の上部にリンク先が増えましたね
+
+
+このように、プロジェクトのtemplatesにadminディレクトリを、そしてその中にカスタマイズしたい対象のHTMLを置き、
+中身を適切に書き換えることで反映されます
+
+ただ、これではどこをカスタマイズしたのかわかりづらいですね
+base.htmlを以下のように変更します
+
+     
+    {% extends "admin/base.html" %}
+    {% load i18n %}
+    {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+     
+    {% block branding %}
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+    {% endblock %}
+     
+    {% block userlinks %}
+        <a href="http://torina.top">torinaのPythonブログへ</a> 
+        {% if site_url %}
+            <a href="{{ site_url }}">{% trans 'View site' %}</a> /
+        {% endif %}
+        {% if user.is_active and user.is_staff %}
+            {% url 'django-admindocs-docroot' as docsroot %}
+            {% if docsroot %}
+                <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+            {% endif %}
+        {% endif %}
+        {% if user.has_usable_password %}
+            <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+        {% endif %}
+        <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+    {% endblock %}
+
+
+
+
+このままだとbase.htmlを読み込む無限ループになりますので、現在のファイル名を変更します
+base.htmlをbase_site.htmlに変更しましょう
+すると、さきほどと同じように表示されると思います
+
+adminのテンプレートをカスタマイズする場合、
+全て置き換える方法と、変更の必要のあるセクション（例えば、あるhtmlの{% block sidebar %}部分のみ等）だけをオーバライドする方法があります
+基本的には必要な部分だけオーバーライドするのがベストですが、動かないな、あれ？ってなったらとりあえず置き換えればよいです
+
+次に、そのアプリケーションのみテンプレートを変更したい場合です。先ほどのは、プロジェクト全体への変更でした
+このアプリケーションのindex画面ですが、横がさびしいです。何か入れたいですね。さっそく改良しましょう
+
+
+test/templates/admin/customadmin　のように、adminの下にアプリケーション名のディレクトリを作成します
+
+
+今回カスタマイズする対象は、「app_index.html」となります
+
+
+中身は、こうしましょう
+app_index.html
+
+     
+    {% extends "admin/app_index.html" %}
+    {% block sidebar %}
+    <div id="content-related">
+    <img src="https://torina.top/media/images/guid.jpg">
+    </div>
+    {% endblock %}
+
+
+
+すると、こうなります。いかがでしょうか。
+
+
+もちろん、違うアプリケーションの管理画面トップには、反映されません。このアプリケーションのみです
+
+{% extends "admin/app_index.html" %}で今回は無限ループになりません。
+admin/app_index.htmlには何もないためです。（admin/customadmin/app_index.html　がこのファイルのパスです）
+この場合、django/contrib/admin/templates/admin/　まで探しにいき、そこからオーバーライドという流れです
+
+もしも、このapp_indexを特定のアプリケーションだけでなく、プロジェクト全体にしたい場合は
+base_site.htmlと同じように、admin配下に置くとよいです。admin/app_index.html となります
+先ほどのコードと違い、{% extends "admin/app_index.html" %}ではなく
+{% extends "admin/index.html" %}としないと無限ループになります。
+また、本来app_index.htmlが上書きしていた部分は自分で実装しなくてはなりませんので、気をつけましょう。
+
+
+さらに、Model1の一覧画面だけ変更したいと思ったとしましょう
+その場合はまず、model1というディレクトリをcustomadminの配下につくります
+
+
+Modelの一覧画面は、chenge_list.htmlです
+
+
+中身はこのようにしてみましょう
+change_list.html
+
+     
+    {% extends "admin/change_list.html" %}
+    {% load i18n admin_urls static admin_list %}
+    {% block object-tools-items %}
+    {% if has_add_permission %}
+    　　<li>
+    　　　　{% url cl.opts|admin_urlname:'add' as add_url %}
+    　　　　　　<a href="{% add_preserved_filters add_url is_popup to_field %}" class="addlink">
+          　　　{% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+          　</a>
+      </li>
+      <li>
+      　　<a href="http://google.co.jp" class="addlink">グーグルへ</a>
+      </li>
+    {% endif %}
+    {% endblock %}
+
+
+
+googleへのリンク先を追加してみました
+このように、Model1だけに反映されていますね
+
+
+
+アプリケーションやモデル単位でオーバライドできるテンプレートは、以下のものだけですので気をつけましょう
+app_index.html
+change_form.html
+change_list.html
+delete_confirmation.html
+object_history.html
+
+それ以外のものは、基本的にプロジェクト全体としてオーバーライドすることになります
+それぞれのhtmlは、このようになっています
+https://github.com/django/django/tree/master/django/contrib/admin/templates/admin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Python] Django 管理サイトのカスタマイズ（表示面）
+Python
+Django
+この記事について
+
+Django の管理画面のカスタマイズ方法です。
+
+表示面の修正方法となります。
+機能のカスタマイズについては以下のエントリの方を参照してください。
+
+Django 管理画面逆引きメモ
+１．タイトルを変更する
+
+見出し部分は軽微な修正で変更可能です。
+プロジェクトのurls.pyに以下のコードを入れます。
+project/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+# 追加
+admin.site.site_title = 'タイトルタグ' 
+admin.site.site_header = 'サンプルアプリケーション' 
+admin.site.index_title = 'メニュー'
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('app.urls')),
+]
+
+変更後の画面
+image.png
+２．CSSを変更する
+
+adminのcssを上書き指定することでデザインの変更ができます。
+
+手順１．staticフォルダを追加
+
+プロジェクト直下にstaticフォルダを作成し、設定ファイルに以下の項目を追加します。
+setting.py
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),  
+)
+
+手順２．adminのstaticリソースをコピー
+
+作成したstaticフォルダに/contrib/admin/staticのadminディレクトリ以下を全てコピーします。Ver2.0.3ではこのような構造になります。
+
+project-root
+└─static
+  └─admin
+      ├─css
+      │  └─vendor
+      │      └─select2
+      ├─fonts
+      ├─img
+      │  └─gis
+      └─js
+          ├─admin
+          └─vendor
+              ├─jquery
+              ├─select2
+              │  └─i18n
+              └─xregexp
+
+試しにstatic/admin/css/base.cssを変更してみます。
+base.css
+
+/* 823行目付近*/
+#header {
+    width: auto;
+    height: 40px;
+    padding: 10px 40px;
+    background: #ff69b4; /* 元は417690(青) */
+    line-height: 40px;
+    color: #ffc;
+    overflow: hidden;
+}
+
+無事に色が変わりました。あとは変更したい部分を探して更新するだけです。
+
+image.png
+
+この設定方法は「templateとstaticは、同名のリソースが定義された場合、先に定義された方を採用する」というDjangoの仕様に基づくものです。管理サイトアプリが使うリソースを管理アプリより先に同名で定義することで読み込むリソースを変更させます。
+
+※同名とは「static」以下のパス名が同じことを指す。
+
+staticファイルの定義順はターミナルでmanage.py findstatic admin/css/base.cssと打ち込むことにより確認できます。
+３．テンプレートを変更する
+
+同様の方法でテンプレートの変更も可能です。
+プロジェクトの直下に「templates」フォルダを作成し、設定ファイルのTEMPLATESを修正します。
+settings.py
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], #★ここを変更
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+そしてtemplatesフォルダにstaticと同様にcontrib/admin/templates以下のディレクトリをそのままコピーします。Ver2.0.3ではこうなりました。
+
+project-root
+└─templates
+  ├─admin
+  │  ├─auth
+  │  │  └─user
+  │  ├─edit_inline
+  │  ├─includes
+  │  └─widgets
+  └─registration
+
+試しに/templates/admin/base.htmlを修正してみます。
+base.html
+
+<-- 39行目付近 -->
+{% if site_url %}
+     <a href="{{ site_url }}">アプリに戻る</a> /
+{% endif %}
+
+もともと「サイトを表示」という表示でしたが、「アプリに戻る」に変更されました。
+
+image.png
+
+上の手順でstaticとtemplatesのファイルを丸ごとコピーしましたが、実際は変更するファイルだけでOKです。

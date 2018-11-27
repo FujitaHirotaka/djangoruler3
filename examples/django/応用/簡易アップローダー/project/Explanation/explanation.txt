@@ -1,0 +1,411 @@
+﻿[概要]
+
+Djangoで、簡易アプロダ（FileField）
+約915日前 2016年5月25日1:18
+プログラミング関連
+Django Bootstrap3 Python FileFieldを使い、下記のような簡易的なアップローダを作ります。
+
+
+プロジェクト名は「test」
+アプリケーション名は「main」
+Python3.4
+Django1.8
+です。
+
+test/test/settings.py
+INSTALLED_APPSへの追加と、メディアルートなどです。
+
+     
+    INSTALLED_APPS = (
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'main',
+    )
+    ...
+    ...
+    STATIC_URL = '/static/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    MEDIA_URL = "/media/"
+
+
+
+test/test/urls.py
+
+     
+    from django.conf import settings
+    from django.conf.urls.static import static
+    from django.conf.urls import include, url
+    from django.contrib import admin
+     
+     
+    urlpatterns = [
+        url(r'^admin/', include(admin.site.urls)),
+        url(r'^', include('main.urls', namespace='main')),
+    ]
+     
+    if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)
+
+
+
+これはsettings.pyのDEBUGがTrueのときの、アップロードされたファイルのパスを追加しています。
+
+     
+    if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)
+
+
+
+settings.pyがFalse（本番環境）等では、例えばApacheならば下記のようにAliasの設定をするとよいでしょう。
+
+     
+    Alias /sitemap.xml /path/to/app/static/sitemap.xml
+    Alias /static/ /path/to/app/static/
+    Alias /media/ /path/to/app/media/
+
+
+
+test/main/urls.py
+インデックスと、アップロード用のsaveのみです。
+
+     
+    from django.conf.urls import url
+    from . import views
+     
+     
+    urlpatterns = [
+        url(r'^$', views.index, name='index'),
+        url(r'^save/$', views.save, name='save'),
+    ]
+
+
+
+test/main/admin.py
+今回別になくてもよかったのですが、一応ね？
+
+     
+    from django.contrib import admin
+    from .models import File
+     
+    admin.site.register(File)
+
+
+
+test/main/models.py
+
+     
+    import os
+    from django.db import models
+     
+     
+    class File(models.Model):
+        title = models.CharField(max_length=255, blank=True)
+        file = models.FileField(upload_to='files/', )
+     
+        def __str__(self):
+            return self.title
+     
+        def get_filename(self):
+            return os.path.basename(self.file.name)
+
+
+
+FileFieldです。uoload_toにfiles/で、今回ならば/media/files/ファイルとなります。
+ファイル添付を任意にしたい場合は、null=True, blank=True,等とつけましょう。
+
+     
+    file = models.FileField(upload_to='files/', )
+
+
+
+これはファイル名のみを返すメソッドです。
+FileFieldにファイル名だけを返すメソッドがどうも見当たらなかったので、その処置です。
+
+     
+        def get_filename(self):
+            return os.path.basename(self.file.name)
+
+
+
+これは path の末尾のファイル名部分を返します。
+
+     
+    os.path.basename(self.file.name)
+
+
+
+FileFieldについて、いくつか見てみましょう。
+
+     
+        data = File.objects.latest("id")  # 結果的に最新のFileが得られる
+        print(dir(data.file))
+
+
+
+     
+    ['DEFAULT_CHUNK_SIZE', '__bool__', '__class__', '__delattr__', '__dict__', '__di
+    r__', '__doc__', '__enter__', '__eq__', '__exit__', '__format__', '__ge__', '__g
+    etattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__iter__', '_
+    _le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__nonzero__', '
+    __reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__'
+    , '__subclasshook__', '__weakref__', '_committed', '_del_file', '_file', '_get_c
+    losed', '_get_file', '_get_path', '_get_size', '_get_size_from_underlying_file',
+     '_get_url', '_require_file', '_set_file', '_set_size', 'chunks', 'close', 'clos
+    ed', 'delete', 'encoding', 'field', 'file', 'fileno', 'flush', 'instance', 'isat
+    ty', 'multiple_chunks', 'name', 'newlines', 'open', 'path', 'read', 'readinto',
+    'readline', 'readlines', 'save', 'seek', 'size', 'softspace', 'storage', 'tell',
+     'truncate', 'url', 'write', 'writelines', 'xreadlines']
+
+
+
+いくつか呼び出してみましょう。
+
+     
+        print(data.file.path)
+        print(data.file.name)
+        print(data.file.url)
+        print(data.file.file)
+
+
+
+結果です。
+
+     
+    C:\\MyMercurial\\test\\test\\media\\files\\capture_tnfHXVV.png
+    files/capture_tnfHXVV.png
+    /media/files/capture_tnfHXVV.png
+    C:\\MyMercurial\\test\\test\\media\\files\\capture_tnfHXVV.png
+
+
+
+test/main/forms.py
+ModelFormを使っています。
+Bootstrapを使うので、ちょっと冗長ですね。
+
+     
+    from django import forms
+    from .models import File
+     
+     
+    class FileForm(forms.ModelForm):
+     
+        class Meta:
+            model = File
+            fields = '__all__'
+            widgets = {
+                'title': forms.TextInput(attrs={
+                    'class': 'form-control',
+                }),
+                'file': forms.FileInput(attrs={
+                    'class': "form-control",
+                }),
+            }
+
+
+
+widgetsでのclass変更ですが、これは失敗だったかもしれません。
+まず見た目がそこまで変わらない上、下記のようにModelFormを利用した場合（データの編集ですね）
+
+     
+    form = FileForm(instance=File.objects.get(id=editing_id))
+
+
+
+現在ファイルの表示等がされており、大変便利です。
+
+
+ですが、先ほどの指定をした場合は便利な表示が消えてしまいます。
+
+
+自力で実装するのも面倒だと思うので、modelFormでのファイルタグのwidgets変更は避けるべきでしょう。
+又は、以下のようにclassだけを変更するようにすると無難です。
+
+     
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['file'].widget.attrs['class'] = 'form-control'
+
+
+
+
+
+test/main/views.py
+割とシンプルです。
+
+     
+    from django.shortcuts import render, redirect
+    from django.views.decorators.http import require_POST
+    from .models import File
+    from .forms import FileForm
+     
+     
+    def index(request):
+     
+        form = FileForm()
+        contexts = {
+            "all_data": File.objects.all(),
+            "form": form,
+        }
+     
+        return render(request, 'main/index.html', contexts)
+     
+     
+    @require_POST
+    def save(request):
+     
+        form = FileForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("main:index")
+     
+        contexts = {
+            "all_data": File.objects.all(),
+            "form": form,
+        }
+        return render(request, 'main/index.html', contexts)
+
+
+
+test/templates/main/base.html
+Bootstrapを使用しています。
+
+     
+    {% load staticfiles %}
+    <!DOCTYPE html>
+    <html lang="ja">
+      <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>簡易アップローダー</title>
+     
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+      </head>
+      <body>
+        <header class="bg-primary">
+          <div class="container">
+            <h1 class="page-header">簡易アップローダー</h1>
+          </div>
+        </header>
+     
+          <div class="container">
+            {% block content %}
+            {% endblock %}
+          </div>
+     
+        <footer class="bg-primary" id="footer">
+          <div class="container">
+            <p>Copyright ○○ All Rights Reserved.</p>
+          </div>
+        </footer>
+     
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+      </body>
+    </html>
+
+
+
+bg-primaryは背景色の設定です。
+headerとfooterにcontainerの指定ですが、これは文字の開始位置を揃える意味合いがあります。
+
+     
+        <header class="bg-primary">
+          <div class="container">
+            <h1 class="page-header">簡易アップローダー</h1>
+          </div>
+        </header>
+     
+          <div class="container">
+            {% block content %}
+            {% endblock %}
+          </div>
+     
+        <footer class="bg-primary" id="footer">
+          <div class="container">
+            <p>Copyright ○○ All Rights Reserved.</p>
+          </div>
+        </footer>
+
+
+
+main/templates/main/index.html
+enctype="multipart/form-data"を忘れないようにしましょう。
+
+     
+    {% extends "main/base.html" %}
+    {% block content %}
+    <hr>
+    <form class="form-horizontal" action="{% url 'main:save' %}" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label class="col-xs-2" for="id_title">{{ form.title.label }}</label>
+        <div class="col-xs-10">
+          {{ form.title }}
+        </div>
+      </div>
+     
+      <div class="form-group">
+        <label class="col-xs-2" for="id_file">{{ form.file.label }}</label>
+        <div class="col-xs-10">
+          {{ form.file }}
+        </div>
+      </div>
+     
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10 text-right">
+          <input type="submit" class="btn btn-primary" value="アップロード">
+        </div>
+      </div>
+    {% csrf_token %}
+    </form>
+    <hr>
+     
+    <div class="row">
+      <div class="col-xs-6">
+        <span>タイトル</span>
+      </div>
+      <div class="col-xs-6">
+        <span>ファイルダウンロード</span>
+      </div>
+    </div>
+    <hr>
+    {% for data in all_data %}
+      <div class="row">
+        <div class="col-xs-6">
+          <span>{{ data.title }}</span>
+        </div>
+        <div class="col-xs-6">
+          <span><a href="/media/{{ data.file }}">{{ data.get_filename }}</a></span>
+        </div>
+      </div>
+      <hr>
+    {% endfor %}
+    {% endblock %}
+
+
+
+
+書いてて思いましたが、data.file.urlのほうがスマートでしたね・・・！（/media/の記述が不要になるため）
+今回は、単純にhrefにファイルパスを指定することにしました。
+
+     
+    <span><a href="/media/{{ data.file }}">{{ data.get_filename }}</a></span>
+

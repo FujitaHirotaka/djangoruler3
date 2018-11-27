@@ -1,0 +1,6 @@
+﻿デフォルトでは、 Django はオブジェクトの str() を表示します。しかし、オブジェクトの各フィールドの値を表示したい場合もあるでしょう。各フィールドの値を表示させるには、 list_display オプションを使います。このオプションには、カラム表示したいフィールドの名前をタプルにして指定します。
+
+polls/admin.py¶
+class QuestionAdmin(admin.ModelAdmin):
+    # ...
+    list_display = ('question_text', 'pub_date')

@@ -1,0 +1,62 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">簡易アプロダ（FileField）</h1>
+<p>[参考ページ]<a href="https://torina.top/detail/235/">Narito blog</a></p>
+
+<h2>フォーム</h2>
+<form class="form-horizontal" action="{% url 'app:save' %}" method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    {{ form.title.errors }}
+    {{ form.title.label_tag }}
+    {{ form.title }}
+  </div>
+  <div class="form-group">
+    {{ form.category.errors }}
+    {{ form.category.label_tag }}
+    {{ form.category }}
+  </div>
+  <div class="form-group">
+    {{ form.file.errors }}
+    {{ form.file.label_tag }}
+    {{ form.file }}
+
+  </div>
+  <div class="form-group">
+    <div class="col-xs-offset-2 col-xs-10 text-right">
+      <input type="submit" class="btn btn-primary" value="アップロード">
+    </div>
+  </div>
+{% csrf_token %}
+</form>
+
+
+
+  <div class="row">
+    <div class="col-xs-6">
+      <span>タイトル</span>
+    </div>
+    <div class="col-xs-6">
+      <span>ファイルダウンロード</span>
+    </div>
+  </div>
+  <hr>
+  {% for data in all_data %}
+    <div class="row">
+      <div class="col-xs-6">
+        <span>{{ data.title }}</span>
+      </div>
+      <div class="col-xs-6">
+        <span><a href="{{data.file.url}}">{{ data.get_filename }}</a></span>
+      </div>
+    </div>
+    <hr>
+  {% endfor %}
+
+
+
+ 
+
+
+<hr>
+

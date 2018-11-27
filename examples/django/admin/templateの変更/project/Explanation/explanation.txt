@@ -1,0 +1,221 @@
+﻿２．CSSを変更する
+adminのcssを上書き指定することでデザインの変更ができます。
+
+手順１．staticフォルダを追加
+
+プロジェクト直下にstaticフォルダを作成し、設定ファイルに以下の項目を追加します。
+
+setting.py
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),  
+)
+
+手順２．adminのstaticリソースをコピー
+
+作成したstaticフォルダに/contrib/admin/staticのadminディレクトリ以下を全てコピーします。Ver2.0.3ではこのような構造になります。
+
+project-root
+└─static
+  └─admin
+      ├─css
+      │  └─vendor
+      │      └─select2
+      ├─fonts
+      ├─img
+      │  └─gis
+      └─js
+          ├─admin
+          └─vendor
+              ├─jquery
+              ├─select2
+              │  └─i18n
+              └─xregexp
+
+試しにstatic/admin/css/base.cssを変更してみます。
+
+base.css
+/* 823行目付近*/
+#header {
+    width: auto;
+    height: 40px;
+    padding: 10px 40px;
+    background: #ff69b4; /* 元は417690(青) */
+    line-height: 40px;
+    color: #ffc;
+    overflow: hidden;
+}
+無事に色が変わりました。あとは変更したい部分を探して更新するだけです。
+
+image.png
+
+この設定方法は「templateとstaticは、同名のリソースが定義された場合、先に定義された方を採用する」というDjangoの仕様に基づくものです。管理サイトアプリが使うリソースを管理アプリより先に同名で定義することで読み込むリソースを変更させます。
+
+※同名とは「static」以下のパス名が同じことを指す。
+
+staticファイルの定義順はターミナルでmanage.py findstatic admin/css/base.cssと打ち込むことにより確認できます。
+
+
+以上をやってみたが、ｃｓｓの変更については不安定でとても使えたものではない。
+
+
+３．テンプレートを変更する
+同様の方法でテンプレートの変更も可能です。
+プロジェクトの直下に「templates」フォルダを作成し、設定ファイルのTEMPLATESを修正します。
+
+settings.py
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], #★ここを変更
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+そしてtemplatesフォルダにstaticと同様にcontrib/admin/templates以下のディレクトリをそのままコピーします。Ver2.0.3ではこうなりました。
+
+project-root
+└─templates
+  ├─admin
+  │  ├─auth
+  │  │  └─user
+  │  ├─edit_inline
+  │  ├─includes
+  │  └─widgets
+  └─registration
+試しに/templates/admin/base.htmlを修正してみます。
+
+base.html
+<-- 39行目付近 -->
+{% if site_url %}
+     <a href="{{ site_url }}">アプリに戻る</a> /
+{% endif %}
+もともと「サイトを表示」という表示でしたが、「アプリに戻る」に変更されました。
+
+image.png
+
+上の手順でstaticとtemplatesのファイルを丸ごとコピーしましたが、実際は変更するファイルだけでOKです。
+
+
+
+
+
+
+
+
+
+adminサイトにCSSを適用する
+adminサイトのレイアウトは既に決まっていますが、自分でカスタマイズすることも出来ます。
+
+ここではDjangoの中でも重要なtemplateという概念についても触れていきます。
+
+templateについては、このページをご覧ください！
+
+【Django入門】templateとHTMLを使ってWebページを表示しよう 1 tweet
+https://www.sejuku.net/blog/26407
+こんにちは。ryoです。今回は、PythonのDjangoで使われるtemplateの書き方、使い方について解説します。Djangoで使われるMTVモデルでも重要な部分を担うtemplateについて、学習していきましょう。この記事では、・MTVモデルとは何か・templateとは何かについて解説し...
+templatesというディレクトリをmanage.pyと同じ階層に作り、settings.pyにこのような変更を加えます。
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+        os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+        os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+ここではDIRSに、templatesというディレクトリを登録します。
+
+ここで必要となるファイルを入れるために、adminディレクトリをtemplates配下に作っておきます。
+
+次に、Django本体配下のdjango/contrib/admin/templates/admin/base_site.htmlを、templates/adminにコピーします。
+
+現在のディレクトリ階層はこのようになっています。
+
+
+├── admin
+│   └── base_site.html
+├── base.html
+└── index.html
+ 
+1 directory, 3 files
+
+
+├── admin
+│   └── base_site.html
+├── base.html
+└── index.html
+ 
+1 directory, 3 files
+このbase_site.htmlを、このように編集して保存しましょう。
+
+
+{% extends "admin/base.html" %}
+ 
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+ 
+{% block extrastyle %}
+<style type="text/css">
+#header {background: #ff8e8e;
+</style>
+{% endblock %}
+ 
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endblock %}
+ 
+{% block nav-global %}{% endblock %}
+
+{% extends "admin/base.html" %}
+ 
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+ 
+{% block extrastyle %}
+<style type="text/css">
+#header {background: #ff8e8e;
+</style>
+{% endblock %}
+ 
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endblock %}
+ 
+{% block nav-global %}{% endblock %}
+extrastyleというブロックで囲み、headerというIDをもつ部分の色を指定しましょう。
+
+これで、指定した色に変わります。

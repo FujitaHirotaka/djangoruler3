@@ -1,0 +1,150 @@
+{% load static %}
+<h2><b>ファイル構成</b></h2>
+<div id="folders"></div>
+<hr>
+<h2 id="title"></h2>
+<pre><div id="ttxt"></div></pre>
+
+<form method="GET" action="{% url 'ajax:ajax2' %}" id="filepath">
+  <input type="hidden" name="filepath">
+</form>
+
+<script>
+
+
+
+var file_path_list={{ file_path_list|safe }};
+var max_hierarchy_number={{ max_hierarchy_number }};
+var file_path_list_list=[];
+for (var i=0; i<file_path_list.length; i++ ){
+    var file_path=file_path_list[i].split("/");
+    file_path_list_list.push(file_path);
+};
+
+var file_path_hierarchy_list=[];
+for (var ii=0; ii<max_hierarchy_number+1; ii++){
+a=[];    
+for (var i of file_path_list_list){
+
+        if (i.length-1==ii){
+            a.push(i)
+        };
+    };
+    file_path_hierarchy_list.push(a);
+};
+file_path_hierarchy_list2=[];
+for (var i=0; i<file_path_hierarchy_list.length-1; i++){
+    bb=[];
+    jj=[];
+    cc=[];
+    for (var ii of file_path_hierarchy_list[i]){
+        var aa=[];
+        for (var iii of file_path_hierarchy_list[i+1]){
+            dd=iii.slice();
+            ee=ii.slice();
+            dd.pop();
+            ff=ee.join("/")
+            gg=dd.join("/")
+            if (gg==ff){
+                 aa.push(iii[iii.length-1]);
+                 hh=gg;
+            };
+
+};
+
+if (aa.length!=0){
+    aa.unshift(hh);
+    cc.push(aa);
+};
+    };
+
+ file_path_hierarchy_list2.push(cc)   ;
+};
+var html1="";
+
+ for (var ii of file_path_hierarchy_list2[0]){
+    for (var iii in ii){
+         if (iii==0){
+            html1=html1+"<div class='first_layer'><div class='layer'>"+ii[iii]+"</div>";  
+         } else {
+            html1=html1+"<div class='"+ii[0]+"/"+ii[iii]+"' style='text-indent:1em'><div class='layer' >"+ii[iii]+"</div></div>";
+        };
+
+    };
+html1=html1+"</div>"
+ };
+
+
+$("div#folders").html(html1);
+
+for (var i=1; i<file_path_hierarchy_list2.length; i++){
+ for (var ii of file_path_hierarchy_list2[i]){
+    for (var iii=1; iii<ii.length; iii++){
+         var abe = document.createElement("div");
+         var bbe=document.createElement("div");
+         bbe.setAttribute("class", "layer");
+         bbe.setAttribute("style", 'text-indent:'+(i+1)+'em');
+         abe.setAttribute("class", ii[0]+"/"+ii[iii]);
+         bbe.innerHTML     = ii[iii];
+         abe.appendChild(bbe);
+         var obj=document.getElementsByClassName(ii[0]);
+         for (var iiii=0; iiii<obj.length; iiii++){
+         obj[iiii].appendChild(abe);
+         }; 
+
+    };
+
+ };
+};
+
+
+
+
+$('.layer').click(function() {
+        $(this).nextAll().slideToggle(400);
+    });
+
+   
+
+
+     $(document).on("click", ".layer", function(){
+         var mojiretu2=$(this).parent("div").attr("class");
+         if (mojiretu2.indexOf(".")!=-1){
+            $("input[name='filepath']").val(mojiretu2);
+            $("form#filepath").submit();
+         };
+
+     });
+
+
+     $(document).on("submit", "form#filepath", function(){
+         
+             $.ajax({
+
+      'url': '{% url "ajax:ajax2" %}',
+      'type': 'GET',
+      'data': $("form#filepath").serialize(),
+      'dataType': 'json',
+    })
+      .done(function (data) { 
+          $("#ttxt").text(data.text);
+          $("h2#title").text(data.title);
+      });
+    return false;
+
+     });
+
+$(".layer").each(function(index, element) {
+         var mojiretu2=$(element).parent().attr("class");
+         if (mojiretu2.indexOf(".")==-1){
+            $(element).prepend('<img src="{% static 'app/folder_icon.gif' %}" width=20 height=20>');
+         } else {
+            $(element).prepend('<img src="{% static 'app/document_icon.gif' %}" width=20 height=20>');  
+         };
+
+});
+
+
+
+
+</script>

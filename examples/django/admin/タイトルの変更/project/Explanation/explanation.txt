@@ -1,0 +1,27 @@
+﻿[概要]
+Django の管理画面のカスタマイズ方法です。
+
+表示面の修正方法となります。
+機能のカスタマイズについては以下のエントリの方を参照してください。
+
+Django 管理画面逆引きメモ
+１．タイトルを変更する
+
+見出し部分は軽微な修正で変更可能です。
+プロジェクトのurls.pyに以下のコードを入れます。
+project/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+# 追加
+admin.site.site_title = 'タイトルタグ' 
+admin.site.site_header = 'サンプルアプリケーション' 
+admin.site.index_title = 'メニュー'
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('app.urls')),
+]
+
+

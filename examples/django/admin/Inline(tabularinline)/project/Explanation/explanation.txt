@@ -1,0 +1,18 @@
+﻿数十ものフィールドがある場合、フォームを複数のフィールドセットに分割したいこともあるでしょう。
+
+polls/admin.py¶
+from django.contrib import admin
+
+from .models import Question
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None,               {'fields': ['question_text']}),
+        ('Date information', {'fields': ['pub_date']}),
+    ]
+
+admin.site.register(Question, QuestionAdmin)
+fieldsets の各タプルの先頭の要素はフィールドセットのタイトルです。 フォームは以下のように表示されます。
+
+Form has fieldsets now

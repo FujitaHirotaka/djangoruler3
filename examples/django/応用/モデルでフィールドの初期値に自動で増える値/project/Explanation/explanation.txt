@@ -1,0 +1,51 @@
+﻿[概要]
+モデルに、id以外に自動でインクリメントするフィールドが欲しい、なんてときのメモ
+やり方は色々あるのかもしれないけど、個人的にいいなぁと思ったのが以下です
+
+     
+    class Inc(models.Model):
+        increment_num = models.IntegerField(default=lambda: Inc.objects.latest('pk').increment_num + 1)
+
+
+latest()では最新のオブジェクトが得られます。
+最新のオブジェクトのincrement_num + 1というわけですね。ですので、自動で1づつ増えていきます。
+例えば100から始めたいなら、最初に作ったオブジェクトのincrement_numを100にすれば、101、102...と続きますし
+150まで続いたあと、次は300にしよう、なんて思ったらあくまで最新オブジェクトのincrement_numを300にすればいいのです。
+一つ欠点があるとすれば、データが一件もないときに管理画面で追加しようとしたりするとDoesNotExistとなります。
+（正確には、データが一件もないのに
+
+     
+    lambda: Inc.objects.latest('pk').increment_num + 1
+
+
+したときです）
+
+なので、最初に一回データを足しときましょう。以下のように
+アプリケーションの名前はappの例
+
+     
+    python manage.py shell
+    >>> from app.models import Inc
+    >>> obj = Inc(increment_num=1)
+    >>> obj.save()
+
+
+
+もしくは、以下のように...こっちのほうがお勧めかもしれません。
+最初にデータを足す必要はなく、なければ1が返ります。
+
+     
+    def get_next():
+        try:
+            return Inc.objects.latest('pk').increment_num + 1
+        except:
+            return 1
+     
+     
+    class Inc(models.Model):
+        increment_num = models.IntegerField(default=get_next)
+
+
+
+参考
+http://stackoverflow.com/questions/18541886/how-do-i-get-a-default-value-for-a-field-that-usually-increments-in-django
