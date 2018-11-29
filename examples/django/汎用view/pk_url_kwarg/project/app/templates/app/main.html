@@ -1,0 +1,27 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">pk_url_kwarg</h1>
+<p>[参考ページ]<a href="https://torina.top/detail/285/">Narito blog</a></p>
+<p>デフォルトでは{{ "<int:pk>"|force_escape}}しか設定できない。{{ "<int:id>"|force_escape }}にするための方法</p>
+
+            <h2>トップ画面</h2>
+            {% for player in player_list %}
+                <p>
+                    名前:{{ player.name }} <br>
+                    過去所属チーム:{{ player.team.all}}
+                    {% for i in player.team.all %}
+                     {{ i }},
+                    {% endfor %}  <br>
+                    登録日:{{ player.pub_date }}<br>
+                    <a href="{% url 'app:detail' player.id%}">続きを読む</a>
+ 
+                </p>
+            {% endfor %}
+
+
+<h2>管理ページに移動</h2>
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+<hr>
+

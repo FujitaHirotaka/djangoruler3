@@ -1,0 +1,45 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">画像アプロダ（CRUD処理を、汎用ビューで）</h1>
+<p>[参考ページ]<a href="https://torina.top/detail/293/">Narito blog</a></p>
+
+<section class="jumbotron text-xs-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">アップローダーサンプル</h1>
+          <p class="lead text-muted">アップローダーのサンプルです。Bootstrap4を使っています。</p>
+          <p>
+            <a href="#" class="btn btn-primary">飾りボタン</a>
+            <a href="#" class="btn btn-secondary">飾りボタン</a>
+          </p>
+        </div>
+      </section>
+     
+      <div class="container">
+        {% for img in img_list %}
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <img src="{{ img.file.url }}" alt="{{ img.title }}" width="70" height="70">
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <p>{{ img.title }}</p>
+              <a href="{% url 'app:update' img.pk %}" class="btn btn-outline-primary">
+                更新する
+              </a>
+              <a href="{% url 'app:delete' img.pk %}" class="btn btn-outline-primary">
+                削除する
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+     
+        <div class="text-xs-center">
+          {% include "app/page.html" %}
+        </div>
+     
+      </div>
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+
+<hr>
+

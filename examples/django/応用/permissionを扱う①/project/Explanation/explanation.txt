@@ -1,0 +1,314 @@
+﻿
+Djangoで、パーミッションを扱う①
+約790日前 2016年9月30日9:45
+プログラミング関連
+Django Python 例えばワードプレスでは、
+・管理者
+・編集者
+・投稿者
+・寄稿者
+・購読者
+といった権限があり、ユーザにそれらを割り当てることができます。
+会員制サイトなどでは、こういった機能が欲しいです。
+
+Djangoにはデフォルトでパーミッション機能があり、大変便利です。
+作りながら色々試していきます。
+Python3.5
+Django1.10
+プロジェクト名:project
+アプリケーション名:app
+です。
+
+project/project/settings.py
+
+     
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'app',  # ついか
+    ]
+
+
+
+project/project/urls.py
+デフォルトの状態です。今回はまずadminを使います。
+
+     
+    from django.conf.urls import url
+    from django.contrib import admin
+     
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+    ]
+
+
+
+project/app/models.py
+シンプルなモデルを作ります。
+
+     
+    from django.db import models
+     
+     
+    class Message(models.Model):
+     
+        text = models.CharField("テキスト", max_length=255)
+     
+        def __str__(self):
+            return self.message
+
+
+
+project/app/admin.py
+管理画面で編集できるよう、登録しましょう。
+
+     
+    from django.contrib import admin
+    from .models import Message
+     
+    admin.site.register(Message)
+
+
+
+
+この状態で、/adminへブラウザからアクセスしましょう。そして、ユーザ登録までいきます。
+
+
+適当にユーザを追加します。
+
+
+ユーザを追加したら、この画面になります。
+
+
+こちらまで、下にスクロールしましょう。
+ユーザーパーミッションというものがありますね。
+
+
+app | message | Can add messageというものがあります。
+
+
+選択し、→矢印をポチポチします。すると、右側のエリアに移されましたね。
+
+
+もう一つ、今回は手間がいります。以下の、スタッフ権限もチェックしときましょう。
+
+
+一番下にスクロールし、「保存」を押しましょう。
+一旦ログアウトし、先ほどのユーザでログインしてみます。
+
+すると、追加しかできなくなっているのがおわかりでしょうか。
+
+
+管理者でログインした場合と比べてみましょう。変更ボタンはないし、Messageのリンクも消えてます。追加しかできません。
+
+
+changeなら変更ができるようになりますし、deleteなら削除ができるようになります。
+
+
+権限の読み方は、以下のようになります。
+
+     
+    アプリケーション名 | モデル名 | 説明
+    ↓
+    app | message | Can ...
+
+
+
+次はグループを設定してみましょう。管理画面トップに戻り、「グループ」の追加をします。
+
+
+以下のようなものを作ります。変更と、削除が可能なグループです。
+
+
+管理画面ホーム→ユーザーに移動。
+
+
+先ほど作ったユーザをクリック。グループに、先ほどつくったものがありますね。
+
+登録して保存しましょう。
+
+
+もう一度、作ったユーザで管理画面へ。すると、Messageモデルに関してはの操作は全てできるようになりました。
+ユーザへの権限としてMessageの追加を、グループとしてMessageの変更と削除ができるためです。ユーザ自体の権限とグループの権限は、併せて適用されます。
+
+
+では、管理画面だけでなく自分で作った投稿画面などにもこの権限を適用しましょう。
+
+project/project/urls.py
+
+     
+    from django.conf.urls import url, include
+    from django.contrib import admin
+     
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+        url(r'^', include('app.urls', namespace='app')),
+    ]
+
+
+
+project/app/urls.py
+
+     
+    from . import views
+     
+    urlpatterns = [
+        url(r'^$', views.MesIndexView.as_view(), name='index'),
+        url(r'^add/$', views.MesAddView.as_view(), name='add'),
+        url(r'^change/(?P<pk>[0-9]+)/$', views.MesChangeView.as_view(), name='change'),
+        url(r'^delete/(?P<pk>[0-9]+)/$', views.MesDeleteView.as_view(), name='delete'),
+    ]
+
+
+
+project/app/views.py
+
+     
+    from django.contrib.auth.mixins import PermissionRequiredMixin
+    from django.core.urlresolvers import reverse_lazy
+    from django.views import generic
+    from .models import Message
+     
+     
+    class MesIndexView(generic.ListView):
+        model = Message
+     
+     
+    class MesAddView(PermissionRequiredMixin, generic.CreateView):
+        model = Message
+        fields = "__all__"
+        success_url = reverse_lazy("app:index")
+        permission_required = ("app.add_message",)
+        raise_exception = True
+     
+     
+    class MesChangeView(PermissionRequiredMixin, generic.UpdateView):
+        model = Message
+        fields = "__all__"
+        success_url = reverse_lazy("app:index")
+        permission_required = ("app.change_message",)
+        raise_exception = True
+     
+     
+    class MesDeleteView(PermissionRequiredMixin, generic.DeleteView):
+        model = Message
+        fields = "__all__"
+        success_url = reverse_lazy("app:index")
+        permission_required = ("app.delete_message",)
+        raise_exception = True
+
+
+
+このように、django.contrib.auth.mixinsのPermissionRequiredMixinを継承することで
+汎用ビューでも簡単に権限でのコントロールが可能です。
+
+     
+    class MesAddView(PermissionRequiredMixin, generic.CreateView):
+        model = Message
+        fields = "__all__"
+        success_url = reverse_lazy("app:index")
+        permission_required = ("app.add_message",)
+        raise_exception = True
+
+
+
+
+permission_requiredには、以下の形式で指定します。
+複数指定すると、それら全て持っていないとアクセスができません。
+
+     
+    <app label>.<permission codename>  # 今回だとapp.add_message等。
+    permission_required = ("app.add_message", "app.change_message")  # 2つの権限が必要！
+
+
+
+raise_exceptionをTrueにすると、権限がない場合に問答無用で403ページへ送られます。
+
+
+raise_exceptionに何も指定しないかFalseにすると、権限がない場合はログイン画面へ飛ばされます。
+
+
+htmlはてきとうです。
+project/app/templates/app/base.html
+
+     
+    <!DOCTYPE html>
+    <html lang="ja">
+      <head>
+        <meta charset="utf-8">
+      </head>
+      <body>
+        {% block content %} {% endblock %}
+      </body>
+    </html>
+
+
+
+
+現在のログインユーザのパーミッションはテンプレート変数 {{ perms }} に入っ ています。
+ので、以下のようにして権限を持っている場合は表示する、等もできます。
+project/app/templates/app/message_list.html
+
+     
+    {% extends "app/base.html" %}
+    {% block content %}
+     
+      {% if perms.app.add_message %}
+        <p><a href="{% url 'app:add' %}">新規追加</a></p>
+      {% endif %}
+     
+      <hr>
+      {% for message in message_list %}
+        <p>
+        　 {{ message.text }}
+          
+          {% if perms.app.change_message %}
+            <a href="{% url 'app:change' message.pk %}">変更する</a>
+          {% endif %}
+        　　
+          {% if perms.app.delete_message %}
+            <a href="{% url 'app:delete' message.pk %}">削除する</a>
+          {% endif %}
+     
+       　</p>
+      {% endfor %}
+    {% endblock %}
+
+
+
+project/app/templates/app/message_form.html
+
+     
+    {% extends "app/base.html" %}
+    {% block content %}
+    　　<form action="" method="POST">
+    　　　　{{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="送信">
+      </form>
+    {% endblock %}
+
+
+
+project/app/templates/app/message_confirm_delete.html
+
+     
+    {% extends "app/base.html" %}
+    {% block content %}
+      <p>{{ message.text }}</p>
+    　　<form action="" method="POST">
+    　　　　{{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="削除する">
+      </form>
+    {% endblock %}
+
+添付ファイル
+
+関連記事
+
+Djangoで、パーミッションを扱う②

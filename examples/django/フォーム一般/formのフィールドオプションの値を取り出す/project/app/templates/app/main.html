@@ -1,0 +1,23 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">フォームのフィールドオプションの値を取り出す</h1>
+<p>template内とview内で表現の仕方が若干ことなることに注意</p>
+<p>template内ではobject的にアクセスする。view内では辞書的にアクセスする。</p>
+
+
+<h2>ここが重要</h2>
+{{ form.fields.name.label }}<br>
+{{ form.fields.title.choices.queryset }}<br>
+{% for i in form.fields.title.choices.queryset %}
+{{ i.name }}<br>
+{% endfor %}
+{{ form.fields.gender.choices }}<br>
+{% for i in form.fields.gender.choices %}
+ {{ i.0 }}: {{ i.1 }}<br>
+{% endfor %}
+
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+<hr>
+

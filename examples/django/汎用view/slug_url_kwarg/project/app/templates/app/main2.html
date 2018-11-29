@@ -1,0 +1,21 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">slug_url_kwarg</h1>
+   
+
+            <h2>トップ画面</h2>
+
+                <p>
+                    名前:{{ object.name }} 
+                    過去所属チーム:{{object.team.all}}
+                    登録日:{{ object.pub_date }}
+                </p>
+
+
+
+<h2>管理ページに移動</h2>
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+<hr>
+

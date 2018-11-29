@@ -1,0 +1,420 @@
+﻿Django1.10
+Python3.4
+プロジェクト名は「testproject」
+アプリケーション名は「testapp」
+です。
+
+testproject/testapp/models.py
+
+     
+    from datetime import time
+     
+    from django.db import models
+    from django.contrib.auth.models import User
+     
+     
+    GENDER_CHOICES = (
+        ("女性", '女性'),
+        ("男性", '男性'),
+    )
+     
+     
+    TIME_CHOICES = [
+        (time(hour, 00, 00), "{0}時".format(hour)) for hour in range(9, 16)
+    ]
+     
+     
+    class License(models.Model):
+        name = models.CharField(max_length=255)
+     
+        def __str__(self):
+            return self.name
+     
+     
+    class Permission(models.Model):
+        name = models.CharField(max_length=255)
+     
+        def __str__(self):
+            return self.name
+     
+     
+    class Member(models.Model):
+        name = models.CharField("名前", max_length=255)
+        license = models.ManyToManyField(License, verbose_name="資格")
+        permission = models.ForeignKey(Permission, verbose_name="えらさ")
+        gender = models.CharField("性別", max_length=2, blank=True, choices=GENDER_CHOICES)
+        login = models.TimeField("ログイン可能時間", choices=TIME_CHOICES)
+     
+        def __str__(self):
+            return self.name
+
+
+
+ManyToManyで各種資格、ForeignKeyで権限（偉さ）を、
+genderとloginにはchocesを指定しています。
+
+     
+        name = models.CharField("名前", max_length=255)
+        license = models.ManyToManyField(License, verbose_name="資格")
+        permission = models.ForeignKey(Permission, verbose_name="えらさ")
+        gender = models.CharField("性別", max_length=2, blank=True, choices=GENDER_CHOICES)
+        login = models.TimeField("ログイン可能時間", choices=TIME_CHOICES)
+
+
+
+性別なんかは、普通は男と女の2つです。こんなものを、わざわざ別にテーブルを作る必要はないでしょう。
+このような場合に、choicesを使います。
+TimeField等を使う場合は、データの型に気をつけましょう...
+例えば、DateTimeFieldだったならば、datetimeを使うことになります。(又はdjango.utils.timezoneを使うのが一般的です)
+
+     
+    GENDER_CHOICES = (
+        ("女性", '女性'),
+        ("男性", '男性'),
+    )
+     
+     
+    TIME_CHOICES = [
+        (time(hour, 00, 00), "{0}時".format(hour)) for hour in range(9, 16)
+    ]
+     
+    ...
+    ...
+        gender = models.CharField("性別", max_length=2, blank=True, choices=GENDER_CHOICES)
+        login = models.TimeField("ログイン可能時間", choices=TIME_CHOICES)
+
+
+
+TIME_CHOICESにリスト内包表記を使ってますが、もっとわかりやすく書くと、以下になります。
+
+     
+    TIME_CHOICES = (
+        (time(9, 00, 00), "9時"),
+        (time(10, 00, 00), "10時"),
+        (time(11, 00, 00), "11時"),
+        (time(12, 00, 00), "12時"),
+        (time(13, 00, 00), "13時"),
+        (time(14, 00, 00), "14時"),
+        (time(15, 00, 00), "15時"),
+    )
+
+
+
+
+ちなみにですが、以下のようにchoicesを指定したモデルにdefault値を指定すると、-------といった選択肢が消えます。
+
+     
+    text = models.CharField('テキスト', max_length=255, choices=TEXT_CHOICE, default=None)
+
+
+
+このようなCharFieldにchoicesを指定したものは、テンプレートで表示する際に以下のようにすると良いです。
+{{ spam.get_fieldname_display }}という形ですね。単純に{{ post }}のようにすると、値部分が取り出されます。
+
+     
+    {{ post.get_text_display }}
+
+
+
+testproject/testapp/forms.py
+
+     
+    from django import forms
+    from .models import Member
+     
+     
+    class MemberModelForm(forms.ModelForm):
+     
+        class Meta:
+            model = Member
+            fields = "__all__"
+     
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field in self.fields.values():
+                field.widget.attrs["class"] = "form-control"
+
+
+
+ほとんど普通のModelFormですが、__init__内が少し特殊です。
+これですが、全てのフォームの部品のclassにform-controlを指定しているだけです。
+今回はBootstrapを使用するので...
+
+     
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field in self.fields.values():
+                field.widget.attrs["class"] = "form-control"
+
+
+
+
+testproject/testapp/views.py
+何も言うことはないでしょう。シンプルです。
+
+     
+    from django.shortcuts import render, redirect
+    from django.views.decorators.http import require_POST
+    from .forms import MemberModelForm
+     
+     
+    def index(request):
+        context = {
+            'form': MemberModelForm(),
+        }
+        return render(request, 'testapp/index.html', context)
+     
+     
+    @require_POST
+    def save(request):
+        form = MemberModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('testapp:index')
+     
+        context = {
+            'form': form,
+        }
+        return render(request, 'testapp/index.html', context)
+
+
+
+testproject/templates/testapp/base.html
+Bootstrapを使った雛形htmlです。こちらも普通ですね。
+
+     
+    {% load staticfiles %}
+    <!DOCTYPE html>
+    <html lang="ja">
+      <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+     
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+      </head>
+      <body>
+          {% block content %}
+          {% endblock %}
+     
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+     
+      </body>
+    </html>
+
+
+
+
+testproject/templates/testapp/index.html
+
+     
+    {% extends "testapp/base.html" %}
+     
+    {% block content %}
+    <div class="container">
+        <h2>ModelForm</h2>
+        <form action="{% url 'testapp:save' %}" method="POST">
+            <table class="table table-bordered">
+                {% for field in form %}
+                    <tr class="warning">
+                        <td>{{ field.label_tag }}</td>
+                        <td>{{ field }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% csrf_token %}
+        <input class="btn btn-success btn-block btn-lg" type="submit" value="登録">
+        </form>
+    </div>
+    {% endblock %}
+
+
+
+このように、 {% for field in form %}で順番に取り出すことが可能です。
+非常に楽チンですね。
+<tr class="warning">ですが、Bootstrapのtableでは色を指定することができます。
+最近、フォームをテーブルで作成することが多いです。
+
+     
+                {% for field in form %}
+                    <tr class="warning">
+                        <td>{{ field.label_tag }}</td>
+                        <td>{{ field }}</td>
+                    </tr>
+                {% endfor %}
+
+
+
+
+Bootstrap4の標準のフォームなら、以下のようにすることができます。
+これは中々ジェネリックです。{{ form.errors }}で、どこかにエラーをまとめて表示することもできます。
+
+     
+    {{ form.non_field_errors }}
+    <form action="" method="POST">
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">send</button>
+    </form>
+
+
+
+
+<input type="hidden">なフィールドが一緒に出力されてレイアウト的に困るならばform.visible_fieldsが使えますし...
+
+     
+    {% for field in form.visible_fields %}
+
+
+
+
+hiddenなフィールドだけを表示することもできますし、field.is_hiddenでのhiddenなフィールドかの確認もできます。
+
+     
+    {% for field in form.hidden_fields %}
+
+
+
+
+では、次にフォームのウィジェットを変更してみましょう。
+以下のようにしてみます。
+
+
+変更箇所は、forms.pyです。
+
+     
+    from django import forms
+    from .models import (
+        Member, License, Permission,
+        GENDER_CHOICES, TIME_CHOICES,
+    )
+     
+     
+    class MemberModelForm(forms.ModelForm):
+     
+        license = forms.ModelMultipleChoiceField(
+            label="資格",
+            queryset=License.objects.all(),
+            widget=forms.CheckboxSelectMultiple,  # 複数選択チェックボックスへ変更。デフォルトはSelectMultiple
+        )
+     
+        permission = forms.ModelChoiceField(
+            label="偉さ",
+            queryset=Permission.objects.all(),
+            widget=forms.RadioSelect,  # ラジオに変更。デフォルトはSelect
+            empty_label=None,
+        )
+     
+        gender = forms.ChoiceField(
+            label="性別",
+            choices=GENDER_CHOICES,
+            widget=forms.RadioSelect,  # ラジオに変更
+        )
+     
+        login = forms.ChoiceField(
+            label="ログイン可能時間",
+            choices=TIME_CHOICES,
+            widget=forms.RadioSelect,  # ラジオに変更
+        )
+     
+        class Meta:
+            model = Member
+            fields = "__all__"
+     
+
+
+
+
+widgetを変更するため、改めてlicense等を定義しています。
+forms.RadioSelect(attrs={'class': 'myclass'})のようにしてclass等の属性の設定も可能です。
+
+forms.ModelChoiceFieldとforms.ChoiceFieldや
+querysetとchoicesの違いには気をつけましょう。
+上記のフォームはModelFormではなく普通のFormにしても大体動作します。
+（細かい場所の変更はありますが...）
+
+実を言うとModelFormの場合は、以下のようにしてwidgetやclassの変更もできます。こちらも覚えておきましょう。
+
+     
+    class ImgForm(forms.ModelForm):
+     
+        class Meta:
+            model = Img
+            fields = '__all__'
+            widgets = {
+                'title': forms.TextInput(attrs={
+                    'class': "form-control",
+                }),
+                'file': forms.ClearableFileInput(attrs={
+                    'class': "form-control-file",
+                }),
+            }
+
+
+
+
+テンプレートにて、それぞれの選択肢をfor文で取り出したいときは以下のようにします。
+これはForeignKey、ManyToManyField、choices付きCharFieldのどの場合でも利用できます。
+
+     
+    {% for value, text in form.[field_name].field.choices %}
+        {{ value }}: {{ text }}
+    {% endfor %}
+
+
+
+Bootstrap4のCustom Formsのように、少し特殊なウィジェットなんかもこれを利用して作れます
+
+     
+    <form action="" method="POST">
+    {% for value, text in form.field1.field.choices %}
+    <label class="custom-control custom-radio">
+      <input name="field1" type="radio" class="custom-control-input" value="{{ value }}">
+      <span class="custom-control-indicator"></span>
+      <span class="custom-control-description">{{ text }}</span>
+    </label>
+    {% endfor %}
+     
+    <hr>
+     
+    {% for value, text in form.field2.field.choices %}
+    <label class="custom-control custom-checkbox">
+      <input name="field2" type="checkbox" class="custom-control-input" value="{{ value }}">
+      <span class="custom-control-indicator"></span>
+      <span class="custom-control-description">{{ text }}</span>
+    </label>
+    {% endfor %}
+    </form>
+
+
+
+以下のようにすると、更新の場合でもうまくチェックが入ります
+choice付きCharField、ForeignKey
+
+     
+    <input name="field1" type="radio" class="custom-control-input" value="{{ value }}" {% if value == form.field1.value %}checked{% endif %}>
+
+
+
+ManyToMany
+
+     
+    <input name="field2" type="checkbox" class="custom-control-input" value="{{ value }}" {% if value in form.field2.value %}checked{% endif %}>

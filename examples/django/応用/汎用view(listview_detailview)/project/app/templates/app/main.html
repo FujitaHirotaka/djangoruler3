@@ -1,0 +1,36 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">汎用view(listview,detailview</h1>
+<p>[参考ページ]<a href="https://torina.top/detail/285/">Narito blog</a></p>
+<p>[point 1]:ListViewのtemplate_nameを指定しない場合のファイルの名前とフォルダのデフォルト：</p>
+
+<p>{{ "<app_name>/<model_name>_list.html" |force_escape }}</p>
+<p>[point 2]:ListViewのcontext_object_nameを指定しない場合のテンプレートでの変数名：</p>    
+<p>{{ "object_listまたは<app_name>/<model_name>_list"|force_escape }}</p>
+    <p>[point 3]:DetailViewのtemplate_nameを指定しない場合のファイルの名前とフォルダのデフォルト：</p>
+
+    <p>{{ "<app_name>/<model_name>_detail.html" |force_escape }}</p>
+        <p>[point 4]:DetailViewのcontext_object_nameを指定しない場合のテンプレートでの変数名：</p>    
+        <p>{{ "objectまたは<model_name>"|force_escape }}</p>    
+
+            <h2>トップ画面</h2>
+            {% for player in player_list %}
+                <p>
+                    名前:{{ player.name }} <br>
+                    過去所属チーム:{{ player.team.all}}
+                    {% for i in player.team.all %}
+                     {{ i }},
+                    {% endfor %}  <br>
+                    登録日:{{ player.pub_date }}<br>
+                    <a href="{% url 'app:detail' player.pk %}">続きを読む</a>
+ 
+                </p>
+            {% endfor %}
+
+
+<h2>管理ページに移動</h2>
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+<hr>
+

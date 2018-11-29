@@ -1,0 +1,28 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">ModelChoiceFieldとModelmultipleChoiceField</h1>
+<p>ModelChoiceFieldはforeignkeyに対応、ModelmultipleChoiceFieldはmanytomanyfieldに対応</p>
+<p>modelformを使わず、formのみを使ってデータを登録するときの忘備録</p>
+<div class="container">
+    <h2>ModelForm</h2>
+    <form action="{% url 'app:save' %}" method="POST">
+        <table class="table table-bordered">
+            {% for field in form %}
+                <tr class="warning">
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% csrf_token %}
+    <input class="btn btn-success btn-block btn-lg" type="submit" value="登録">
+    </form>
+</div>
+
+
+<h2>管理ページに移動</h2>
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+<hr>
+

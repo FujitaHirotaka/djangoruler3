@@ -1,0 +1,35 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">画像アプロダ（CRUD処理を、汎用ビューで）</h1>
+<p>[参考ページ]<a href="https://torina.top/detail/293/">Narito blog</a></p>
+
+
+
+  <div class="container">
+    <form action="" method="POST" enctype='multipart/form-data'>
+      {% for field in form %}
+        <div class="form-group row">
+          <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">
+            {{ field.label }}
+          </label>
+          <div class="col-sm-10">
+            {{ field }}
+          </div>
+        </div>
+      {% endfor %}
+      {% csrf_token %}
+      <div class="text-xs-center">
+        <button type="submit" class="btn btn-outline-primary">送信する</button>
+        <a href="{% url 'app:index' %}" class="btn btn-outline-primary">やめる</a>
+      </div>
+    </form>
+  </div>
+
+
+
+<a href="{% url 'admin:index' %}">管理画面へ</a>
+
+
+<hr>
+
