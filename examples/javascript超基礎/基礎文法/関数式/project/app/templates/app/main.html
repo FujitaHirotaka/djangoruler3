@@ -1,0 +1,37 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">関数式</h1>
+<p>[参考ページ]<a href="https://jsprimer.net/basic/function-declaration/">JavaScriptの入門書</a></p>
+
+
+<script>
+//関数式の場合    
+const f=function(num){
+     return num*2
+};
+alert(f(4));
+
+
+//fn,f,flは同等
+
+//関数宣言の場合
+function  fn(num){
+    return num*2;
+
+};
+
+alert(fn(4))
+
+//アロー関数の場合
+const fl =     (num) => { return num*2 };
+alert(fl(4));
+
+//アロー関数の省略形の場合
+const fm =     num =>  num*2 ;
+alert(fm(4));
+
+</script>
+
+
+

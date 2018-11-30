@@ -1,0 +1,44 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">変数のスコープ</h1>
+<p>[参考ページ]<a href="https://jsprimer.net/basic/function-scope/#what-is-scope">JavaScriptの入門書</a></p>
+<p>スコープとは変数の名前や関数などの参照できる範囲を決めるもの</p>
+
+
+ 
+<br>
+ <h2>ここからがデモンストレーション</h2>    <br>
+
+<script>
+function f(){
+   const x=1;
+   console.log(x);
+
+};
+f();
+try {
+console.log(x)
+} catch(e){
+    console.log("xは定義されていません")
+};
+
+
+function fn(arg) {
+    // fn関数のスコープ内から仮引数`arg`は参照できる
+    console.log(arg); // => 1
+};
+fn(1);
+// fn関数のスコープ外から`arg`は参照できないためエラー
+try {
+console.log(arg); // => ReferenceError: arg is not defined
+} catch(e){
+  console.log("argは定義されていません")
+};
+
+alert(a);
+
+</script>
+
+
+

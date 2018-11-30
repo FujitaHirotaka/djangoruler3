@@ -1,0 +1,35 @@
+﻿[概要]
+可変長引数を実現するためには、
+引数がすべて入ったargumentsか、
+Rest parametersを使用します。
+
+arguments
+argumentsは関数の中でのみ参照できる特殊な変数です。
+ argumentsは関数に渡された値が入ったArray-likeなオブジェクトです。
+
+function myFunc() {
+    console.log(arguments[0]); // => "a" 
+    console.log(arguments[1]); // => "b" 
+    console.log(arguments[2]); // => "c" 
+}
+myFunc("a", "b", "c");
+
+Array-likeなオブジェクトは、
+配列のようにインデックスで要素へアクセスできます。 
+しかし、Arrayを継承していないため、
+Arrayのメソッドが使えない特殊なオブジェクトです。
+
+Rest parameters
+Rest parametersは仮引数名の前に...をつけます。 
+この仮引数には、関数に渡された値の配列が入ります。
+
+function myFunc(...args) {
+    console.log(args[0]); // => "a" 
+    console.log(args[1]); // => "b" 
+    console.log(args[2]); // => "c" 
+}
+myFunc("a", "b", "c");
+実行
+argumentsは後述するArrow Functionでは利用できないことや、
+Array-likeなオブジェクトであるため扱いにくいです。 
+そのため、可変長引数が必要な場合はRest parametersでの実装を検討した方がよいでしょう。

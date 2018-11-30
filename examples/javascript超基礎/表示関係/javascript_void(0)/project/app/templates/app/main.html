@@ -1,0 +1,25 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">javascript:void(0)</h1>
+<p>[参考ページ]<a href="http://memories.zal.jp/WP/blog/20150504_2542.html">JavaScriptのvoid(0)。おまじないのように使っていたが意味を調べてみた！</a></p>
+<p>(概要）リンクを無効にした状態でマウスオーバしたときにマウスカーソルが矢印から手に変わり、
+    ユーザがクリックできることがわかりやすくする</p>
+
+<strong>イディオム</strong>    <br>
+    <p>   //テキストボタン</p>
+ <p>{{ '<a href="javascript:void(0)" onclick="javascript関数()">○○○○</a>' | force_escape }}</p>
+ 
+ <p> //画像ボタン</p>
+ {{ '<a href="javascript:void(0)"> <img src="image/○○○.jpg" onclick="javascript関数()"> </a>'   | force_escape | linebreaksbr }}
+<br>
+ <strong>ここからがデモンストレーション</strong>    <br>
+
+ <a href="javascript:void(0)" >リンクなし</a>
+ <br>
+ <a href="javascript:void(0)" onclick='window.open("https://www.yahoo.co.jp")'>yahoo</a>
+
+
+
+<hr>
+

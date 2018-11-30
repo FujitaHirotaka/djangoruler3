@@ -67,7 +67,7 @@ def example_open(request):
     if pid1.isdigit():
         if int(pid1) in pid_list:  # psutil.pid_exists()はどうも変数を受け付けないらしい。なので、このような記述になった。
             subprocess.Popen("taskkill /f /T /pid " + str(pid1))
-    if largecategory=="django":
+    if largecategory!="python一般":
         example_path = base_path / largecategory / middlecategory / example_name / "project"
         example_index_path = example_path / "app" / "templates" / "app"
         os.chdir(example_path)

@@ -1,0 +1,84 @@
+﻿[概要]
+javascript:void(0) これって何を意味してるんだろ？
+おまじないの言葉ですがテキストや画像がクリックできることをユーザさんにわかってもらうように、
+aタグを使うことがよくあります。
+そうすることでマウスオーバしたときにマウスカーソルが矢印から手に変わり、
+ユーザさんがクリックできることがわかりやすくなります。
+
+
+このときによく使うのが、おまじないの言葉
+
+javascript:void(0)
+
+これが具体的に何を意味しているのか調べてみました。
+
+aタグの動作
+私が javascript:void(0) を使うときは大体以下のようなパターン。
+
+SyntaxHighlighterについて
+//テキストボタン
+<a href="javascript:void(0)" onclick="javascript関数()">○○○○</a>
+ 
+//画像ボタン
+<a href="javascript:void(0)">
+    <img src="image/○○○.jpg" onclick="javascript関数()">
+</a>
+onclickとの組み合わせ。
+ただ、onclickだとテキストや画像がカーソルの変化（手にならない）のでユーザさんがわかりにくい。
+ということでaタグを使って強引にカーソルを変化させてるわけです。
+今だとCSSの cursor:pointer; を使えよ！って感じですが、
+ずっと前から運用しているサイトやコーダーさんによってはまだまだaタグ組み合わせの方法みますね。
+さて、このaタグですが href属性に何か値が入ると何らかの動作しようとします。
+基本は、入力した値のページにアクセスしようとしますが、
+ただ単に空 (href="")でも再読み込みになります。
+なので、完全にaタグの動作を無効にしたいので、そこにおまじない javascript:void(0) です。
+
+JavaScript Void演算子 とは
+void operator - JavaScript | MDN によると、Void演算子は式を評価し、
+結果として必ず undefined(未定義) を返します。ポイントは、
+
+必ず undefined を返す
+
+ということ。
+
+SyntaxHighlighterについて
+alert(void 0)
+alert(void (0))
+alert(void "hello")
+alert(void (new Date()))
+alert(void document.getElementById("123"))
+alert(void(alert('abc')))
+//all will return undefined
+なので、void(式）で式を実行した後に上記の結果はすべて undefined を返します。
+
+aタグとJavaScript URIs
+void operator - JavaScript | MDN によると、
+ブラウザはaタグのhrefでJavaScriptをを使うとき、
+URI(aタグ)内のコードを評価し、戻り値がundefined(未定義)である場合を除き、
+返された値にページの内容を置き換えます。逆に言えば、
+
+undefined（未定義）の場合は何もしない
+
+ということ。
+
+JavaScript: undefined じゃダメなの？
+最近のブラウザは undefined がconst(定数）扱いになっており上書きできなくなってきてますが、
+古いブラウザなどを使う場合は上書きされていまいます。以前は、undefined はグローバル変数だったんです。
+なので、 What does `void 0` mean? - Stack Overflow によると以下のような現象が起こるらしい。
+
+SyntaxHighlighterについて
+alert(undefined); //alerts "undefined"
+var undefined = "new value";
+alert(undefined); //alerts "new value"
+undefinedの値が"new value"に上書きされた。
+これだとaタグのhrefに未定義以外は入る恐れがあって予想外の動作になってしまいます。
+不特定多数のユーザがみるサイトでは、ユーザが何のブラウザを使うかわからないので、
+undefinedは直接使わない方が良さそうです。
+
+まとめ
+onclickを使いたいけどユーザさんがクリックできることを分かってもらうためにaタグを使いたい。
+aタグの動作は無効にしたいので、未定義ならば動作しないという決まりから void演算子を使う。
+未定義(undefined)は、古いブラウザでは値を上書きできて危険なので、必ず未定義を返すvoid演算子を使うと安全。
+void(式）の式は何でもいい。今回は undefined（未定義）を返してくれればいいだけなので、
+それならば簡単な 0 を使えばいい。void(0) を使う！
+以上のような感じかな。

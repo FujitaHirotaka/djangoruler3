@@ -1,0 +1,27 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">可変長引数の関数</h1>
+<p>[参考ページ]<a href="https://jsprimer.net/basic/function-declaration/">JavaScriptの入門書</a></p>
+<p>RestParametersを使う</p>
+
+
+
+<script>
+
+function fn(...num){
+   return Math.max(...num)
+};
+alert(fn(1,2,3,4,5));
+
+function f(...num){
+   alert(num[0]);
+   alert(num[2]);
+
+};
+f(1,2,3,4,5);
+
+</script>
+
+
+

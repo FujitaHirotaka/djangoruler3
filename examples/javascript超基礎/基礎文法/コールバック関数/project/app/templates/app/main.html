@@ -1,0 +1,32 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">コールバック関数</h1>
+<p>[参考ページ]<a href="https://jsprimer.net/basic/function-declaration/">JavaScriptの入門書</a></p>
+
+
+
+
+<script>
+//関数式で
+const f1=function(num){return num*2};
+const f2=function(num, f){ return f(num)};
+alert(f2(5, f1));
+
+//関数宣言で
+function f3(num){return num*2};
+function f4(num, f){return f(num)};
+alert(f4(5,f3));
+
+const list=[1,2,3,4,5];
+const f6=function(num){alert(2*num)};
+alert(list.forEach(f6))
+
+//直接コールバック関数を高階関数に書き込むことも可能
+list.forEach(function(num){alert(3*num)})
+list.forEach(num => {alert(num*4)})
+
+</script>
+
+
+
