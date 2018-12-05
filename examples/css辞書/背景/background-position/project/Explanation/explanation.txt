@@ -1,0 +1,31 @@
+﻿[概要]
+background-repeatプロパティは、背景画像のリピートの仕方を指定する際に使用します。
+
+■値
+repeat
+縦横に背景画像を繰り返して表示します。これが初期値です。
+repeat-x
+横方向にのみ背景画像を繰り返して表示します。
+repeat-y
+縦方向にのみ背景画像を繰り返して表示します。
+no-repeat
+背景画像を一回だけ表示して繰り返しません。
+■使用例
+スタイルシート部分は外部ファイル（sample.css）に記述。
+body {
+background-image: url("../images/inu01.jpg");
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: right bottom
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+：
+：
+</body>
+</html>

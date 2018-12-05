@@ -1,0 +1,125 @@
+﻿[概要]
+background-clipプロパティは、背景の適用範囲を指定する際に使用します。
+
+尚、Firefox3以下は、content-boxの値をサポートしておらず、他の値については-boxを付けない値をサポートしているようです。
+
+■値
+border-box
+背景をボーダーボックスに適用する（初期値）
+padding-box
+背景をパティングボックスに適用する
+content-box
+背景をコンテントボックスに適用する
+■初期値・適用対象・値の継承
+初期値
+border-box
+適用対象
+すべての要素
+値の継承
+しない
+■使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.sample1 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+background-clip:border-box;
+}
+
+p.sample2 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+background-clip:padding-box;
+}
+
+p.sample3 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+background-clip:content-box;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="sample1">background-clip:border-box;　を指定</p>	
+<p class="sample2">background-clip:padding-box;　を指定</p>
+<p class="sample3">background-clip:content-box;　を指定</p>	
+<p>
+以下は、使用した背景画像です。<br>
+<img src="images/bg_flower.png" alt="背景画像" border="1">
+</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+background-clip:border-box;　を指定
+
+background-clip:padding-box;　を指定
+
+background-clip:content-box;　を指定
+
+以下は、使用した背景画像です。
+背景画像
+
+■ベンダープレフィックスを付けた場合の使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.prefix_sample1 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+-moz-background-clip:border;
+-webkit-background-clip:border-box;
+-o-background-clip:border-box;
+-ms-background-clip:border-box;
+}
+
+p.prefix_sample2 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+-moz-background-clip:padding;
+-webkit-background-clip:padding-box;
+-o-background-clip:padding-box;
+-ms-background-clip:padding-box; 
+}	
+
+p.prefix_sample3 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+-moz-background-clip:content;
+-webkit-background-clip:content-box;
+-o-background-clip:content-box;
+-ms-background-clip:content-box;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="prefix_sample1">background-clip:border-box;　を指定</p>
+<p class="prefix_sample2">background-clip:padding-box;　を指定</p>	
+<p class="prefix_sample3">background-clip:content-box;　を指定</p>
+<p>
+以下は、使用した背景画像です。<br>
+<img src="images/bg_flower.png" alt="背景画像" border="1">
+</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+background-clip:border-box;　を指定
+
+background-clip:padding-box;　を指定
+
+background-clip:content-box;　を指定
+
+以下は、使用した背景画像です。
+背景画像

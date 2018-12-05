@@ -1,0 +1,152 @@
+﻿[概要]
+background-sizeプロパティは、背景画像のサイズを指定する際に使用します。
+
+長さやパーセンテージで指定する場合、値を２つ記述すると、それぞれ記述した順に幅と高さを表します。 １つだけ指定した場合には、もう１つはautoと解釈されます。負の値を指定することはできません。
+
+■値
+auto
+自動的に算出される（初期値）
+contain
+縦横比は保持して、背景領域に収まる最大サイズになるように背景画像を拡大縮小する
+cover
+縦横比は保持して、背景領域を完全に覆う最小サイズになるように背景画像を拡大縮小する
+長さ
+背景画像の幅・高さを指定する
+パーセンテージ
+背景領域に対する背景画像の幅・高さのパーセンテージを指定する
+■初期値・適用対象・値の継承
+初期値
+auto
+適用対象
+すべての要素
+値の継承
+しない
+■使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.sample1 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000;	
+background-image:url("images/bg_flower.png");
+background-size:contain;
+}
+
+p.sample2 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+background-size:cover;
+}
+
+p.sample3 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+background-size:20px 20px;
+}
+
+p.sample4 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+background-size:50% auto;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="sample1">background-size:contain;　を指定</p>
+<p class="sample2">background-size:cover;　を指定</p>
+<p class="sample3">background-size:20px 20px;　を指定</p>
+<p class="sample4">background-size:50% auto;　を指定</p>	
+<p>
+以下は、使用した背景画像です。<br>
+<img src="images/bg_flower.png" alt="背景画像" border="1">
+</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+background-size:contain;　を指定
+
+background-size:cover;　を指定
+
+background-size:20px 20px;　を指定
+
+background-size:50% auto;　を指定
+
+以下は、使用した背景画像です。
+背景画像
+
+■ベンダープレフィックスを付けた場合の使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.prefix_sample1 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000;	
+background-image:url("images/bg_flower.png");
+-moz-background-size:contain;
+-webkit-background-size:contain;
+-o-background-size:contain;
+-ms-background-size:contain;	
+}
+
+p.prefix_sample2 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+-moz-background-size:cover;
+-webkit-background-size:cover;
+-o-background-size:cover;
+-ms-background-size:cover;
+}
+
+p.prefix_sample3 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+-moz-background-size:20px 20px;
+-webkit-background-size:20px 20px;
+-o-background-size:20px 20px;
+-ms-background-size:20px 20px;
+}
+
+p.prefix_sample4 {
+width:300px; height:80px; padding:15px;
+border:dashed 5px #000000; 
+background-image:url("images/bg_flower.png");
+-moz-background-size:50% auto;
+-webkit-background-size:50% auto;
+-o-background-size:50% auto;
+-ms-background-size:50% auto;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="prefix_sample1">background-size:contain;　を指定</p>
+<p class="prefix_sample2">background-size:cover;　を指定</p>
+<p class="prefix_sample3">background-size:20px 20px;　を指定</p>
+<p class="prefix_sample4">background-size:50% auto;　を指定</p>	
+<p>
+以下は、使用した背景画像です。<br>
+<img src="images/bg_flower.png" alt="背景画像" border="1">
+</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+background-size:contain;　を指定
+
+background-size:cover;　を指定
+
+background-size:20px 20px;　を指定
+
+background-size:50% auto;　を指定
+
+以下は、使用した背景画像です。
+背景画像

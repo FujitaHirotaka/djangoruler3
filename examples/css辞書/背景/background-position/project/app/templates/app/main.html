@@ -1,0 +1,32 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">background-repeat</h1>
+<p>[参考ページ]<a href="http://www.htmq.com/style/background-repeat.shtml">HTMLクイックリファレンス</a></p>
+
+<div id="b_main">
+    <form action="{% url 'app:index' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">送信</button>
+    </form>
+
+    <form action="{% url 'app:index' %}" method="POST">
+        {% csrf_token %}
+        {{ form1 }}
+        <button type="submit">送信</button>
+    </form>
+
+    <form action="{% url 'app:index' %}" method="POST">
+        {% csrf_token %}
+        {{ form2 }}
+        <button type="submit">送信</button>
+    </form>
+</div>
+
+
+{% if request.method == "POST" %}
+<div id="a_main" >{{ choice }}</div>
+
+{% endif %}
+<hr>

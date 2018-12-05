@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+div#a_main {
+    width:350px;
+    height:200px;
+    margin:auto;
+    padding: 35px;
+    background-image:url("./bg_check.png");
+    border:dashed 10px #000000; 
+    background-repeat:no-repeat;
+    background-position:--**__**;
+}
+
+div#b_main {
+   background-color: pink;
+   margin:30px 20px 30px 20px;
+}

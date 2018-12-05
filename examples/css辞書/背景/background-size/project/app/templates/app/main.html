@@ -1,0 +1,31 @@
+﻿<!-- Page Content -->
+
+<h1 class="mt-5">background-size</h1>
+
+<p>
+    [参考ページ]
+
+    <a href="http://www.htmq.com/css3/background-size.shtml">HTMLクイックリファレンス</a>
+</p>
+
+<div id="b_main">
+    <form
+        action="{% url 'app:index' %}"
+        method="POST"
+    >
+        {% csrf_token %}
+        {{form.as_p}}
+        <p>長さ、高さの値は、上の値がパーセンテージ、長さでない場合、無視してよい</p>
+
+
+
+        <button type="submit" style="float:right;">送信</button>
+    </form>
+</div>
+
+{% if request.method == "POST" %}
+
+<div id="a_main">{{ choice }}</div>
+
+{% endif %}
+

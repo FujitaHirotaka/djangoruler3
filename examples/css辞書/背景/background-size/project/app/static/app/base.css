@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+div#a_main {
+    width:350px;
+    height:200px;
+    margin:auto;
+    padding: 35px;
+    background-image:url("./bg_flower.png");
+    border:dashed 10px #000000; 
+    background-size:20px 20px;
+}
+
+div#b_main {
+   background-color: pink;
+   margin:30px 20px 30px 20px;
+}
