@@ -1,0 +1,104 @@
+﻿[概要]
+ 
+border-top-right-radiusプロパティは、ボックスの右上の角丸を指定する際に使用します。 角丸の形状を指定する際には、水平方向と垂直方向の半径のセットで表します。指定するのは、ボーダーの外側の輪郭です。
+
+角丸の楕円半径は、長さかパーセンテージで指定します。 ２つの値を記述しますが、１つ目の値は水平方向、２つ目の値は垂直方向の半径となります。 ２つ目の値が省略された場合には、１つ目と同じ値になります。
+
+尚、border-radiusプロパティを使用すると、ボックスの４つのコーナーの角丸をまとめて指定することができます。
+
+■値
+長さ
+楕円半径の長さを指定する（初期値は0）
+パーセンテージ
+ボーダーボックスの幅と高さに対する楕円半径のパーセンテージを指定する
+■初期値・適用対象・値の継承
+初期値
+0
+適用対象
+すべての要素
+値の継承
+しない
+■使用例
+CSSソースは外部ファイル（sample.css）に記述
+table.sample1 {
+border:solid 10px blue;
+border-top-right-radius: 1em;	
+}
+table.sample1 td {
+background-color:forestgreen;
+border-top-right-radius: 0.5em;	
+}	
+
+p.sample2 {
+width:280px; height:130px; background-color:#ccecf4; 
+border:solid 20px #7fcfe2; 
+border-top-right-radius: 100px 50px;
+}	
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<table class="sample1">
+<tr><td>指定したプロパティ</td><td>border-top-right-radius</td></tr>
+<tr><td>table要素に指定した値</td><td>1em</td></tr>
+<tr><td>td要素に指定した値</td><td>0.5em</td></tr>	
+</table>
+<p class="sample2">border-top-right-radius: 100px 50px;　を指定</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+指定したプロパティ	border-top-right-radius
+table要素に指定した値	1em
+td要素に指定した値	0.5em
+border-top-right-radius: 100px 50px;　を指定
+
+■ベンダープレフィックスを付けた場合の使用例
+CSSソースは外部ファイル（sample.css）に記述
+table.prefix_sample1 {
+border:solid 10px blue;
+-moz-border-top-right-radius: 1em;
+-webkit-border-top-right-radius: 1em;
+-o-border-top-right-radius: 1em;
+-ms-border-top-right-radius: 1em;
+}
+table.prefix_sample1 td {
+background-color:forestgreen;
+-moz-border-top-right-radius: 0.5em;
+-webkit-border-top-right-radius: 0.5em;
+-o-border-top-right-radius: 0.5em;
+-ms-border-top-right-radius: 0.5em;	
+}	
+
+p.prefix_sample2 {
+width:280px; height:130px; background-color:#ccecf4; 
+border:solid 20px #7fcfe2; 
+-moz-border-top-right-radius: 100px 50px;
+-webkit-border-top-right-radius: 100px 50px;
+-o-border-top-right-radius: 100px 50px;
+-ms-border-top-right-radius: 100px 50px;
+}	
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<table class="prefix_sample1">
+<tr><td>指定したプロパティ</td><td>border-top-right-radius</td></tr>
+<tr><td>table要素に指定した値</td><td>1em</td></tr>
+<tr><td>td要素に指定した値</td><td>0.5em</td></tr>	
+</table>
+<p class="prefix_sample2">border-top-right-radius: 100px 50px;　を指定</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+指定したプロパティ	border-top-right-radius
+table要素に指定した値	1em
+td要素に指定した値	0.5em
+border-top-right-radius: 100px 50px;　を指定

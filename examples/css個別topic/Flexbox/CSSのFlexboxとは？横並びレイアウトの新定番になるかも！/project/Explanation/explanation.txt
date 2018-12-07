@@ -1,0 +1,2364 @@
+﻿[概要]
+ 
+こんにちは！ ライターのナナミです。
+
+みなさん、要素を下記のように横並びにする時、どんな方法を使っていますか？
+
+flex1
+floatやインラインブロックで作っているという方が多いのではないでしょうか。
+
+実は、もっと柔軟で簡単な手法があるんです。
+
+ということで、今回は横並びレイアウトの新定番、Flexboxについて解説していきます！
+
+この記事の流れは下記の通りです。
+
+【基礎】Flexboxとは何か
+【基礎】Flexboxの使い方
+【発展】Flexboxの指定色々
+【発展】Flexboxの活用方法
+今まで悩んでいた横並びレイアウトも、これで解決できちゃいます。
+どんどん使えるようになっちゃいましょう！
+
+この記事の目次
+
+1 Flexboxとは？
+1.1 高さを自動的に調整してくれる
+1.2 並び順を指定できる
+1.3 余白の指定が楽々
+1.4 Flexboxとgridの違い
+1.5 対応ブラウザ
+2 Flexboxの使い方
+3 親要素（Flexコンテナ）に指定する詳細設定
+3.1 縦の揃えを変更：align-items
+3.2 横の揃えを変更：justify-content
+3.3 並びの方向を変更：flex-direction
+3.4 折り返しを変更：flex-wrap
+3.5 複数行の揃えを変更：align-content
+4 子要素（Flexアイテム）に指定する詳細設定
+4.1 要素の並び順を調整：order
+4.2 要素の幅を広げる：flex-grow
+4.3 要素の幅を縮ませる：flex-shrink
+4.4 要素の大きさを単位指定：flex-basis
+4.5 要素の大きさを調整を一括指定：flex
+4.6 縦の揃えを子要素ごとに変更：align-self
+5 コピペで使える! Flexbox使用サンプル
+5.1 写真を並べる
+5.2 ブログ投稿を並べる
+5.3 レスポンシブ対応のメニューを作る
+6 まとめ
+6.1 非常識な結果を出した卒業生
+6.2 活躍する現役エンジニア
+6.3 人気記事セレクション
+Flexboxとは？
+Flexboxは、CSS3で追加された新機能です。
+正式名称はFlexible Box Layout Moduleといいます。
+
+今までよりも自由に、そして簡単に横並びのレイアウトを作ることができます。
+フレキシブル（柔軟性のある）レイアウトができる、というわけですね。
+
+flex2
+この手法を使う時、親要素をFlexコンテナ、子要素をFlexアイテムと言います。
+
+では、他にどんな特徴があるのかを細かく見ていきましょう！
+
+高さを自動的に調整してくれる
+Flexboxの素晴らしい点は、指定した時に高さを自動的に揃えてくれる点です。
+
+flex3
+floatやインラインブロックでは、このようにガタガタしてしまいますが…
+
+flex4
+Flexboxは綺麗に高さを揃えることができます。
+
+もしも今後文言が増えたりしても、また自動的に調整してくれます。
+いちいち高さを入れたり、jQueryで制御する必要はありません。
+
+並び順を指定できる
+普通、横並びのレイアウトを作ると縦の順序と同じように並べることしかできませんよね。
+
+flex1
+Flexboxは、この並び順を自由に変えることができます。
+
+flex5
+急にメニューの順番が変わった…なんて時でも楽々対応できてしまうのです。
+
+余白の指定が楽々
+要素を横並びにした時に悩ましいのは、周りの余白の扱いですよね。
+
+flex6
+Flexboxなら、この余白をどのようにするのかを一行の記述で指定することができます。
+
+flex7
+もういちいち崩れに悩まされることもありません。
+
+Flexboxとgridの違い
+Flexboxと似たようなもので、CSS gridというものがあります。
+どちらも要素をいい感じに並べられる手法なのですが、ちょっと仕組みが違います。
+
+Flexboxは一次元レイアウトという並び方をしています。
+下記の図のように、横に並んだ後に下に折り返していく並び方のことです。
+
+grid3
+CSS gridは、要素の並びを無視して、パズルのように配置することができます。
+これを二次元レイアウトと言います。
+
+grid4
+Flexboxは一次元レイアウトなので、綺麗に揃えて配置することに長けています。
+
+一方CSS gridは、タイルやパズルのように詰めて配置するのが得意です。
+
+どちらで実装べきかはその時の状態や、実装したいデザインによります。
+CSS gridの記事も併せて読んでみて、どちらが向いているのか確認してみてくださいね。
+
+CSS Gridとは？floatを使わずに要素を並べる新しいレイアウト方法 1 user
+https://www.sejuku.net/blog/55869
+こんにちは！ライターのナナミです。みなさん、グリッドレイアウトってご存知ですか？こんな風に、コンテンツがタイル状に配置されているレイアウトです。目に入ってくる情報が多くて楽しいですね！でもなんか作るの難しそう…と思った方も多いのではないでしょうか？...
+対応ブラウザ
+Flexbox、これだけの便利さでお察しの方も多いと思います。
+
+はい、IE9以前などのオールドブラウザは使えません。
+
+だだ、現在のカレントブラウザでは問題なく使用できます。
+古いブラウザへの対応が必要でないならば、そんなに心配しなくても大丈夫です。
+
+Flexboxの使い方
+では、Flexboxの使い方を解説していきましょう。
+
+今回はこんな感じの要素を用意しました。
+
+flex2-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+これを横並びにしていきましょう。
+親要素にdisplay:flexを指定します。
+
+flex2-2
+CSS
+
+
+.flex_test-box {
+    display: flex;              /* フレックスボックスにする */
+}
+1
+2
+3
+.flex_test-box {
+    display: flex;              /* フレックスボックスにする */
+}
+はいできた！
+
+そう、基本的な使い方はたった一行、display:flexを入れるだけなんです。
+なんだこの手軽さは…便利すぎる…
+
+もちろんこれだけではイメージ通りのレイアウトにはなっていないかもしれません。
+細かい調整方法は次の項目で解説していきましょう。
+
+
+親要素（Flexコンテナ）に指定する詳細設定
+親要素（Flexコンテナ）に指定する設定は、主に子要素の配置や揃えに関するものです。
+
+縦の揃えを変更：align-items
+横並びになっている要素の、縦の位置を調整するプロパティです。
+上揃えにしたり真ん中揃えにしたりすることができます。
+
+flex3-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    align-items:stretch;        /* 縦の位置指定 */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 15%;                 /* 幅指定 */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    align-items:stretch;        /* 縦の位置指定 */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 15%;                 /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+指定できる値
+値	説明	見栄え
+stretch	一番大きい高さに合わせて、
+要素を広げて配置します。	flex3-1
+flex-start	上揃えで配置します。	flex3-2
+flex-end	下揃えで配置します。	flex3-3
+center	中央揃えで配置します。	flex3-4
+横の揃えを変更：justify-content
+右揃えや中央揃え、均等に配置など、横方向の位置を調整することができます。
+
+flex3-2-3
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    justify-content:center;
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 15%;                 /* 幅指定 */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    justify-content:center;
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 15%;                 /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+指定できる値
+値	説明	見栄え
+flex-start	左揃えで配置します。	flex3-2-1
+flex-end	右揃えで配置します。	flex3-2-2
+center	中央揃えで配置します。	flex3-2-3
+space-between	最初の要素と最後の要素を
+左右の一番端に配置し、
+それ以外の要素は
+バランスよく配置します。	flex3-2-4
+space-around	全ての要素を均等に配置します。	flex3-2-5
+並びの方向を変更：flex-direction
+左から1,2,3…と並べるか、上から1,2,3…と並べるのかなど、配置時に並ぶ方向を指定することができます。
+
+flex3-3-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-direction:row;         /* 要素の並び順 */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 15%;                 /* 幅指定 */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-direction:row;         /* 要素の並び順 */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 15%;                 /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+指定できる値
+値	説明	見栄え
+row	子要素（Flexアイテム）を左から右に配置します。	flex3-3-1
+row-reverse	子要素（Flexアイテム）を右から左に配置します。	flex3-3-2
+column	子要素（Flexアイテム）を上から下に配置します。	flex3-3-3
+column-reverse	子要素（Flexアイテム）を下から上に配置します。	flex3-3-4
+折り返しを変更：flex-wrap
+Flexboxは、そのままだと子要素（Flexアイテム）を一行で表示できるように幅を調整するようになっています。
+flex-wrapを指定することで、折り返して表示することが可能となります。
+
+flex3-4-2
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-wrap: wrap;            /* 折り返し指定 */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size:  30px;           /* 文字サイズ */
+    width: 200px;               /* 幅指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-wrap: wrap;            /* 折り返し指定 */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size:  30px;           /* 文字サイズ */
+    width: 200px;               /* 幅指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+指定できる値
+値	説明	見栄え
+nowrap	子要素を折り返しせず
+一行で配置します。	flex3-4-1
+wrap	子要素を折り返し、
+上から下への順で配置します。	flex3-4-2
+wrap-reverse	子要素を折り返し、
+下から上への順で配置します。	flex3-4-3
+複数行の揃えを変更：align-content
+align-itemsの複数行バージョンです。
+縦方向についても、位置やバランスを調整してくれます。
+
+flex3-5-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    height: 300px;              /* 高さ指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-wrap: wrap;            /* 折り返し指定 */
+    align-content:stretch;      /* 折り返し時の配置指定 */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size:  30px;           /* 文字サイズ */
+    width: 200px;               /* 幅指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    height: 300px;              /* 高さ指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-wrap: wrap;            /* 折り返し指定 */
+    align-content:stretch;      /* 折り返し時の配置指定 */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size:  30px;           /* 文字サイズ */
+    width: 200px;               /* 幅指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+指定できる値
+値	説明	見栄え
+stretch	親要素の高さに合わせて、
+綺麗に並ぶように広げて配置します。	flex3-5-1
+flex-start	親要素に対して、
+上揃えで配置します。	flex3-5-2
+flex-end	親要素に対して
+下揃えで配置します。	flex3-5-3
+center	親要素の中央に配置します。	flex3-5-4
+space-between	最初の要素と最後の要素を
+親要素の一番端に配置し、
+それ以外の要素は
+バランスよく配置します。	flex3-5-5
+space-around	全ての要素を均等に
+間を空けて配置します。	flex3-5-6
+子要素（Flexアイテム）に指定する詳細設定
+子要素（Flexアイテム）に指定する設定は、要素の幅の調整などがメインになっています。
+
+要素の並び順を調整：order
+要素の並び順を設定します。
+
+指定は数値のみで、数値が小さい順に並ぶようになります。
+マイナスの値は無効です。
+
+flex4-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    order: 3;                   /* 順番指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+    order: 2;                   /* 順番指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color:  #3F51B5; /* 背景色指定 */
+    order: 4;                   /* 順番指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+    order: 1;                   /* 順番指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    order: 3;                   /* 順番指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+    order: 2;                   /* 順番指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color:  #3F51B5; /* 背景色指定 */
+    order: 4;                   /* 順番指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+    order: 1;                   /* 順番指定 */
+}
+要素の幅を広げる：flex-grow
+子要素の大きさ調整のプロパティです。
+親要素にスペースがある場合、子要素が他の子要素に対してどれくらい伸びるかを比率で指定します。
+
+flex-0-1
+値は数値を指定します。
+マイナスの値は無効です。
+
+指定した数値が大きいほど、幅は広くなります。
+
+flex-0-2
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size: 30px;            /* 文字サイズ指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    flex-grow: 1;               /* 幅指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5;  /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color: #00BCD4;  /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size: 30px;            /* 文字サイズ指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    flex-grow: 1;               /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5;  /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color: #00BCD4;  /* 背景色指定 */
+}
+要素の幅を縮ませる：flex-shrink
+flex-growなどと同じく、子要素の大きさ調整のプロパティです。
+コンテンツがいっぱいいっぱいになっている場合、このプロパティが指定されている要素をどれくらい縮ませるかを比率で指定します。
+
+flex-0-3
+こちらも値は数値を指定します。
+同じく、マイナスの値は無効です。
+
+flex-growと違い、指定した数値が大きいほど幅は小さく表示されます。
+
+flex-0-4
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-wrap: nowrap;          /* 折り返し指定 */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+    flex-shrink: 2;             /* 幅指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color:  #3F51B5; /* 背景色指定 */
+    flex-shrink: 2;             /* 幅指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    flex-wrap: nowrap;          /* 折り返し指定 */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+    flex-shrink: 2;             /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color:  #3F51B5; /* 背景色指定 */
+    flex-shrink: 2;             /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+要素の大きさを単位指定：flex-basis
+widthと同じように、pxや%で明示的に幅を指定することができます。
+
+flex-0-5
+指定できる数値はpxや%など、単位がついている数値です。
+
+flex-0-6
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size: 30px;            /* 文字サイズ指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    flex-basis:  200px;         /* 幅指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5;  /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color: #00BCD4;  /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size: 30px;            /* 文字サイズ指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    flex-basis:  200px;         /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5;  /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color: #00BCD4;  /* 背景色指定 */
+}
+要素の大きさを調整を一括指定：flex
+flex-grow、flex-shrink、flex-basisを一括で指定することができます。
+要素の最大サイズと最小サイズを一気に指定できる、という感じです
+
+下記のように記述します。
+
+CSS
+
+
+セレクタ {
+    flex:flex-growの値 flex-shrinkの値 flex-basisの値;
+}
+1
+2
+3
+セレクタ {
+    flex:flex-growの値 flex-shrinkの値 flex-basisの値;
+}
+指定してみると、下記のように表示されます。
+
+flex-0-7
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1
+    </div>
+    <div class="flex_test-item">
+        2
+    </div>
+    <div class="flex_test-item">
+        3
+    </div>
+    <div class="flex_test-item">
+        4
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size: 30px;            /* 文字サイズ指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    flex:2 1 100px;             /* 幅指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+    flex:1 3 100px;             /* 幅指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5;  /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color: #00BCD4;  /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    font-size: 30px;            /* 文字サイズ指定 */
+    text-align:  center;        /* 文字中央揃え */
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+    flex:2 1 100px;             /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+    flex:1 3 100px;             /* 幅指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5;  /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color: #00BCD4;  /* 背景色指定 */
+}
+縦の揃えを子要素ごとに変更：align-self
+align-itemsの子要素バージョンです。
+子要素ごとに、縦の揃えを調整することができます。
+
+flex3-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        1.コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        2.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        3.コンテンツが入ります。コンテンツが入ります。コンテンツが入ります。
+    </div>
+    <div class="flex_test-item">
+        4.コンテンツが入ります。
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 25%;
+    align-self: stretch;
+}
+
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+ 
+.flex_test-item {
+    padding: 10px;
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 25%;
+    align-self: stretch;
+}
+ 
+.flex_test-item:nth-child(1) {
+    background-color:  #2196F3; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(2) {
+    background-color:  #4CAF50; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(3) {
+    background-color: #3F51B5; /* 背景色指定 */
+}
+ 
+.flex_test-item:nth-child(4) {
+    background-color:  #00BCD4; /* 背景色指定 */
+}
+指定できる値
+値	説明	見栄え
+auto	親要素のalign-itemsに合わせた配置になります。	
+stretch	一番大きい高さに合わせて配置します。	flex3-1
+flex-start	親要素に対して上揃えで配置します。	flex3-2
+flex-end	親要素に対して下揃えで配置します。	flex3-3
+center	親要素に対して中央揃えで配置します。	flex3-4
+コピペで使える! Flexbox使用サンプル
+Flexbox、細かい指定が色々あって難しい…なんて方もいるかもしれませんね。
+
+例として色々用意してみましたので、コピペして使ったり、参考にしてみたりしてください！
+
+写真を並べる
+flex5-1
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+     <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+     <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+    <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+     <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+     <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+    <div class="flex_test-item">
+        <img src="test_img.jpg" alt="">
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+.flex_test-item {
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    align-self: stretch;        /* 縦の位置指定 */
+}
+img {
+    width: 100%;                /* 画像サイズ指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+.flex_test-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+}
+.flex_test-item {
+    color:  #fff;               /* 文字色 */
+    margin:  10px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    align-self: stretch;        /* 縦の位置指定 */
+}
+img {
+    width: 100%;                /* 画像サイズ指定 */
+}
+画像もいい感じに並べることができます。
+背景色を変えたりすると、アルバムみたいな見せ方もできそうですね。
+
+ブログ投稿を並べる
+flex5-2
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+    <div class="flex_test-item">
+        <h2>
+            見出し
+        </h2>
+        <p>
+            テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+        </p>
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #eee;         /* 背景色指定 */
+    padding:  10px;                 /* 余白指定 */
+    display: flex;                  /* フレックスボックスにする */
+    flex-wrap:  wrap;               /* 折り返し指定 */
+    justify-content: space-evenly;  /* 横の位置指定 */
+}
+.flex_test-item {
+    margin:  10px;                  /* 外側の余白 */
+    border-radius:  5px;            /* 角丸指定 */
+    width: 43%;
+    background-color:  #fff;        /* 文字色 */
+    padding:  10px;                 /* 余白指定 */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+.flex_test-box {
+    background-color: #eee;         /* 背景色指定 */
+    padding:  10px;                 /* 余白指定 */
+    display: flex;                  /* フレックスボックスにする */
+    flex-wrap:  wrap;               /* 折り返し指定 */
+    justify-content: space-evenly;  /* 横の位置指定 */
+}
+.flex_test-item {
+    margin:  10px;                  /* 外側の余白 */
+    border-radius:  5px;            /* 角丸指定 */
+    width: 43%;
+    background-color:  #fff;        /* 文字色 */
+    padding:  10px;                 /* 余白指定 */
+}
+ブログは記事ごとに文字の量が違う場合があるので、うまく並べられないこともありますよね。
+Flexboxなら、高さが違っても簡単に揃えて表示することができます。
+
+レスポンシブ対応のメニューを作る
+flex5-3
+HTML
+
+
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+<div class="flex_test-box">
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+    <div class="flex_test-item">
+        <a href="URL">メニュー</a>
+    </div>
+</div>
+CSS
+
+
+.flex_test-box {
+    background-color: #00BCD4;
+    padding:  10px;                 /* 余白指定 */
+    display: flex;                  /* フレックスボックスにする */
+    justify-content: space-evenly;  /* 横の位置指定 */
+}
+.flex_test-item {
+    margin:  10px;                  /* 外側の余白 */
+    border-bottom: solid 1px #fff;  /* 下線指定 */
+}
+
+.flex_test-item a {
+    color:  #fff;                   /* 文字色 */
+    text-decoration:  none;         /* デフォルトCSS打ち消し */
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+.flex_test-box {
+    background-color: #00BCD4;
+    padding:  10px;                 /* 余白指定 */
+    display: flex;                  /* フレックスボックスにする */
+    justify-content: space-evenly;  /* 横の位置指定 */
+}
+.flex_test-item {
+    margin:  10px;                  /* 外側の余白 */
+    border-bottom: solid 1px #fff;  /* 下線指定 */
+}
+ 
+.flex_test-item a {
+    color:  #fff;                   /* 文字色 */
+    text-decoration:  none;         /* デフォルトCSS打ち消し */
+}
+グローバルメニューもこれで一発！
+幅が狭くなってもある程度自動的に調整してくれるので、崩れの心配が一気に減ります。
+
+まとめ
+いかがでしたか？
+Flexbox、かなり便利な手法ですよね。
+
+慣れるまでは色々と難しい箇所もあるかもしれませんが、わかってしまえばこっちのものです。
+floatやインラインブロックよりも配置調整が楽々なので、これからどんどん活躍してくれるでしょう。
+
+使い方がわからなくなってしまったら、またこの記事で確認してみてくださいね。

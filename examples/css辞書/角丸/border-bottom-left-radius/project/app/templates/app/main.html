@@ -1,0 +1,21 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">border-bottom-left-radius</h1>
+<p>[参考ページ]<a href="http://www.htmq.com/css3/border-bottom-left-radius.shtml">HTMLクイックリファレンス</a></p>
+<details>横と縦の間にスラッシュはいらないことに注意</details>
+
+<div id="b_main">
+    <form action="{% url 'app:index' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <button type="submit">送信</button>
+    </form>
+</div>
+
+
+{% if request.method == "POST" %}
+<div id="a_main" >{{ choice }}</div>
+
+{% endif %}
+<hr>

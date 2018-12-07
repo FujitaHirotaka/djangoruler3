@@ -1,0 +1,105 @@
+﻿[概要]
+border-image-sourceプロパティは、画像ボーダーに使用する画像ファイルを指定する際に使用します。
+
+画像は上下左右それぞれの画像ボーダー用に４枚必要となるわけではなく、１枚の画像で上下左右の画像ボーダーを実現します。
+
+
+border-image-sourceを指定すると、 border-styleで指定されるボーダースタイルの代わりに、 画像ボーダーのレイヤーが背景に挿入されて描画されます。 値にnoneが指定された場合や画像を表示できない場合には、border-styleの値が適用されます。
+
+尚、border-imageプロパティを使用すると、画像ボーダーについてまとめて指定することができます。
+
+■値
+none
+ボーダーに画像を使用しない（初期値）
+画像ファイルのURI
+ボーダーに使用する画像ファイルのURIを指定する
+■初期値・適用対象・値の継承
+初期値
+none
+適用対象
+すべての要素（border-collapseプロパティの値にcollapseが指定されたtable内要素を除く）
+値の継承
+しない
+■使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.sample1 {
+width:300px; height:75px;
+border-image-source:url("images/bg_dot.png");
+border-image-slice:15px;
+border-image-width:2;
+border-image-outset:5px;
+border-image-repeat:round stretch;
+border-style:solid; border-width:5px;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="sample1">画像ボーダーの使用例</p>
+<p>
+以下は、ボーダーに使用した画像です。<br>
+<img src="images/bg_dot.png" alt="ボーダー用画像" border="1">
+</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+画像ボーダーの使用例
+
+以下は、ボーダーに使用した画像です。
+ボーダー用画像
+
+■ベンダープレフィックスを付けた場合の使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.prefix_sample1 {
+width:300px; height:75px;
+
+-moz-border-image-source:url("images/bg_dot.png");
+-moz-border-image-slice:15px;
+-moz-border-image-width:2;
+-moz-border-image-outset:5px;
+-moz-border-image-repeat:round stretch;
+
+-webkit-border-image-source:url("images/bg_dot.png");
+-webkit-border-image-slice:15px;
+-webkit-border-image-width:2;
+-webkit-border-image-outset:5px;
+-webkit-border-image-repeat:round stretch;
+
+-o-border-image-source:url("images/bg_dot.png");
+-o-border-image-slice:15px;
+-o-border-image-width:2;
+-o-border-image-outset:5px;
+-o-border-image-repeat:round stretch;
+
+-ms-border-image-source:url("images/bg_dot.png");
+-ms-border-image-slice:15px;
+-ms-border-image-width:2;
+-ms-border-image-outset:5px;
+-ms-border-image-repeat:round stretch;
+
+border-style:solid; border-width:5px;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="prefix_sample1">画像ボーダーの使用例</p>
+<p>
+以下は、ボーダーに使用した画像です。<br>
+<img src="images/bg_dot.png" alt="ボーダー用画像" border="1">
+</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+画像ボーダーの使用例
+
+以下は、ボーダーに使用した画像です。
+ボーダー用画像

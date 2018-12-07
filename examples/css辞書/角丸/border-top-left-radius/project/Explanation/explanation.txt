@@ -1,0 +1,115 @@
+﻿[概要]
+border-radiusプロパティは、ボックスの４つのコーナーの角丸をまとめて指定する際に使用します。 それぞれの角丸コーナーは４分の１楕円になりますが、楕円の形状は、下図のように水平方向と垂直方向の２つの半径の組み合わせで決定されます。
+
+図
+
+border-radiusプロパティで角丸を指定する際には、それぞれのコーナーの楕円の形状を水平方向と垂直方向の半径のセットで表します。 指定するのは、ボーダーの外側の輪郭です。
+
+水平方向と垂直方向の半径のセットは、スラッシュ（ / ）で区切ります。 スラッシュの前後に水平方向と垂直方向の半径の値を、左上・右上・右下・左下の順で指定します。
+
+border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;
+スラッシュ以降を省略した場合には、水平垂直ともに同じ値として解釈されます。 また、それぞれのコーナーの値は省略することができますが、その場合には以下のルールに基づいて解釈されます。
+
+左下が省略された場合には、右上と同じ。
+右下が省略された場合には、左上と同じ。
+右上が省略された場合には、左上と同じ。
+楕円半径の値は、長さかパーセンテージで指定します。長さで指定する場合には、px・em・ptなどの単位を使用できます。 また、パーセンテージで指定する場合には、ボーダーボックスの幅と高さに対する楕円半径のパーセンテージを指定します。 指定する値が0の場合、コーナーの形状は四角になります。
+
+尚、border-top-left-radius（左上）・ border-top-right-radius（右上）・ border-bottom-left-radius（左下）・ border-bottom-right-radius（右下）を使用すると、それぞれのコーナーの角丸を個別に指定することができます。
+
+■値
+長さ
+楕円半径の長さを指定する（初期値は0）
+パーセンテージ
+ボーダーボックスの幅と高さに対する楕円半径のパーセンテージを指定する
+■初期値・適用対象・値の継承
+初期値
+0
+適用対象
+すべての要素（border-collapseプロパティの値にcollapseが指定されたtable要素を除く）
+値の継承
+しない
+■使用例
+CSSソースは外部ファイル（sample.css）に記述
+table.sample1 {
+border:solid 10px blue;
+border-radius: 1em;	
+}
+table.sample1 td {
+background-color:forestgreen;
+border-radius: 0.5em;	
+}	
+
+p.sample2 {
+width:280px; height:130px; background-color:#ccecf4; 
+border:solid 20px #7fcfe2; 
+border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;
+}	
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<table class="sample1">
+<tr><td>指定したプロパティ</td><td>border-radius</td></tr>
+<tr><td>table要素に指定した値</td><td>1em</td></tr>
+<tr><td>td要素に指定した値</td><td>0.5em</td></tr>	
+</table>
+<p class="sample2">border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;　を指定</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+指定したプロパティ	border-radius
+table要素に指定した値	1em
+td要素に指定した値	0.5em
+border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;　を指定
+
+■ベンダープレフィックスを付けた場合の使用例
+CSSソースは外部ファイル（sample.css）に記述
+table.prefix_sample1 {
+border:solid 10px blue;
+-moz-border-radius: 1em;
+-webkit-border-radius: 1em;
+-o-border-radius: 1em;
+-ms-border-radius: 1em;	
+}
+table.prefix_sample1 td {
+background-color:forestgreen;
+-moz-border-radius: 0.5em;
+-webkit-border-radius: 0.5em;
+-o-border-radius: 0.5em;
+-ms-border-radius: 0.5em;
+}	
+
+p.prefix_sample2 {
+width:280px; height:130px; background-color:#ccecf4; 
+border:solid 20px #7fcfe2; 
+-moz-border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;
+-webkit-border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;
+-o-border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;
+-ms-border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;
+}	
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<table class="prefix_sample1">
+<tr><td>指定したプロパティ</td><td>border-radius</td></tr>
+<tr><td>table要素に指定した値</td><td>1em</td></tr>
+<tr><td>td要素に指定した値</td><td>0.5em</td></tr>	
+</table>
+<p class="prefix_sample2">border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;　を指定</p>
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+指定したプロパティ	border-radius
+table要素に指定した値	1em
+td要素に指定した値	0.5em
+border-radius: 100px 25px 50px 50px / 50px 25px 50px 25px;　を指定

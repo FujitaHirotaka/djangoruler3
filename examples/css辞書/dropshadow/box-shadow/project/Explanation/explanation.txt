@@ -1,0 +1,121 @@
+﻿[概要]
+ 
+box-shadowプロパティは、ボックスに1つまたは複数の影をつける際に使用します。 box-shadowプロパティでは、例えば以下のように影を指定します。
+
+box-shadow: 10px 10px;
+box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4);
+box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;
+影は２～４つの長さの値で定義されますが、任意で色、insetキーワードを指定することもできます。 insetキーワードを付けると、影がボックスの外側ではなく内側につくようになります。 長さの指定を省略すると0となり、色の指定を省略するとユーザーエージェントが選んだ色になります。 複数の影を指定する場合には、カンマ（ , ）区切りで影のリストを複数指定します。
+
+影を定義する指定内容は、以下のように解釈されます。
+
+１番目の長さの値は、水平方向の影のオフセット距離です。正の値を指定すると右へ、負の値を指定すると左へ影が移動します。
+２番目の長さの値は、垂直方向の影のオフセット距離です。正の値を指定すると下へ、負の値を指定すると上へ影が移動します。
+３番目の長さの値は、ぼかし距離です。負の値を指定することはできません。 値が大きいほど影の端のぼかしが強くなり、値が0の場合には端がくっきりとした影となります。
+４番目の長さの値は、広がり距離です。正の値を指定すると影の形状を全方向に拡大、負の値を指定すると縮小します。
+色の値を指定すると、影がその色になります。
+insetキーワードを指定すると、ボックスの外側の影から内側の影に変更されます。
+尚、box-shadowプロパティは、::first-letter擬似要素に適用されますが、::first-line擬似要素には適用されません。 また、border-collapse:collapse;が指定されたtable内要素には、外側の影はつきません。
+
+テキストに影をつける場合には、text-shadowプロパティを使用します。
+
+■値
+none
+要素に影をつけない（初期値）
+水平方向の距離 垂直方向の距離 ぼかし距離 広がり距離 影の色 inset
+スペース区切りで、水平方向の距離 垂直方向の距離 ぼかし距離 広がり距離 影の色 insetキーワードを指定する。 ぼかし距離 広がり距離 影の色 insetキーワードは省略可
+■初期値・適用対象・値の継承
+初期値
+none
+適用対象
+すべての要素
+値の継承
+しない
+■使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.sample1 {box-shadow: 10px 10px;} 
+p.sample2 {box-shadow: 10px 10px 10px rgba(0,0,0,0.4);}	
+p.sample3 {box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4);}	
+p.sample4 {box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;}
+p.sample1, p.sample2, p.sample3, p.sample4 {
+width:300px; height:50px;	
+background-color:yellow;
+border:solid 10px orange;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="sample1">box-shadow: 10px 10px; を指定</p> 
+<p class="sample2">box-shadow: 10px 10px 10px rgba(0,0,0,0.4); を指定</p>
+<p class="sample3">box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4); を指定</p>
+<p class="sample4">box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;を指定</p>	
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+box-shadow: 10px 10px; を指定
+
+box-shadow: 10px 10px 10px rgba(0,0,0,0.4); を指定
+
+box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4); を指定
+
+box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;を指定
+
+■ベンダープレフィックスを付けた場合の使用例
+CSSソースは外部ファイル（sample.css）に記述
+p.prefix_sample1 {
+-moz-box-shadow: 10px 10px;
+-webkit-box-shadow: 10px 10px;
+-o-box-shadow: 10px 10px;
+-ms-box-shadow: 10px 10px;
+} 
+p.prefix_sample2 {
+-moz-box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+-webkit-box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+-o-box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+-ms-box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+} 
+p.prefix_sample3 {
+-moz-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4);
+-webkit-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4);
+-o-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4);
+-ms-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4);
+} 
+p.prefix_sample4 {
+-moz-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;
+-webkit-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;
+-o-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;
+-ms-box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;
+}
+p.prefix_sample1, p.prefix_sample2, p.prefix_sample3, p.prefix_sample4 {
+width:300px; height:50px; 
+background-color:yellow;
+border:solid 10px orange;
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+<p class="prefix_sample1">box-shadow: 10px 10px; を指定</p> 
+<p class="prefix_sample2">box-shadow: 10px 10px 10px rgba(0,0,0,0.4); を指定</p>
+<p class="prefix_sample3">box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4); を指定</p>
+<p class="prefix_sample4">box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;を指定</p> 
+</body>
+</html>
+↓↓↓
+ブラウザ上の表示
+box-shadow: 10px 10px; を指定
+
+box-shadow: 10px 10px 10px rgba(0,0,0,0.4); を指定
+
+box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4); を指定
+
+box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.4) inset;を指定

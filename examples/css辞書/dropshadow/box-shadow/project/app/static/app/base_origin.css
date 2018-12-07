@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+div#a_main {
+    width:200px;
+    height:200px;
+    margin:auto;
+    padding: 35px;
+    background-color:orange;
+    border: solid 5px red;
+    box-shadow: **__value1__** **__value2__** **__value3__** **__value4__** **__inset__** rgba(0,0,0,0.4);
+}
+
+div#b_main {
+   background-color: pink;
+   margin:30px 20px 30px 20px;
+}

@@ -1,0 +1,51 @@
+﻿<!-- Page Content -->
+
+
+<h1 class="mt-5">box-shadow</h1>
+<p>[参考ページ]<a href="http://www.htmq.com/css3/box-shadow.shtml">HTMLクイックリファレンス</a></p>
+
+<div id="b_main">
+    <form action="{% url 'app:index' %}" method="POST">
+        {% csrf_token %}
+        <p>要素１のパラメーター</p>
+        {{form1.as_p}}
+        <p>要素２のパラメーター</p>
+        {{form2.as_p}}
+        <p>要素３のパラメーター</p>
+        {{form3.as_p}}
+        <p>要素４のパラメーター</p>
+        {{form4.as_p}}
+        <p>要素5のパラメーター</p>
+        {{form5.as_p}}
+        <p>要素6のパラメーター</p>
+        {{form6.as_p}}
+        <p>要素7のパラメーター</p>
+        {{form7.as_p}}
+        <p>要素8のパラメーター</p>
+        {{form8.as_p}}
+        <p>要素9のパラメーター</p>
+        {{form9.as_p}}
+        <p>要素10のパラメーター</p>
+        {{form10.as_p}}
+        <button type="submit">送信</button>
+    </form>
+</div>
+
+
+{% if request.method == "POST" %}
+<div id="flex_container" >
+    <div class="flex_item">11111 1111 11111 1111 111 111 1111 1111 1111 11111 1111 1111 111 11 1111 1111 11111 1111 11111 1111 1111 111 111 111 111 11 111 111 111 11 111 111 111 1111 1111 111 111 111 1111 1111 1111 111 1111 1111 111 1</div>
+    <div class="flex_item">2222222222</div>
+    <div class="flex_item">3333333333333333333333333333333333333333333333</div>
+    <div class="flex_item">4444444444444444444444444444444444</div> 
+    <div class="flex_item">5555555555555555555555555555555555555</div> 
+    <div class="flex_item">666666666666666666666666666666666666666666666666666666666666666666666</div> 
+    <div class="flex_item">7777777777777777777777777777777777777777777777</div> 
+    <div class="flex_item">888888888888888888888</div> 
+    <div class="flex_item">99</div> 
+    <div class="flex_item">1010101010101010101010101010101010101010101010101010101010</div> 
+</div>
+
+{% endif %}
+<hr>
+
