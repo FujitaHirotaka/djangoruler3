@@ -1,0 +1,27 @@
+﻿[概要]
+background-attachmentプロパティは、画面をスクロールする際、 背景画像をその位置に固定されたままにするか、スクロールに伴って移動するかどうかを指定します。
+
+■値
+fixed
+背景画像の位置が固定され、スクロールしても動かなくなります。
+scroll
+スクロールに伴って、背景画像も移動します。
+■使用例
+スタイルシート部分は外部ファイル（sample.css）に記述。
+body {
+background-image: url("../images/inu01.jpg");
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: right bottom
+}
+
+HTMLソース
+<html>
+<head>
+<link rel="stylesheet" href="sample.css" type="text/css">
+</head>
+<body>
+：
+：
+</body>
+</html>

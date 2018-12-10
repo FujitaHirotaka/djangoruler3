@@ -20,6 +20,7 @@ def index(request):
     if request.method=="POST":
 
           print(request.POST)
+          fc=FlexContainerProperty(request.POST)
           dict1={"width":request.POST.getlist("width")[0], "height":request.POST.getlist("height")[0]}
           f1=FlexItem1(dict1)
           dict2={"width":request.POST.getlist("width")[1], "height":request.POST.getlist("height")[1]}          
@@ -41,8 +42,13 @@ def index(request):
           dict10={"width":request.POST.getlist("width")[9], "height":request.POST.getlist("height")[9]}          
           f10=FlexItem10(dict10)
           
-          choice_list=f1.fields['width'].choices          
-          if f1.is_valid() and f2.is_valid and f3.is_valid and f4.is_valid and f5.is_valid and f6.is_valid and f7.is_valid and f8.is_valid and f9.is_valid and f10.is_valid:
+          choice_list=f1.fields['width'].choices       
+          alignitems_list=fc.fields["alignitems"].choices   
+          justifycontent_list=fc.fields["justifycontent"].choices 
+          aligncontent_list=fc.fields["aligncontent"].choices           
+          flexwrap_list=fc.fields["flexwrap"].choices
+          flexdirection_list=fc.fields["flexdirection"].choices            
+          if fc.is_valid() and f1.is_valid() and f2.is_valid and f3.is_valid and f4.is_valid and f5.is_valid and f6.is_valid and f7.is_valid and f8.is_valid and f9.is_valid and f10.is_valid:
                  d["form1"]=f1
                  d["form2"]=f2
                  d["form3"]=f3
@@ -52,11 +58,10 @@ def index(request):
                  d["form7"]=f7
                  d["form8"]=f8
                  d["form9"]=f9
-                 d["form10"]=f10                                                  
+                 d["form10"]=f10
+                 d["formfc"]=fc                                                  
                  with open("app/static/app/base_origin.css", "r") as ff:
                        data = ff.read()
-
-                       print(choice_list)
                        if dict1["width"]=="0":
                             data=data.replace("width1", "")
                        else:      
@@ -73,11 +78,7 @@ def index(request):
                        if dict2["height"]=="0":
                             data=data.replace("height2", "")   
                        else:                                
-                            data=data.replace("height2", "height:"+choice_list[int(dict2["height"])][1]+"px;")
-
-
-
-                       
+                            data=data.replace("height2", "height:"+choice_list[int(dict2["height"])][1]+"px;")              
                        if dict3["width"]=="0":
                             data=data.replace("width3", "")
                        else:      
@@ -157,8 +158,13 @@ def index(request):
                             data=data.replace("heighta", "")   
                        else:                                
                             data=data.replace("heighta", "height:"+choice_list[int(dict10["height"])][1]+"px;") 
-
-
+                       
+                       data=data.replace("**__align-items__**", alignitems_list[int(fc.cleaned_data["alignitems"])][1])
+                       data=data.replace("**__justify-content__**", justifycontent_list[int(fc.cleaned_data["justifycontent"])][1])
+                       data=data.replace("**__align-content__**", aligncontent_list[int(fc.cleaned_data["aligncontent"])][1])                       
+                       data=data.replace("**__flex-wrap__**", flexwrap_list[int(fc.cleaned_data["flexwrap"])][1])
+                       data=data.replace("**__flex-direction__**", flexdirection_list[int(fc.cleaned_data["flexdirection"])][1])                       
+                       print(int(fc.cleaned_data["alignitems"]))
                  with open("app/static/app/base.css", "w") as ff:
                        ff.write(data)
                  return render(request, "app/index.html", d)
@@ -173,6 +179,7 @@ def index(request):
           f8=FlexItem8()
           f9=FlexItem9()
           f10=FlexItem10()
+          fc=FlexContainerProperty()
           d["form1"]=f1
           d["form2"]=f2
           d["form3"]=f3
@@ -183,6 +190,8 @@ def index(request):
           d["form8"]=f8
           d["form9"]=f9
           d["form10"]=f10
+          d["formfc"]=fc
+          
           
 
     return render(request, "app/index.html", d)      

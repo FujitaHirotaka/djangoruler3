@@ -1,0 +1,27 @@
+﻿<form id=tekitou>
+  <input type="hidden" name="pid" value="17616">
+</form>
+<script>
+  /*
+windowを閉じたらクロームドライバーをキルする。
+  */
+
+/*
+  $(window).on("beforeunload", function () {
+
+
+    $.ajax({
+
+      'url': '{% url "ajax:ajax" %}',
+      'type': 'GET',
+      'data': $("form#tekitou").serialize(),
+      'dataType': 'text',
+    })
+      .done(function (data) { alert("chromedriverをキルしました" ) });
+
+    return false;
+
+
+  });
+*/
+</script>
