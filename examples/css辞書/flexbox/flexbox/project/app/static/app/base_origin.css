@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+div#a_main {
+    margin:auto;
+    padding:80px;
+    width:200px;
+    height:200px;
+    background-color:orange;
+    border:dashed 10px #000000; 
+    background-clip:--**__**;
+}
+
+div#b_main {
+   background-color: pink;
+   margin:30px 20px 30px 20px;
+}

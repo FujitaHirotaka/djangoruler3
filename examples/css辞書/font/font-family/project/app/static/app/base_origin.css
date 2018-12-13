@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+div#a_main {
+    background-color:orange;
+    font-family: **__value1__**;
+    font-size:4ex;
+}
+
+div#b_main {
+   background-color: pink;
+   margin:30px 20px 30px 20px;
+}
